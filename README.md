@@ -41,11 +41,11 @@ Create a Firebase account and create an app.
 Replace the details in [app.module.ts](./src/app/app.module.ts) file, similar to this below with your own
 ```bash
 export const firebaseConfig = {
-  apiKey: "AIzaSyAb2-XMBDfc54tR9Ym9RktYIfQTNZCnof4", 
-  authDomain: "taxiapp-48ea8.firebaseapp.com",
-  databaseURL: "https://taxiapp-48ea8.firebaseio.com",
-  storageBucket: "taxiapp-48ea8.appspot.com",
-  messagingSenderId: "1003487763108"
+  apiKey: "**************************", 
+  authDomain: "**************************",
+  databaseURL: "**************************",
+  storageBucket: "**************************",
+  messagingSenderId: "**************************"
 };
 ```
 
