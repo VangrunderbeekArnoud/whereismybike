@@ -80,6 +80,11 @@ $ ionic cordova plugin add cordova-plugin-googlemaps@2.1.0 \
 I was missing a node_module named 'minimist', so I copied this module from my project
 node_modules to the './plugin/cordova-plugin-googlemaps/node_modules' folder which solved the error !
 
+## Phone authentication
+
+Go to your Firebase project settings, under your apps you'll find the google-services.json file. Add
+this to your project root. ![Firebase google-services.json file](./resources/readme/google-services.png?raw=true "Google-services.json")
+
 ## Fixing errors
 
 When running the emulator first, and then going back to running the program on an actual device,
