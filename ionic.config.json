@@ -1,0 +1,8 @@
+{
+  "name": "whereismybike",
+  "app_id": "691fbc94",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}

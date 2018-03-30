@@ -1,0 +1,99 @@
+{
+  "project_info": {
+    "project_number": "1003487763108",
+    "firebase_url": "https://taxiapp-48ea8.firebaseio.com",
+    "project_id": "taxiapp-48ea8",
+    "storage_bucket": "taxiapp-48ea8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1003487763108:android:ca3c58585066ee3a",
+        "android_client_info": {
+          "package_name": "com.taxiapp.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1003487763108-siq7h77tcs22qp7ceb2hm33np5nubeng.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.taxiapp.app",
+            "certificate_hash": "378caa0fb4e073f0c29eff0d294ba6aad2f3a308"
+          }
+        },
+        {
+          "client_id": "1003487763108-7jae0bjtsc5o1qspoq4vmvohuskulabd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIteiFRSd0QdsAy-ZbWT1lrKpL1P8Vmfc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1003487763108-7jae0bjtsc5o1qspoq4vmvohuskulabd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1003487763108:android:31b0109aa37b1125",
+        "android_client_info": {
+          "package_name": "com.taxidriver.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1003487763108-8494pj98bmgs2ukc8jl04b6kaffiousd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.taxidriver.app",
+            "certificate_hash": "0112cd0e37fd3fb019bebfa97672abf451c3511b"
+          }
+        },
+        {
+          "client_id": "1003487763108-7jae0bjtsc5o1qspoq4vmvohuskulabd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIteiFRSd0QdsAy-ZbWT1lrKpL1P8Vmfc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1003487763108-7jae0bjtsc5o1qspoq4vmvohuskulabd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

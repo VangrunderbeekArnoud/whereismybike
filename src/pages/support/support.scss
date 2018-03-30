@@ -1,0 +1,41 @@
+page-support {
+    ion-content{
+        ion-icon{
+         padding: 4px;
+         }
+
+         .reviewspace{
+            margin-top: 30%;
+          }
+    
+          form {
+            margin-bottom: 26px;
+            height: 200px auto;
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 20px;
+            animation-direction: alternate;
+            animation-name: wiki;
+            animation-duration: 0.3s;
+            animation-iteration-count: 1;
+            button {
+              margin-top: 20px !important;
+            }
+            .button{
+              border: 1px solid color($colors, primary, base);
+              padding: 10px;
+              background: color($colors, primary, base);
+              color: color($colors, light, base);
+            }
+          }
+    
+          #myInput {
+            border: 1.5px solid color($colors, deep, base);;
+            border-radius: 4px;
+            height: 70%;
+            margin-left: 0%;
+         
+        }
+    }
+}

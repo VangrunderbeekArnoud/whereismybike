@@ -1,0 +1,21 @@
+page-history {
+  ion-content{
+
+    .drive{
+        color: color($colors, primary, base);
+    }
+
+    .price{
+      color: green;
+    }
+
+     .followed-items{
+      ion-item{
+        margin-top: 15px;
+        margin-bottom: 15px;
+        border-radius: 4px;
+    }
+     }
+   
+}
+}

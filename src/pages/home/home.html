@@ -1,0 +1,54 @@
+<ion-content class="no-scroll">
+
+  <!-- This is the cordova google map -->
+  <div id="map">
+
+    <!-- This is the navigation bar containing sidemenu btn and booklater btn -->
+    <div class="topBar" [hidden]="pop.onRequest">
+
+      <!-- sidemenu btn -->
+      <button no-lines detail-none class='button' clear padding icon-only ion-button menuToggle>
+        <ion-icon name="ios-menu"></ion-icon>
+      </button>
+
+      <!-- booklater btn -->
+
+    </div>
+
+    <!-- These are the location bar and destination bar -->
+    <div class="bars">
+      <!-- location bar -->
+      <button no-lines detail-none [hidden]="!cMap.onLocationbarHide" ion-item class="bars-locate" icon-start
+              (click)="showAddressModal(1)">
+        <ion-icon color='deep' name="locate"></ion-icon>
+        <div id="location">Set Pin On Location</div>
+      </button>
+    </div>
+
+    <!-- This is the little location btn on the top left corner -->
+    <button *ngIf='!startedNavigation' class='locate_button' no-lines detail-none icon-only clear
+            (click)="cMap.ResetMe()">
+      <ion-icon class='locate_icon' color='primary' name="locate"></ion-icon>
+    </button>
+
+    <!-- marker/pin situated in the center -->
+    <div class="centerMarker">
+     <span class="middy" [hidden]="cMap.onPointerHide">
+        <div id="nugget" [hidden]="cMap.onPointerHide">
+          </div>
+      </span>
+    </div>
+
+
+    <!-- Booking section  -->
+    <!-- center  bar showing driver booking state-->
+    <!-- bar showing driver information section-->
+    <!-- Low bar containing btns to connect the driver and the user-->
+    <!-- driver and user distance container -->
+
+    <div padding id='header'></div>
+    <div id="destination"></div>
+
+  </div>
+
+</ion-content>
