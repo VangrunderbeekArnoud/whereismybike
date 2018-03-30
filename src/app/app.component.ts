@@ -30,12 +30,12 @@ export class MyApp {
 
     this.pages = [
       //Add pages for sidemenu
-      { title: 'History', component: 'HistoryPage', icon: "ios-clock" },
-      { title: 'Payment', component: 'PaymentPage', icon: "ios-card" },
-      { title: 'Promotion', component: 'PromoPage', icon: "ios-trophy" },
-      { title: 'Support', component: 'SupportPage', icon: "ios-help-circle" },
-      { title: 'FreeRides', component: 'FreeridePage', icon: "ios-star-outline" },
-      { title: 'About', component: 'AboutPage', icon: "ios-information-circle" },
+      //{ title: 'History', component: 'HistoryPage', icon: "ios-clock" },
+      //{ title: 'Payment', component: 'PaymentPage', icon: "ios-card" },
+      //{ title: 'Promotion', component: 'PromoPage', icon: "ios-trophy" },
+      //{ title: 'Support', component: 'SupportPage', icon: "ios-help-circle" },
+      //{ title: 'FreeRides', component: 'FreeridePage', icon: "ios-star-outline" },
+      //{ title: 'About', component: 'AboutPage', icon: "ios-information-circle" },
     ];
 
   }

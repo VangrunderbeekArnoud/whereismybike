@@ -42,6 +42,10 @@ export class PhonePage {
 
   signIn(phoneNumber: number) { //Step 2 - Pass the mobile number for verification
     this.api.presentLoader('You Will Recieve An SMS Shortly');
+    // If the phoneNumber starts with 0, delete this !
+    if (this.phoneNumber.toString()[0] == '0') {
+      this.phoneNumber = this.phoneNumber.substring(1, 15);
+    }
     let number = this.phoneNumber;
     this.countryCode = '+' + 32 ;
     let au = this.countryCode + number
