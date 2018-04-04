@@ -39,11 +39,11 @@ export class ProfileProvider {
         this.userProfile = firebase.database().ref(`userProfile/${user.uid}`);
         this.appPrice = firebase.database().ref(`DashboardSettings`);
         this.userOtherProfile = firebase.database().ref(`driverProfile/${user.uid}`);
-      
+
         this.getUserOtherProfile().on('value', userProfileSnapshot => {
           this.driver = userProfileSnapshot.val()
          })
-         
+
 
         this.drivers = firebase.database().ref(`Drivers`);
         this.CustomerOwnPropertyRef = firebase.database().ref(`Customer/${user.uid}/client`);
@@ -60,7 +60,7 @@ export class ProfileProvider {
          this.cvc = userProfileSnapshot.val().Card_Cvc;
          this.year = userProfileSnapshot.val().Card_Year;
          this.month = userProfileSnapshot.val().Card_month;
-        
+
          console.log(this.phone)
         })
       }
@@ -120,10 +120,10 @@ export class ProfileProvider {
   }
 
 
-  createHistory(name: string, price: number, date: any, 
+  createHistory(name: string, price: number, date: any,
     location: number, destination: number): firebase.Promise<any> {
     return this.userProfile.child('/eventList').push({
-      name: name, 
+      name: name,
       price: price,
       date: date,
       location: location,
@@ -150,7 +150,7 @@ export class ProfileProvider {
     value: any): firebase.Promise<any> {
     return  firebase.database().ref(`DashboardSettings/complains`).push({
       complain: value,
-      email: this.user.email 
+      email: this.user.email
     });
   }
 
@@ -195,5 +195,5 @@ export class ProfileProvider {
     });
   }
 
-  
+
 }

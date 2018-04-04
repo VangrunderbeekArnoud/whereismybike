@@ -1,0 +1,20 @@
+{
+  "time": "{time}",
+  "duplicate": "{duplicate}",
+  "snr": "{snr}",
+  "station": "{station}",
+  "data": "{data}",
+  "avgSnr": "{avgSnr}",
+  "rssi": "{rssi}",
+  "seqNumber": "{seqNumber}",
+  "location": {
+    "sigfox": {
+      "lat": "{lat}",
+      "lng": "{lng}"
+    },
+    "gps": {
+      "lat": "{customData#int1}.{customData#int2}{customData#int3}{customData#int4}",
+      "lng": "{customData#int5}.{customData#int6}{customData#int7}{customData#int8}"
+    }
+  }
+}

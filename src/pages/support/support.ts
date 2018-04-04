@@ -35,14 +35,14 @@ export class SupportPage {
     this.call.callNumber(newLocal, true)
   }
 
-  
+
 
 
 
 logForm() {
-   
+
     this.prof.Complain(this.todo.description).then(suc =>{
-this.pop.showPimp('Your complain has been submitted, we will get back to you. In a few minutes.')
+this.pop.showPimp('Your complain has been submitted, we will get back to you as soon as possible via e-mail.')
     })
 
   }
