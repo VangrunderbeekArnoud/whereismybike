@@ -10,9 +10,9 @@ export class AuthProvider {
   public userProfileRef:firebase.database.Reference;
   private currentUser: firebase.User;
   //public provider = new firebase.auth.FacebookAuthProvider();
-  
+
   constructor(public platform: Platform, public facebook: Facebook) {
-     this.userProfileRef = firebase.database().ref('/userProfile');
+     this.userProfileRef = firebase.database().ref('/users');
      firebase.auth().onAuthStateChanged((user: firebase.User) => this.currentUser = user);
   }
 
@@ -49,16 +49,16 @@ export class AuthProvider {
       .then( response => {
         const facebookCredential = firebase.auth.FacebookAuthProvider
           .credential(response.authResponse.accessToken);
-  
+
         firebase.auth().signInWithCredential(facebookCredential)
-          .then( success => { 
+          .then( success => {
             console.log("Firebase success: " + JSON.stringify(success));
           }).catch((error) => {
             console.log("Firebase failure: " + JSON.stringify(error));
             //alert('Something Went Wrong, Check Your Connection And Try Again')
-           
+
         });
-  
+
       }).catch((error) => { console.log(error) });
     } else {
 
@@ -69,7 +69,7 @@ export class AuthProvider {
       .catch((error) => {
         console.log("Firebase failure: " + JSON.stringify(error));
        // alert('Something Went Wrong, Check Your Connection And Try Again')
-      
+
     });
 
     }
@@ -90,4 +90,3 @@ export class AuthProvider {
 
   }
 
-  

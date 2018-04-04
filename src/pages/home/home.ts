@@ -102,7 +102,7 @@ export class HomePage {
             }
 
 
-            //var otherDatabaseInfo = firebase.database().ref(`DashboardSettings`);
+            //var otherDatabaseInfo = firebase.database().ref(`dashboard`);
             //otherDatabaseInfo.on('value', userProfileSnapshot => {
             //this.dProvider.fare = userProfileSnapshot.val().price;
             //this.dProvider.pricePerKm = userProfileSnapshot.val().perkm;

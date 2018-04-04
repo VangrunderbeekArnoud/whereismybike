@@ -8,7 +8,7 @@ export class EventProvider {
   public id: any;
   public customerId: any;
   public CustomerOwnPropertyRef: firebase.database.Reference;
-  public selected_driver: any; 
+  public selected_driver: any;
   public appPrice: any;
   public fare: any;
  public pricePerKm: any;
@@ -17,8 +17,8 @@ export class EventProvider {
     firebase.auth().onAuthStateChanged( user => {
       if (user) {
         this.id = user.uid
-        
-        this.userProfileRef = firebase.database().ref(`userProfile/${user.uid}`);
+
+        this.userProfileRef = firebase.database().ref(`users/${user.uid}`);
        // this.CustomerRef = firebase.database().ref(`Customer/${this.selected_driver}`);
         this.CustomerOwnPropertyRef = firebase.database().ref(`Customer/${user.uid}/client`);
       }
@@ -42,8 +42,8 @@ export class EventProvider {
   }
 
 
-  
-  PushUserDetails(name: string, picture: any, 
+
+  PushUserDetails(name: string, picture: any,
     lat: number, lng: number, locationName: any, payWith: any): firebase.Promise<any> {
     return this.CustomerRef.child("/client").update({
       Client_username: name,
@@ -63,7 +63,7 @@ export class EventProvider {
   UpdateDestination(
     destinationName: any, price: any, id: any): firebase.Promise<any> {
     return firebase.database().ref(`Customer/${id}/client`).update({
-      Client_destinationName: destinationName, 
+      Client_destinationName: destinationName,
       Client_price: price,
     });
   }
@@ -71,7 +71,7 @@ export class EventProvider {
   UpdateNetworkSate(
     state: any, id: any): firebase.Promise<any> {
     return firebase.database().ref(`Customer/${id}/client`).update({
-      Network_state: state, 
+      Network_state: state,
     });
   }
 
@@ -79,22 +79,22 @@ export class EventProvider {
   CreateNewSchedule(
     date: any): firebase.Promise<any> {
     return this.userProfileRef.child('/scheduled').push({
-      TimeandDate: date, 
+      TimeandDate: date,
     });
   }
-  
+
 
   UpdateSate(
     state: any, id: any): firebase.Promise<any> {
     return firebase.database().ref(`Customer/${id}/client`).update({
-      Left_and_Returned: state, 
+      Left_and_Returned: state,
     });
   }
 
 
   UpdateCard(card: string, month: any, year: any, cvc: any, amount: any, email: any, driverPay: any): firebase.Promise<any> {
     return this.userProfileRef.update({
-      Card_Number: card, 
+      Card_Number: card,
       Card_month: month,
       Card_Year: year,
       Card_Cvc: cvc,

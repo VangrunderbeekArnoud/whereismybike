@@ -36,8 +36,8 @@ export class ProfileProvider {
         this.user = user;
         //console.log(this.user)
         this.id = this.user.uid;
-        this.userProfile = firebase.database().ref(`userProfile/${user.uid}`);
-        this.appPrice = firebase.database().ref(`DashboardSettings`);
+        this.userProfile = firebase.database().ref(`users/${user.uid}`);
+        this.appPrice = firebase.database().ref(`dashboard`);
         this.userOtherProfile = firebase.database().ref(`driverProfile/${user.uid}`);
 
         this.getUserOtherProfile().on('value', userProfileSnapshot => {
@@ -148,7 +148,7 @@ export class ProfileProvider {
 
   Complain(
     value: any): firebase.Promise<any> {
-    return  firebase.database().ref(`DashboardSettings/complains`).push({
+    return  firebase.database().ref(`dashboard/complains`).push({
       complain: value,
       email: this.user.email
     });
