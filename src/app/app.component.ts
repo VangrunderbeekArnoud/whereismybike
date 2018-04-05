@@ -33,7 +33,9 @@ export class MyApp {
       //{ title: 'History', component: 'HistoryPage', icon: "ios-clock" },
       //{ title: 'Payment', component: 'PaymentPage', icon: "ios-card" },
       //{ title: 'Promotion', component: 'PromoPage', icon: "ios-trophy" },
+      { title: 'Devices', component: 'DevicesPage', icon: 'md-bicycle'},
       { title: 'Support', component: 'SupportPage', icon: "ios-help-circle" },
+      { title: 'Language', component: 'LanguagePage', icon: 'md-globe'}
       //{ title: 'FreeRides', component: 'FreeridePage', icon: "ios-star-outline" },
       //{ title: 'About', component: 'AboutPage', icon: "ios-information-circle" },
     ];
