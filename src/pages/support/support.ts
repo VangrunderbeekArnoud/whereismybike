@@ -5,6 +5,9 @@ import { CallNumber } from '@ionic-native/call-number';
 const newLocal = 'YourPhoneNumberHere';
 import { PopUpProvider } from '../../providers/pop-up/pop-up';
 import { ProfileProvider } from '../../providers/profile/profile';
+import { InAppBrowser } from "@ionic-native/in-app-browser";
+import { BrowserTab } from "@ionic-native/browser-tab";
+
 const newLocal_1 = 'YourEmailHere';
 
 @IonicPage()
@@ -23,7 +26,7 @@ export class SupportPage {
   todo: any = {
     description: ''
   }
-  constructor(public navCtrl: NavController, public pop: PopUpProvider, public prof: ProfileProvider, public navParams: NavParams, public call: CallNumber) {
+  constructor( public browsertab: BrowserTab, public iab: InAppBrowser, public navCtrl: NavController, public pop: PopUpProvider, public prof: ProfileProvider, public navParams: NavParams, public call: CallNumber) {
   }
 
   ionViewDidLoad() {
@@ -35,12 +38,21 @@ export class SupportPage {
     this.call.callNumber(newLocal, true)
   }
 
+  goToSite(){
+    //const browser = this.iab.create('http://startware.tech/');
+    this.browsertab.openUrl('http://startware.tech/').then(suc=>{
+      console.log('hurray!! it works')
+    })
+  }
 
-
-
+  goToSiteFAQ(){
+    //const browser = this.iab.create('http://startware.tech/');
+    this.browsertab.openUrl('http://startware.tech/').then(suc=>{
+      console.log('hurray!! it works')
+    })
+  }
 
 logForm() {
-
     this.prof.Complain(this.todo.description).then(suc =>{
 this.pop.showPimp('Your complain has been submitted, we will get back to you as soon as possible via e-mail.')
     })

@@ -16,6 +16,15 @@
 <ion-content class="no-scroll" padding>
 
   <div text-center >
+  <button  class='butt'  color="primary" ion-button block (click)="goToSiteFAQ()">
+       Frequently Asked Questions
+  </button>
+  <button  class='butt'  color="gery" ion-button block (click)="goToSite()">
+      <ion-icon color='nav-color' padding name='md-wifi'></ion-icon>
+       Visit our website
+  </button>
+  </div>
+  <div text-center padding >
       <ion-title>Write A Complain</ion-title>
       <form (ngSubmit)="logForm()">
             <ion-textarea  #myInput id="myInput" rows="1" maxLength="500"  [(ngModel)]="todo.description" name="description"></ion-textarea>
@@ -24,18 +33,5 @@
         </form>
     </div>
 
-    <div text-center class='reviewspace'>
-      <!--
-    <button  class='butt'  color="primary" ion-button block (click)="callNow()">
-        <ion-icon color='nav-color' padding name='ios-call'></ion-icon>
-         Customer Care
-    </button>
-
-    <button  class='butt'  color="gery" ion-button block (click)="callNow()">
-        <ion-icon color='nav-color' padding name='ios-chatbubbles'></ion-icon>
-         Frequently Asked Questions
-    </button>
-    -->
-    </div>
 
 </ion-content>
