@@ -6,19 +6,20 @@
     </ion-navbar>
   </ion-header>
    -->
-  
-  <ion-content class="o-scroll" padding>
-   
-      <div id="recaptcha-container"></div>
-      
-    <div class='form'>
-        <!-- <button padding ion-button class='star' color="primary" ico-only (click)='signIn(phoneNumber)'>
-          <ion-icon name='star'></ion-icon>
-        </button> -->
-      <ion-label class='stack' padding color='primary' stacked>Phone Number Format : 080xxxxxxxxx </ion-label>
-        <ion-input class='input' no-lines type="tel" placeholder="eg 080xxxxxxxxx" [(ngModel)]="phoneNumber" ></ion-input>
 
-      <button padding ion-button color="primary" id='mybutton' block (click)='signIn(phoneNumber)'>PROCEED</button>
-       
-    </div>
-  </ion-content>
+<ion-content class="o-scroll" padding>
+
+  <div id="recaptcha-container"></div>
+
+  <div class='form'>
+    <ion-label class='stack' padding color='primary' stacked>Country code</ion-label>
+    <ion-select interface="popover" [(ngModel)]="myCountry" placeholder="eg Belgium (+32)">
+      <ion-option *ngFor="let country of countries" [value]="country">{{country.displayName}}</ion-option>
+    </ion-select>
+    <ion-label class='stack' padding color='primary' stacked>Phone</ion-label>
+    <ion-input class='input' no-lines type="tel" placeholder="eg 04xxxxxxxx" [(ngModel)]="phoneNumber"></ion-input>
+
+    <button padding [disabled]="!(phoneNumber && myCountry)" ion-button color="primary" id='mybutton' block (click)='signIn(phoneNumber)'>PROCEED</button>
+
+  </div>
+</ion-content>

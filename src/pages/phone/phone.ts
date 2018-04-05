@@ -13,8 +13,15 @@ export class PhonePage {
   public recaptchaVerifier: firebase.auth.RecaptchaVerifier;
   verificationId: any = '';
   phoneNumber: any = '';
-  countryCode: any = '';
   result: any;
+  myCountry: Country;
+  countries = [
+    new Country('Belgium', 32),
+    new Country('Netherlands', 31),
+    new Country('France', 33),
+    new Country('Luxembourg', 352),
+    new Country('Germany', 49)
+  ]
   constructor(public navCtrl: NavController, public ph: ProfileProvider, private api: PopUpProvider, public navParams: NavParams, private alertCtrl: AlertController,public firebase: Firebase) {
   }
 
@@ -47,8 +54,7 @@ export class PhonePage {
       this.phoneNumber = this.phoneNumber.substring(1, 15);
     }
     let number = this.phoneNumber;
-    this.countryCode = '+' + 32 ;
-    let au = this.countryCode + number
+    let au = '+' + this.myCountry.nr + number
     console.log(au);
     (<any>window).FirebasePlugin.verifyPhoneNumber(au, 60, (credential) =>{
       this.api.hideLoader();
@@ -63,5 +69,12 @@ export class PhonePage {
       this.api.showAlert(error, 'Try Again')
     });
 
+  }
+}
+
+export class Country {
+  public displayName: string = '';
+  constructor(public name: string, public nr: number) {
+    this.displayName = name + ' (+' + nr + ')';
   }
 }
