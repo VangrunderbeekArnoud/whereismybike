@@ -6,10 +6,13 @@ page-phone {
     .form {
       margin-bottom: 26px;
       height: 200px auto;
+      left: 20px;
+      right: 20px;
       background: white;
       padding: 10px;
       border-radius: 4px;
       margin-top: 20px;
+      position: fixed;
       button {
         margin-top: 20px !important;
       }
