@@ -7,12 +7,12 @@
 //   color: color($colors, dark, base);
 // }
 
-ion-content{
+ion-content {
   font-family: 'Humanst';
-  
+
 }
 
-.whiteFlap{
+.whiteFlap {
   margin-bottom: 26px;
   height: 200px auto;
   background: white;
@@ -22,94 +22,96 @@ ion-content{
   border: 1px solid color($colors, nav-border-bottom, base);
 }
 
-ion-menu{
+ion-menu {
   overflow: hidden !important;
 }
 
-ion-header{
+ion-header {
   font-family: 'Humanst';
 }
 
-.no-scroll .scroll-content{
+.no-scroll .scroll-content {
   overflow: hidden;
-  background: color($colors, secondary, base); 
+  background: color($colors, secondary, base);
 }
 
-.yes-scroll{
+.yes-scroll {
   overflow: auto;
-  background: color($colors, secondary, base); 
+  background: color($colors, secondary, base);
 }
 
-.o-scroll{
+.o-scroll {
   overflow: hidden;
-  
+
 }
 
-ion-navbar{
+ion-navbar {
   border-bottom: 1px solid color($colors, nav-border-bottom, base);
 }
 
-button{
+button {
   box-shadow: none;
   border-radius: 4px;
-  height: 50px; 
-  font-size: 1.2em;
-}
-.button{
-  box-shadow: none;
-  border-radius: 4px;
-  height: 50px; 
+  height: 50px;
   font-size: 1.2em;
 }
 
+.button {
+  box-shadow: none;
+  border-radius: 4px;
+  height: 50px;
+  font-size: 1.2em;
+}
 
-.profile-pic{
+.profile-pic {
   width: 4em auto;
   height: 4em auto;
   border-radius: 50px;
- }
+  object-fit: cover;
+}
 
- ion-input{
+ion-input {
   border-radius: 4px;
   border: 1px solid color($colors, nav-border-bottom, base);
   padding: 6px;
   font-size: 1.3em;
- }
-
- ion-searchbar{
-  box-shadow: none;
-  border-radius: 4px;
- }
-
- ion-list{
-   border-radius: 4px;
- }
- 
- ion-icon{
-   color: color($colors, shade, base); 
- }
-
- ion-spinner{
-  color: color($colors, primary, base); 
 }
 
- .main{
-  background: color($colors, secondary, base); 
+ion-searchbar {
+  box-shadow: none;
+  border-radius: 4px;
+}
+
+ion-list {
+  border-radius: 4px;
+}
+
+ion-icon {
+  color: color($colors, shade, base);
+}
+
+ion-spinner {
+  color: color($colors, primary, base);
+}
+
+.main {
+  background: color($colors, secondary, base);
   overflow: hidden !important;
   border-bottom: 1.5px solid color($colors, nav-border-bottom, base);
-   .top_bar{
-    height: 100px; 
-    border-bottom: 1.5px solid color($colors, nav-border-bottom, base); 
+  .top_bar {
+    height: 100px;
+    border-bottom: 1.5px solid color($colors, nav-border-bottom, base);
     padding: 0px;
-    background: color($colors, nav-color, base); 
-   }
-   .profile-pic{
-    width: 4em ;
-    height: 4em ;
+    background: color($colors, nav-color, base);
+  }
+  .profile-pic {
+    width: 4em;
+    height: 4em;
     border: 1px solid color($colors, light, base);
-   }
- }
+    object-fit: cover;
+  }
+}
 
- #sidebarList{
+#sidebarList {
   overflow: hidden !important;
- }
+}
