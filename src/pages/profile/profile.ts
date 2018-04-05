@@ -111,8 +111,6 @@ export class ProfilePage {
     })
   }
 
-
-  // something is wrong with this function, it hangs with 'Processing image..'
   processProfilePicture(captureData) {
     let storageRef = firebase.storage().ref();
     // Create a timestamp as filename
@@ -157,8 +155,8 @@ export class ProfilePage {
         {
           text: 'Save',
           handler: data => {
-            console.log(data)
-            this.ph.UpdateNumber(data);
+            console.log(data[0])
+            this.ph.UpdateNumber(data[0]);
           }
         }
       ]
@@ -183,8 +181,8 @@ export class ProfilePage {
         {
           text: 'Save',
           handler: data => {
-            console.log(data)
-            this.ph.updateName(data);
+            console.log(data[0])
+            this.ph.updateName(data[0]);
           }
         }
       ]
