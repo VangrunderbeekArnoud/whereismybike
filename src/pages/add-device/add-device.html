@@ -19,20 +19,20 @@
 <ion-content class="no-scroll" padding>
 
   <ion-list no-lines>
-    <ion-item (click)="updateDeviceID()">
+    <ion-item (click)="updatesigfoxID()">
       <ion-grid>
         <ion-row>
           <ion-col padding col-5>
             Device ID:
           </ion-col>
-          <ion-col padding col-5 *ngIf="ph.user?.displayName">
+          <ion-col padding col-5 *ngIf="sigfoxID">
             <ion-icon name="ios-create"></ion-icon>
-            {{ph.user?.displayName}}
+            {{sigfoxID}}
           </ion-col>
-          <ion-col padding col-5 *ngIf="!ph.user?.displayName && name">
+          <ion-col padding col-5 class="placeholder-profile" *ngIf="!sigfoxID">
             <span>
               <ion-icon name="ios-create"></ion-icon>
-              {{name}}
+              {{sigfoxID}}
             </span>
           </ion-col>
         </ion-row>
@@ -44,11 +44,11 @@
           <ion-col padding col-5>
             Name:
           </ion-col>
-          <ion-col padding col-5 *ngIf="ph.user?.displayName">
+          <ion-col padding col-5 *ngIf="name">
             <ion-icon name="ios-create"></ion-icon>
-            {{ph.user?.displayName}}
+            {{name}}
           </ion-col>
-          <ion-col padding col-5 *ngIf="!ph.user?.displayName && name">
+          <ion-col padding col-5 class="placeholder-profile" *ngIf="!name">
             <span>
               <ion-icon name="ios-create"></ion-icon>
               {{name}}
@@ -67,14 +67,14 @@
           <ion-col padding col-5>
             Brand:
           </ion-col>
-          <ion-col padding col-5 *ngIf="ph.user?.displayName">
+          <ion-col padding col-5 *ngIf="brand">
             <ion-icon name="ios-create"></ion-icon>
-            {{ph.user?.displayName}}
+            {{brand}}
           </ion-col>
-          <ion-col padding col-5 *ngIf="!ph.user?.displayName && name">
+          <ion-col padding col-5 class="placeholder-profile" *ngIf="!brand">
             <span>
               <ion-icon name="ios-create"></ion-icon>
-              {{name}}
+              {{brand}}
             </span>
           </ion-col>
         </ion-row>
@@ -86,14 +86,14 @@
           <ion-col padding col-5>
             Type:
           </ion-col>
-          <ion-col padding col-5 *ngIf="ph.user?.displayName">
+          <ion-col padding col-5 *ngIf="type">
             <ion-icon name="ios-create"></ion-icon>
-            {{ph.user?.displayName}}
+            {{type}}
           </ion-col>
-          <ion-col padding col-5 *ngIf="!ph.user?.displayName && name">
+          <ion-col padding col-5 class="placeholder-profile" *ngIf="!type">
             <span>
               <ion-icon name="ios-create"></ion-icon>
-              {{name}}
+              {{type}}
             </span>
           </ion-col>
         </ion-row>
@@ -105,14 +105,14 @@
           <ion-col padding col-5>
             Engraving nr:
           </ion-col>
-          <ion-col padding col-5 *ngIf="ph.user?.displayName">
+          <ion-col padding col-5 *ngIf="number">
             <ion-icon name="ios-create"></ion-icon>
-            {{ph.user?.displayName}}
+            {{number}}
           </ion-col>
-          <ion-col padding col-5 *ngIf="!ph.user?.displayName && name">
+          <ion-col padding col-5 class="placeholder-profile" *ngIf="!number">
             <span>
               <ion-icon name="ios-create"></ion-icon>
-              {{name}}
+              {{number}}
             </span>
           </ion-col>
         </ion-row>

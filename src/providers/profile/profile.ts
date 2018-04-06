@@ -32,7 +32,7 @@ export class ProfileProvider {
   constructor() {
     firebase.auth().onAuthStateChanged( user => {
       if (user) {
-       // console.log(user)
+        //console.log(user)
         this.user = user;
         //console.log(this.user)
         this.id = this.user.uid;

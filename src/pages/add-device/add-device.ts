@@ -6,6 +6,7 @@ import {IonicPage} from 'ionic-angular';
 import {Camera, CameraOptions} from '@ionic-native/camera';
 import {PopUpProvider} from '../../providers/pop-up/pop-up';
 import firebase from 'firebase/app';
+import { SigfoxProvider } from "../../providers/sigfox/sigfox";
 
 @IonicPage()
 @Component({
@@ -14,8 +15,9 @@ import firebase from 'firebase/app';
 })
 export class AddDevicePage {
   public userProfile: any;
+  public devicesProfile: any;
   public captureDataUrl: any;
-  public deviceID: any;
+  public sigfoxID: any;
   public name: any;
   public brand: any;
   public type: any;
@@ -24,8 +26,9 @@ export class AddDevicePage {
 
 
   constructor(public navCtrl: NavController, public actionSheetCtrl: ActionSheetController, public modalCtrl: ModalController, private pop: PopUpProvider, private camera: Camera, public alertCtrl: AlertController,
-              public ph: ProfileProvider, public authProvider: AuthProvider) {
+              public ph: ProfileProvider, public authProvider: AuthProvider, public sigfox: SigfoxProvider) {
     ph.isHome = false;
+    sigfox.test = false;
   }
 
   ionViewDidLoad() {
@@ -34,15 +37,18 @@ export class AddDevicePage {
 
   ionViewDidEnter() {
     console.log('AddDevicesPage: ionViewDidEnter() called');
-    this.ph.getUserProfile().on('value', userProfileSnapshot => {
+    this.sigfox.getUserProfile().on('value', userProfileSnapshot => {
       this.userProfile = userProfileSnapshot.val();
-      this.deviceID = userProfileSnapshot.val().deviceID;
-      this.name = userProfileSnapshot.val().name;
-      this.brand = userProfileSnapshot.val().brand;
-      this.type = userProfileSnapshot.val().type;
-      this.number = userProfileSnapshot.val().number;
-      this.pic = userProfileSnapshot.val().picture;
     });
+    this.sigfox.getDevicesProfile().on('value', devicesProfileSnapshot => {
+      this.devicesProfile = devicesProfileSnapshot.val();
+      this.sigfoxID = devicesProfileSnapshot.val().sigfoxID;
+      this.name = devicesProfileSnapshot.val().name;
+      this.brand = devicesProfileSnapshot.val().brand;
+      this.type = devicesProfileSnapshot.val().type;
+      this.number = devicesProfileSnapshot.val().number;
+      this.pic = devicesProfileSnapshot.val().picture;
+    })
   }
 
   cancel() {
@@ -50,18 +56,18 @@ export class AddDevicePage {
     this.navCtrl.pop();
   }
 
-  updateDeviceID() {
+  updatesigfoxID() {
     const alert = this.alertCtrl.create({
       message: "Device ID",
       inputs: [
-        { value: this.userProfile.name },
+        { value: this.devicesProfile.sigfoxID },
       ],
       buttons: [
         { text: 'Cancel'},
         { text: 'Save',
         handler: data => {
           console.log(data[0]);
-          this.ph.updateName(data[0]);
+          this.sigfox.updateSigfoxID(data[0]);
         }}
       ]
     });
@@ -74,7 +80,7 @@ export class AddDevicePage {
       inputs: [
         {
 
-          value: this.userProfile.name
+          value: this.devicesProfile.name
         },
       ],
       buttons: [
@@ -85,7 +91,7 @@ export class AddDevicePage {
           text: 'Save',
           handler: data => {
             console.log(data[0])
-            this.ph.updateName(data[0]);
+            this.sigfox.updateName(data[0]);
           }
         }
       ]
@@ -96,14 +102,14 @@ export class AddDevicePage {
     const alert = this.alertCtrl.create({
       message: "Brand name of your bike",
       inputs: [
-        { value: this.userProfile.name },
+        { value: this.devicesProfile.brand },
       ],
       buttons: [
         { text: 'Cancel'},
         { text: 'Save',
           handler: data => {
             console.log(data[0]);
-            this.ph.updateName(data[0]);
+            this.sigfox.updateBrand(data[0]);
           }}
       ]
     });
@@ -113,14 +119,14 @@ export class AddDevicePage {
     const alert = this.alertCtrl.create({
       message: "Type of the bike",
       inputs: [
-        { value: this.userProfile.name },
+        { value: this.devicesProfile.type },
       ],
       buttons: [
         { text: 'Cancel'},
         { text: 'Save',
           handler: data => {
             console.log(data[0]);
-            this.ph.updateName(data[0]);
+            this.sigfox.updateType(data[0]);
           }}
       ]
     });
@@ -132,7 +138,7 @@ export class AddDevicePage {
       message: "Bike engravings number",
       inputs: [
         {
-          value: this.userProfile.phoneNumber
+          value: this.devicesProfile.number
         },
       ],
       buttons: [
@@ -143,7 +149,7 @@ export class AddDevicePage {
           text: 'Save',
           handler: data => {
             console.log(data[0])
-            this.ph.UpdateNumber(data[0]);
+            this.sigfox.updateNumber(data[0]);
           }
         }
       ]

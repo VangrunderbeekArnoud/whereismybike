@@ -38,7 +38,7 @@ import { PopUpProvider } from '../providers/pop-up/pop-up';
 import { OnesignalProvider } from '../providers/onesignal/onesignal';
 import { NativeMapContainerProvider } from '../providers/native-map-container/native-map-container';
 import { ApiProvider } from '../providers/api/api';
-
+import { SigfoxProvider } from "../providers/sigfox/sigfox";
 
 
 //Change this to your firebase configuration file gotten from https://console.firebase.google.com
@@ -102,7 +102,8 @@ firebase.initializeApp(firebaseConfig);
     NativeMapContainerProvider,
     GoogleMaps,
     Vibration,
-    ApiProvider
+    ApiProvider,
+    SigfoxProvider
   ]
 })
 export class AppModule {}
