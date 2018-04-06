@@ -97,3 +97,7 @@ If that doesn't fix the problem, run:
 ```bash
 $ npm install
 ```
+
+## Convert and use images to BASE64
+
+Convert your standard images to BASE64 with this [tool](https://www.base64-image.de/).
