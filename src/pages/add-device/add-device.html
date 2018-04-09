@@ -9,7 +9,7 @@
       <ion-title>Add Device</ion-title>
     </div>
     <ion-buttons end>
-      <button ion-button solid color="primary" [disabled]="true">
+      <button ion-button solid color="primary" [disabled]="!(sigfoxID&&name)" (click)="proceed()">
         Add
       </button>
     </ion-buttons>
@@ -19,7 +19,7 @@
 <ion-content class="no-scroll" padding>
 
   <ion-list no-lines>
-    <ion-item (click)="updatesigfoxID()">
+    <ion-item (click)="addDevice()" *ngIf="initState">
       <ion-grid>
         <ion-row>
           <ion-col padding col-5>
@@ -38,7 +38,26 @@
         </ion-row>
       </ion-grid>
     </ion-item>
-    <ion-item (click)="updateName()">
+    <ion-item *ngIf="!initState">
+      <ion-grid>
+        <ion-row>
+          <ion-col padding col-5>
+            Device ID:
+          </ion-col>
+          <ion-col padding col-5 *ngIf="sigfoxID">
+            <ion-icon name="ios-create"></ion-icon>
+            {{sigfoxID}}
+          </ion-col>
+          <ion-col padding col-5 class="placeholder-profile" *ngIf="!sigfoxID">
+            <span>
+              <ion-icon name="ios-create"></ion-icon>
+              {{sigfoxID}}
+            </span>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+    <ion-item (click)="updateName()" *ngIf="!initState">
       <ion-grid>
         <ion-row>
           <ion-col padding col-5>
@@ -60,7 +79,7 @@
   </ion-list>
 
 
-  <ion-list no-lines>
+  <ion-list no-lines *ngIf="!initState">
     <ion-item (click)="updateBrand()">
       <ion-grid>
         <ion-row>
@@ -120,7 +139,7 @@
     </ion-item>
   </ion-list>
 
-  <ion-list no-lines>
+  <ion-list no-lines *ngIf="!initState">
     <ion-item (click)="updateNumber()">
       <ion-grid>
         <ion-row>

@@ -14,6 +14,7 @@ import { SigfoxProvider } from "../../providers/sigfox/sigfox";
   templateUrl: 'add-device.html',
 })
 export class AddDevicePage {
+  public initState: boolean =  true;
   public userProfile: any;
   public devicesProfile: any;
   public captureDataUrl: any;
@@ -23,12 +24,12 @@ export class AddDevicePage {
   public type: any;
   public number: any;
   public pic: any;
-
+  public device: any;
+  private reference: any;
 
   constructor(public navCtrl: NavController, public actionSheetCtrl: ActionSheetController, public modalCtrl: ModalController, private pop: PopUpProvider, private camera: Camera, public alertCtrl: AlertController,
               public ph: ProfileProvider, public authProvider: AuthProvider, public sigfox: SigfoxProvider) {
     ph.isHome = false;
-    sigfox.test = false;
   }
 
   ionViewDidLoad() {
@@ -37,37 +38,58 @@ export class AddDevicePage {
 
   ionViewDidEnter() {
     console.log('AddDevicesPage: ionViewDidEnter() called');
-    this.sigfox.getUserProfile().on('value', userProfileSnapshot => {
-      this.userProfile = userProfileSnapshot.val();
-    });
-    this.sigfox.getDevicesProfile().on('value', devicesProfileSnapshot => {
-      this.devicesProfile = devicesProfileSnapshot.val();
-      this.sigfoxID = devicesProfileSnapshot.val().sigfoxID;
-      this.name = devicesProfileSnapshot.val().name;
-      this.brand = devicesProfileSnapshot.val().brand;
-      this.type = devicesProfileSnapshot.val().type;
-      this.number = devicesProfileSnapshot.val().number;
-      this.pic = devicesProfileSnapshot.val().picture;
-    })
   }
 
-  cancel() {
-    console.log('navCtrl.pop(): AddDevicePage -> DevicesPage');
+  listeners() {
+    this.reference = this.device.on('value', snapshot => {
+      this.sigfoxID = snapshot.val().sigfoxID;
+      this.name = snapshot.val().name;
+      this.brand = snapshot.val().brand;
+      this.type = snapshot.val().type;
+      this.number = snapshot.val().number;
+      this.pic = snapshot.val().picture;
+    });
+  }
+
+  proceed() {
     this.navCtrl.pop();
   }
 
-  updatesigfoxID() {
+  cancel() {
+    if ( this.device) { // Delete device in the database
+      this.device.off();
+      this.ph.deleteDevice(this.device);
+    }
+    this.navCtrl.pop();
+  }
+
+  addDevice() {
     const alert = this.alertCtrl.create({
       message: "Device ID",
       inputs: [
-        { value: this.devicesProfile.sigfoxID },
+        { },
       ],
       buttons: [
         { text: 'Cancel'},
         { text: 'Save',
         handler: data => {
-          console.log(data[0]);
-          this.sigfox.updateSigfoxID(data[0]);
+          var self = this;
+          this.sigfox.getDevice(data[0]).once('value', function(snapshot1) {
+            if ( snapshot1.exists()) {
+              self.ph.getDevice(data[0]).once('value', function(snapshot2) {
+                if ( !snapshot2.exists()) {
+                  self.ph.addDevice(data[0]);
+                  self.initState = false;
+                  self.device = self.ph.getDevice(data[0]);
+                  self.listeners();
+                } else {
+                  self.pop.presentToast('Device already exists!')
+                }
+              });
+            } else {
+              self.pop.presentToast('Please enter a valid device ID.')
+            }
+          })
         }}
       ]
     });
@@ -79,8 +101,7 @@ export class AddDevicePage {
       message: "Your Name",
       inputs: [
         {
-
-          value: this.devicesProfile.name
+          value: this.device.name
         },
       ],
       buttons: [
@@ -91,7 +112,7 @@ export class AddDevicePage {
           text: 'Save',
           handler: data => {
             console.log(data[0])
-            this.sigfox.updateName(data[0]);
+            this.ph.updateDeviceName(this.device, data[0]);
           }
         }
       ]
@@ -102,14 +123,14 @@ export class AddDevicePage {
     const alert = this.alertCtrl.create({
       message: "Brand name of your bike",
       inputs: [
-        { value: this.devicesProfile.brand },
+        { value: this.device.brand },
       ],
       buttons: [
         { text: 'Cancel'},
         { text: 'Save',
           handler: data => {
             console.log(data[0]);
-            this.sigfox.updateBrand(data[0]);
+            this.ph.updateDeviceBrand(this.device, data[0]);
           }}
       ]
     });
@@ -119,14 +140,14 @@ export class AddDevicePage {
     const alert = this.alertCtrl.create({
       message: "Type of the bike",
       inputs: [
-        { value: this.devicesProfile.type },
+        { value: this.device.type },
       ],
       buttons: [
         { text: 'Cancel'},
         { text: 'Save',
           handler: data => {
             console.log(data[0]);
-            this.sigfox.updateType(data[0]);
+            this.ph.updateDeviceType(this.device, data[0]);
           }}
       ]
     });
@@ -138,7 +159,7 @@ export class AddDevicePage {
       message: "Bike engravings number",
       inputs: [
         {
-          value: this.devicesProfile.number
+          value: this.device.number
         },
       ],
       buttons: [
@@ -149,7 +170,7 @@ export class AddDevicePage {
           text: 'Save',
           handler: data => {
             console.log(data[0])
-            this.sigfox.updateNumber(data[0]);
+            this.ph.updateDeviceNumber(this.device, data[0]);
           }
         }
       ]

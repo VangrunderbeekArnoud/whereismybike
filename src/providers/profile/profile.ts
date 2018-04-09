@@ -5,6 +5,7 @@ import firebase from 'firebase';
 export class ProfileProvider {
   public userProfile:firebase.database.Reference;
   public customer:firebase.database.Reference;
+  public devicesProfile:firebase.database.Reference;
   public currentUser:firebase.User;
   public user: any;
   public phone: number;
@@ -47,6 +48,7 @@ export class ProfileProvider {
 
         this.drivers = firebase.database().ref(`Drivers`);
         this.CustomerOwnPropertyRef = firebase.database().ref(`Customer/${user.uid}/client`);
+        this.devicesProfile = firebase.database().ref(`users/${user.uid}/devices`);
 
         this.getUserProfile().on('value', userProfileSnapshot => {
          //this.userProfile = userProfileSnapshot.val();
@@ -64,6 +66,48 @@ export class ProfileProvider {
          console.log(this.phone)
         })
       }
+    });
+  }
+
+  updateDeviceName(device: any, name: string): firebase.Promise<void> {
+    return device.update({
+      name: name
+    });
+  }
+  updateDeviceBrand(device: any, brand: string): firebase.Promise<void> {
+    return device.update({
+      brand: brand
+    });
+  }
+  updateDeviceType(device: any, type: string): firebase.Promise<void> {
+    return device.update({
+      type: type
+    });
+  }
+  updateDeviceNumber(device: any, number: string): firebase.Promise<void> {
+    return device.update({
+      number: number
+    });
+  }
+  updateDevicePic(device: any, name: string): firebase.Promise<void> {
+    return device.update({
+      name: name
+    });
+  }
+
+  getDevice(device: string): firebase.database.Reference {
+    return firebase.database().ref(`users/${this.user.uid}/devices/${device}`);
+  }
+
+  addDevice(sigfoxID: string): firebase.Promise<any> {
+    return this.devicesProfile.child('/' + sigfoxID).update({
+      sigfoxID: sigfoxID
+    });
+  }
+
+  deleteDevice(device: any) {
+    device.remove().then( f => {
+      console.log(f);
     });
   }
 
