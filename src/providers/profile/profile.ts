@@ -182,6 +182,11 @@ export class ProfileProvider {
       picture: pic,
     });
   }
+  UpdateDevicePhoto(device: any, pic: any): firebase.Promise<any> {
+    return device.update({
+      picture: pic
+    });
+  }
 
   PushRandomNumber(
     number: number): firebase.Promise<any> {

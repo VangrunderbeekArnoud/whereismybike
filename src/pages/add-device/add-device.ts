@@ -249,7 +249,7 @@ export class AddDevicePage {
     imageRef.putString(captureData, firebase.storage.StringFormat.DATA_URL).then((snapshot) => {
       imageRef.getDownloadURL().then(url => {
         //console.log(url)
-        this.ph.UpdatePhoto(url).then(success => {
+        this.ph.UpdateDevicePhoto( this.device, url).then(success => {
           //  console.log(url)
           this.pop.hideLoader();
           //console.log("done")

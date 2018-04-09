@@ -26,9 +26,9 @@ export class PopUpProvider {
   public dismissLoader: any;
 
   constructor( protected injector: Injector, private toastCtrl: ToastController, public storage: Storage, public cMap: NativeMapContainerProvider,  public alert: AlertController, public ph: ProfileProvider, public load: LoadingController) {
-   
+
   }
-   
+
   get navCtrl(): NavController {
     return this.injector.get(NavController);
   }
@@ -46,7 +46,7 @@ showAlertNormal(title, subtitle, network){
           }
       }
     },],
-    enableBackdropDismiss: false 
+    enableBackdropDismiss: false
   });
   alert.present();
 }
@@ -63,7 +63,7 @@ showAlert(title, subtitle){
       this.cMap.map.setClickable(true)
       }
     },],
-    enableBackdropDismiss: false 
+    enableBackdropDismiss: false
   });
   alert.present();
 }
@@ -73,6 +73,20 @@ presentToast(message) {
     message: message,
     duration: 3000,
     position: 'top'
+  });
+
+  toast.onDidDismiss(() => {
+    console.log('Dismissed toast');
+  });
+
+  toast.present();
+}
+
+presentToast2(message) {
+  let toast = this.toastCtrl.create({
+    message: message,
+    duration: 3000,
+    position: 'bottom'
   });
 
   toast.onDidDismiss(() => {
@@ -102,7 +116,7 @@ pickup(){
        //picked up true, disable cancel of navigation
       }
     },],
-    enableBackdropDismiss: false 
+    enableBackdropDismiss: false
   });
   alert.present();
 }
@@ -125,7 +139,7 @@ showPayMentAlert(title, subtitle, canLeave ){
        }
       }
     },],
-    enableBackdropDismiss: false 
+    enableBackdropDismiss: false
   });
   alert.present();
 }
@@ -143,7 +157,7 @@ showPomp(title, message ){
         this.clearAll(this.uid, true);
       }
     },],
-    enableBackdropDismiss: false 
+    enableBackdropDismiss: false
   });
   alert.present();
 }
@@ -158,7 +172,7 @@ showPimp(title ){
       handler: () => {
       }
     },],
-    enableBackdropDismiss: false 
+    enableBackdropDismiss: false
   });
   alert.present();
 }
@@ -175,7 +189,7 @@ show(title ){
         document.getElementById("destination").innerHTML = "Set A Closer Destination";
       }
     },],
-    enableBackdropDismiss: false 
+    enableBackdropDismiss: false
   });
   alert.present();
 }
@@ -196,8 +210,8 @@ Send(id) {
       {
         text: 'Cancel',
         role: 'cancel',
-        handler: data => {    
-         
+        handler: data => {
+
         }
       },
       {
@@ -214,11 +228,11 @@ Send(id) {
 
 
 refactor(){
-  
+
         this.cMap.onDestinatiobarHide = false;
         this.calculateBtn = false;
         document.getElementById("destination").innerHTML = "Set Destination";
-   
+
 }
 
 
@@ -234,13 +248,13 @@ clearAll(uid, can){
     // this.cMap.toggleFlipAnim('flipped');
     // this.cMap.toggleFadeAnim('invisible');
     // this.cMap.toggleBounceAnim("out");
-   
+
     this.cMap.onbar2 = false
     this.cMap.onbar3 = false
     this.cMap.isNavigate = false;
     this.cMap.map.clear().then(s=>{
       this.cMap.Reset();
-     // this.presentRouteLoader("Cancelling..."); 
+     // this.presentRouteLoader("Cancelling...");
     });
     //this.cMap.element = this.mapComponent
     this.cMap.hasRequested = false;
@@ -260,7 +274,7 @@ clearAll(uid, can){
   }).catch((error)=>{
    // this.showAlertNormal("Network Error", "please make sure you have a strong network and try Again", false)
   })
-  
+
 }
 
 
@@ -282,7 +296,7 @@ presentRouteLoader(message) {
     loading.dismiss();
     clearInterval(myInterval)
   }
-    
+
   }, 1000);
 }
 
@@ -324,7 +338,7 @@ showAlertComplex(title, message, accept, reject, iscancel){
         text: reject,
         role: 'cancel',
         handler: () => {
-          
+
         }
       },
       {
@@ -336,9 +350,9 @@ showAlertComplex(title, message, accept, reject, iscancel){
         }
       }
     ],
-    enableBackdropDismiss: false 
+    enableBackdropDismiss: false
   });
   alert.present();
 }
-  
+
 }
