@@ -98,6 +98,9 @@ export class ProfileProvider {
   getDevice(device: string): firebase.database.Reference {
     return firebase.database().ref(`users/${this.user.uid}/devices/${device}`);
   }
+  getDevices(): firebase.database.Reference {
+    return firebase.database().ref(`users/${this.user.uid}/devices`)
+  }
 
   addDevice(sigfoxID: string): firebase.Promise<any> {
     return this.devicesProfile.child('/' + sigfoxID).update({

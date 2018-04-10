@@ -1,12 +1,7 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
-/**
- * Generated class for the DevicesPage page.
- *
- * See http://ionicframework.com/docs/components/#navigation for more info
- * on Ionic pages and navigation.
- */
+import {Component} from '@angular/core';
+import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import {ProfileProvider} from "../../providers/profile/profile";
+import {PopUpProvider} from "../../providers/pop-up/pop-up";
 
 @IonicPage()
 @Component({
@@ -14,8 +9,30 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'devices.html',
 })
 export class DevicesPage {
+  public devices: Array<any>;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public ph: ProfileProvider,
+              public pop: PopUpProvider) {
+  }
+
+  ionViewDidEnter() {
+    this.pop.presentLoader('Retrieving all items...');
+    this.ph.getDevices().on('value', snapshot => {
+      this.devices = [];
+      this.pop.hideLoader();
+      snapshot.forEach(snap => {
+        this.devices.push({
+          sigfoxID: snap.val().sigfoxID,
+          name: snap.val().name,
+          brand: snap.val().brand,
+          type: snap.val().type,
+          number: snap.val().number,
+          pic: snap.val().picture,
+          photoURL: snap.val().photoURL
+        });
+        return false;
+      });
+    });
   }
 
   ionViewDidLoad() {
