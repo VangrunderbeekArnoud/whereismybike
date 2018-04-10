@@ -157,12 +157,6 @@ export class EditDevicePage {
     alert.present();
   }
 
-  remove(): void {
-    this.authProvider.logoutUser().then(() => {
-      this.navCtrl.setRoot('LoginPage');
-    });
-  }
-
   choosePic() {
     let actionSheet = this.actionSheetCtrl.create({
       title: 'Choose From',

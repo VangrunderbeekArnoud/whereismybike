@@ -266,7 +266,6 @@ clearAll(uid, can){
     this.cMap.map.setClickable(true);
     document.getElementById("header").innerText = "Requesting A Ride";
     //this.cMap.map.setOptions({draggable: true});
-    this.cMap.isCarAvailable = true;
     this.cMap.car_notificationIds = [];
     this.canDismiss = true
     this.storage.remove(`currentUserId`);

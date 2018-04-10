@@ -16,6 +16,7 @@ import {
   LatLngBounds,
   LatLng
 } from '@ionic-native/google-maps';
+import {SigfoxProvider} from "../sigfox/sigfox";
 
 declare var google: any;
 
@@ -41,7 +42,6 @@ export class NativeMapContainerProvider {
   public car_notificationIds: any = [];
   public delay: number = 100;
   public hasRequested: boolean = false;
-  public isCarAvailable: boolean = false;
   public uid: any
   public onGpsEnabled: boolean = false;
   isNavigate: boolean = false;
@@ -49,7 +49,6 @@ export class NativeMapContainerProvider {
   location: any;
   timer1: any;
   map: GoogleMap;
-  public driverCarType: any;
   choseCar: boolean = false;
   public toggleNav: boolean = true;
   public isClear: boolean = false;
@@ -78,22 +77,20 @@ export class NativeMapContainerProvider {
   ready: boolean = false;
   public D_lng: any;
 
-  constructor(private googleMaps: GoogleMaps, public zone: NgZone, public myProf: ProfileProvider, public gcode: GeocoderProvider, public platform: Platform) {
+  constructor(private googleMaps: GoogleMaps, public zone: NgZone, public ph: ProfileProvider,
+              public gcode: GeocoderProvider, public platform: Platform, public sigfox: SigfoxProvider) {
   }
 
   ///Start the cordova map
   loadMap() {
     console.log('map called')
 
-
     let lat;
     let lng;
     let zoom;
-
     lat = 46.1634787
     lng = 104.3458401
     zoom = 5
-
 
     let mapOptions: GoogleMapOptions = {
       camera: {
@@ -115,27 +112,21 @@ export class NativeMapContainerProvider {
         this.map.setCompassEnabled(false)
         this.map.setTrafficEnabled(false)
         this.map.setIndoorEnabled(false)
-
         this.hasStart = true;
-
         this.map.getMyLocation().then(location => {
           console.log('sucess location found');
-
           this.AnimateToLoc(location);
           this.location = location;
           this.map.setClickable(true)
           this.gcode.Reverse_Geocode(location.latLng.lat, location.latLng.lng, this.map, false)
-
-
         }).catch(er => {
           console.log(er)
         })
-
       });
   }
 
 
-  //check if gps is available by trying to getlocation info which automatically handles everything
+  //check if gps is available by trying to get location info which automatically handles everything
   checkGps() {
     let mapOptions: GoogleMapOptions = {
       camera: {}
@@ -149,64 +140,40 @@ export class NativeMapContainerProvider {
 
 //Start the map touch detection
   PumpControls() {
-
     this.map.on(GoogleMapsEvent.CAMERA_MOVE_START).subscribe(start => {
-
       if (!this.hasRequested) {
         // this.map.refreshLayout();
         let centerBar = document.getElementById("onbar").style.display = 'none'
-
         // let location = document.getElementById("location").style.marginTop = '-140px'
-
         this.onDestinatiobarHide = false
-
         clearTimeout(this.timer1);
-
         let bottomBar1 = document.getElementById("bar2").style.display = 'none'
-
       }
-
-
     });
-
     this.map.on(GoogleMapsEvent.CAMERA_MOVE_END).subscribe(start => {
-
-
       //Check if the user has already booked a ride
       if (!this.hasRequested) {
-
         let centerBar = document.getElementById("onbar").style.display = 'block'
-
         this.onDestinatiobarHide = false
-
         //let location = document.getElementById("location").style.marginTop = '-50px'
-
         let center = this.map.getCameraPosition();
         this.lat = center.target.lat;
         this.lng = center.target.lng;
-
         if (this.canCheck && this.ready) {
           this.canCheck = false
           console.log('move ended')
-          this.checkForDriversAroundUser()
         }
         // if (this.locations != null)
         // this.showCloseDrivers(this.lat, this.lng)
         console.log('should animate end')
-
         this.gcode.Reverse_Geocode(this.lat, this.lng, this.map, false)
       }
-
-
     });
-
   }
-
 
   ///Animate to user location
   AnimateToLoc(location) {
-
-    console.log('ani to loc')
+    console.log('animante to loc')
     this.map.animateCamera({
       target: location.latLng,
       zoom: 17,
@@ -217,19 +184,13 @@ export class NativeMapContainerProvider {
       console.log('camera done')
       this.lat = location.latLng.lat
       this.lng = location.latLng.lng
-
       console.log(this.lat, this.lng)
       this.PumpControls();
-
-      this.showDriversOnMap();
-
+      this.showDevicesOnMap();
       this.hasShown = true
-
       let centerBar = document.getElementById("onbar")
       centerBar.style.display = 'block'
-
       this.hasRequested = false;
-
       this.map.addMarker({
         title: '',
         icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAEcUlEQVRIS7WVfUxVZRzHf7/nuQx8QZJLEC81MXpZsjSuZOrEc869CDhoZTW16GXiRXvbrCxa/lFuQdqLmE5mMuacq1Z3gxISHPc8B1dopGEMxlTYNZp6s4WUFl2unOdp5+DFc4GL9EdnO9vdOc/9fH+/7+/lIPzPF96Ej7mS5OCIRQIxi3OeZJynAL8iIe0c4BBj7BQAiEiciAK5suy8JsR7lJBsrutXgJB2iug3QBwgRej6A4TSWQjQhkKUNWva0YlExgk4HI6o2bGxOwQhLwEAQyHeHxZCbWlpGbYCJEmyEUJyAaAMAZYj5zuHAV4fey5MwIDfEhf3Jdf1FcRmK1VV9bPJ0r8uiE6n8xkQYi8ANMTb7Ws8Ho8eCiZMwCVJu3Uh1tkIWdGsaa1Tqf/iwicfjNYDF6MCA3dyxCYuRJWmaa+NEzA854heQCxWVfXTqcCz1m5Wfk5fVT3zSt+lub7aVbZ/fl8pEGsAMUdV1W8NRigDlCSpjRJyVWXMNQVbwID3pRXV9KflzDF6aM7pgydmnDuanxj0fU0QicrY0lGBXElayAk5gULkezXtiPEiLy8veZjSWPXw4bNjszHh6UU1/ckj8NB9T8dHx5PPNeyghHi4EAs0TeswM3DK8lbO+SaBaDe6YNHDa5Mu3P1o7bXouBm3d9cVn6zb2xUSMeFzi2r6U8LhMX/7A2m+r7bcdb5+T2Bw8DJSWsEYKzcFFEWpF0LM1DRNdjxRGjeQuqTZN//ZbCOytDP13Um+hjU/evZ1Zj29Wem744YtocgNeEZXdWXXwbffMniSJB0jhPgZY4+ZApIk/WAjpHeY83W/ZK4+4svemGNNPaX3m+64/tObfkvM3hfyfBT+lz+Q0XkDbjqiKB4ASDHqECbgZeypee6KD3uyN7wcjI6PsorEn2/TL6csouYzPuJ7TAh+YCTy0DVOwClJhwQhsxhjknEo012+qydr/fND0xNtVhHr75ir/kBGR3Vl1xh4yCJK6UVVVR83M3Apyju6rr8SKrLxbF5J+Z6ehe7S4PRbx4mY8FMTwwsKCqKDQ0MDgPiuqqoVpoAsyw6CeFIArGSMNYZSvW99eVWvw+22isT8GRlu+u90PgJC1CEh93u93s7RQXMpynEOEGCMydZByyzZWnU2+wV3cFqCLeYPfyDjp+rKrv3hnlvsNwa2FRF1TdOWWScZcmV5OUdsAcTnVFU9YC3avRu27bqULpeknmn6eBI4uGS5VCB+IgCWMsaOhQmYtZCkSkHIRiJE/tj9vrRg9UOtjV98H2lHKYqiCF1vpJRWehl7c8Jtaux4SsjnAFCIQrzo1bT9U9hL6JJlt875bkJpbbzdXhxxXV9vMRsibieIr3IhvgOADxISEpo8Hk/QGr3ZLcFgga7rb1BCFiPA9tl2+xYrfJxFYcPidC4DIbYBwBKu64MCsYMScsE4o3OeSglZAADTjCAQsSzk+VgLb/bRN1p4PiIWAkAWAtxmAka+ze2IWG+0YqS6TJrBZH/6L+/+BedwGDdvfYzpAAAAAElFTkSuQmCC",
@@ -257,29 +218,6 @@ export class NativeMapContainerProvider {
 
   }
 
-
-// startChecking(){
-//   if (!this.hasRequested){
-//  this.timer1 = setTimeout(() => {
-
-//   this.map.getMyLocation().then(location =>{
-//     this.location = location;
-//     console.log(location)
-//     // this.map.moveCamera({
-//     //   target: location.latLng,
-//     //   zoom: 17,
-//     //   tilt: 0,
-//     //   bearing: 0,
-//     //  }).then(suc =>{
-//       this.marker.setPosition(location.latLng)
-//       // this.startChecking();
-//     //  })
-//   })
-//  }, 10000);
-// }
-// }
-
-
 //Change the pointer/marker to reflect changed position.
   RefreshMap(address) {
     let centerBar = document.getElementById("onbar")
@@ -299,25 +237,17 @@ export class NativeMapContainerProvider {
           let centerBar = document.getElementById("onbar")
           centerBar.style.display = 'block';
           console.log(this.lat)
-
           this.lat = position.lat()
           this.lng = position.lng()
           if (this.canCheck) {
             this.canCheck = false
-            this.checkForDriversAroundUser()
           }
-
-
         })
       } else {
         // alert('Geocode was not successful for the following reason: ' + status);
       }
-
     })
-
-
   }
-
 
 //recreate the map class to clear previous markers and positions
   Reset() {
@@ -333,13 +263,11 @@ export class NativeMapContainerProvider {
       console.log('camera done')
       this.lat = this.location.latLng.lat
       this.lng = this.location.latLng.lng
-      this.showDriversOnMap();
-
+      this.showDevicesOnMap();
       console.log(this.lat, this.lng)
       let centerBar = document.getElementById("onbar")
       centerBar.style.display = 'block'
       this.hasRequested = false;
-
       this.map.addMarker({
         title: '',
         icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAEcUlEQVRIS7WVfUxVZRzHf7/nuQx8QZJLEC81MXpZsjSuZOrEc869CDhoZTW16GXiRXvbrCxa/lFuQdqLmE5mMuacq1Z3gxISHPc8B1dopGEMxlTYNZp6s4WUFl2unOdp5+DFc4GL9EdnO9vdOc/9fH+/7+/lIPzPF96Ej7mS5OCIRQIxi3OeZJynAL8iIe0c4BBj7BQAiEiciAK5suy8JsR7lJBsrutXgJB2iug3QBwgRej6A4TSWQjQhkKUNWva0YlExgk4HI6o2bGxOwQhLwEAQyHeHxZCbWlpGbYCJEmyEUJyAaAMAZYj5zuHAV4fey5MwIDfEhf3Jdf1FcRmK1VV9bPJ0r8uiE6n8xkQYi8ANMTb7Ws8Ho8eCiZMwCVJu3Uh1tkIWdGsaa1Tqf/iwicfjNYDF6MCA3dyxCYuRJWmaa+NEzA854heQCxWVfXTqcCz1m5Wfk5fVT3zSt+lub7aVbZ/fl8pEGsAMUdV1W8NRigDlCSpjRJyVWXMNQVbwID3pRXV9KflzDF6aM7pgydmnDuanxj0fU0QicrY0lGBXElayAk5gULkezXtiPEiLy8veZjSWPXw4bNjszHh6UU1/ckj8NB9T8dHx5PPNeyghHi4EAs0TeswM3DK8lbO+SaBaDe6YNHDa5Mu3P1o7bXouBm3d9cVn6zb2xUSMeFzi2r6U8LhMX/7A2m+r7bcdb5+T2Bw8DJSWsEYKzcFFEWpF0LM1DRNdjxRGjeQuqTZN//ZbCOytDP13Um+hjU/evZ1Zj29Wem744YtocgNeEZXdWXXwbffMniSJB0jhPgZY4+ZApIk/WAjpHeY83W/ZK4+4svemGNNPaX3m+64/tObfkvM3hfyfBT+lz+Q0XkDbjqiKB4ASDHqECbgZeypee6KD3uyN7wcjI6PsorEn2/TL6csouYzPuJ7TAh+YCTy0DVOwClJhwQhsxhjknEo012+qydr/fND0xNtVhHr75ir/kBGR3Vl1xh4yCJK6UVVVR83M3Apyju6rr8SKrLxbF5J+Z6ehe7S4PRbx4mY8FMTwwsKCqKDQ0MDgPiuqqoVpoAsyw6CeFIArGSMNYZSvW99eVWvw+22isT8GRlu+u90PgJC1CEh93u93s7RQXMpynEOEGCMydZByyzZWnU2+wV3cFqCLeYPfyDjp+rKrv3hnlvsNwa2FRF1TdOWWScZcmV5OUdsAcTnVFU9YC3avRu27bqULpeknmn6eBI4uGS5VCB+IgCWMsaOhQmYtZCkSkHIRiJE/tj9vrRg9UOtjV98H2lHKYqiCF1vpJRWehl7c8Jtaux4SsjnAFCIQrzo1bT9U9hL6JJlt875bkJpbbzdXhxxXV9vMRsibieIr3IhvgOADxISEpo8Hk/QGr3ZLcFgga7rb1BCFiPA9tl2+xYrfJxFYcPidC4DIbYBwBKu64MCsYMScsE4o3OeSglZAADTjCAQsSzk+VgLb/bRN1p4PiIWAkAWAtxmAka+ze2IWG+0YqS6TJrBZH/6L+/+BedwGDdvfYzpAAAAAElFTkSuQmCC",
@@ -349,7 +277,6 @@ export class NativeMapContainerProvider {
         .then(marker => {
           this.marker = marker
           console.log('marker added')
-
           this.map.addCircle({
             'center': this.location.latLng,
             'radius': 900,
@@ -363,10 +290,8 @@ export class NativeMapContainerProvider {
             }, 1500)
           });
         })
-
     })
   }
-
 
 //Reset map position to user current position on location btn press
   ResetMe() {
@@ -382,277 +307,50 @@ export class NativeMapContainerProvider {
       console.log('camera done')
       this.lat = this.location.latLng.lat
       this.lng = this.location.latLng.lng
-      //  this.showDriversOnMap();
+      //  this.showDevicesOnMap();
 
       // this.startChecking(
       console.log(this.lat, this.lng)
       let centerBar = document.getElementById("onbar")
       centerBar.style.display = 'block'
       // this.hasRequested = false;
-
     })
   }
 
-
-//For web purpose, you can remove this if you want to build for device
-  showDriversWithoutCordova() {
-    let allCars;
-    let id
-    let pos1;
-    let pos2;
-    this.myProf.getAllDrivers().on('child_added', driverSnapshot => {
-
-      this.isCarAvailable = true;
-      //  pos1 = [driverSnapshot.val().driver_details[0]];
-      //  pos2 = [driverSnapshot.val().driver_details[1]]
-
-      id = [driverSnapshot.val().driver_details[0], driverSnapshot.val().driver_details[1], driverSnapshot.val().driver_details[2], driverSnapshot.key];
-
-      console.log(driverSnapshot.key)
-      let marker, i;
-      this.driverCarType = driverSnapshot.val().driver_details[3]
-      console.log(driverSnapshot.val().driver_details[3])
-
-      if (this.driverCarType == 1)
-        this.smallcar = true
-      if (this.driverCarType == 2)
-        this.bus = true
-      if (this.driverCarType == 3)
-        this.classic = true
-
-
-      // console.log(this.locations[1])
-
-      this.car_notificationIds.push(id)
-      //this.locations.push(pos1)
-
-
-      if (this.canCheck) {
-        this.canCheck = false
-        this.checkForDriversAroundUser()
-      }
-
-
-      //this.myProf.getAllDrivers().off('child_added');
-
-      console.log(this.car_notificationIds);
-
-      //console.log(driverSnapshot.val().driver_details[2], this.location.length, driverSnapshot.val().driver_details[0], driverSnapshot.val().driver_details[1])
-    })
-
-    this.myProf.getAllDrivers().on('child_removed', driverSnapshot => {
-
-      console.log('something removed update id now')
-
-
-      this.car_notificationIds = []
-
-
-      setTimeout(() => {
-
-        this.myProf.getAllDrivers().on('child_added', driverSnapshot => {
-          id = [driverSnapshot.val().driver_details[0], driverSnapshot.val().driver_details[1], driverSnapshot.val().driver_details[2], driverSnapshot.key];
-          this.locations = [driverSnapshot.val().driver_details[0], driverSnapshot.val().driver_details[1]];
-
-          console.log(driverSnapshot.key)
-
-          this.car_notificationIds.push(id)
-          console.log(this.car_notificationIds)
-        })
-      }, 500);
-
-    })
+  processSnapshot(snapshot: any) {
+    this.locations =  {
+      lat: snapshot.val().location.gps.lat,
+      lng: snapshot.val().location.gps.lng
+    };
+    var DEVICES = [
+      {
+        position: {lat: this.locations.lat, lng: this.locations.lng},
+        icon: 'data:image/png;base64,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'
+      },
+    ]
+    DEVICES.forEach((markerOptions) => {
+      this.map.addMarker(markerOptions).then(marker => {
+      });
+    });
+    if (this.canCheck) {
+      this.canCheck = false
+      this.ready = true
+    }
   }
-
 
 ///Go through the databse and access the list of drivers available with thier informations.
-  showDriversOnMap() {
+  showDevicesOnMap() {
     this.platform.ready().then(() => {
-      let allCars;
-      let id;
-
-      this.myProf.getAllDrivers().on('child_added', driverSnapshot => {
-
-        this.isCarAvailable = true;
-        id = [driverSnapshot.val().driver_details[0], driverSnapshot.val().driver_details[1], driverSnapshot.val().driver_details[2], driverSnapshot.key];
-        this.locations = [driverSnapshot.val().driver_details[0], driverSnapshot.val().driver_details[1]];
-
-        console.log(driverSnapshot.key)
-        // console.log(this.locations[1])
-        this.driverCarType = driverSnapshot.val().driver_details[3]
-        this.car_notificationIds.push(id)
-        if (this.driverCarType == 1)
-          this.smallcar = true
-        if (this.driverCarType == 2)
-          this.bus = true
-        if (this.driverCarType == 3)
-          this.classic = true
-        let marker, i;
-        //console.log(this.locations.length)
-
-
-        var CARS = [
-          {
-            position: {lat: this.locations[0], lng: this.locations[1]},
-            icon: 'data:image/png;base64,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'
-          },
-        ]
-
-        if (CARS.length <= 5) {
-          //dont let the number of drivers to show exceed 5 to avoid map lag.
-          CARS.forEach((markerOptions) => {
-            this.map.addMarker(markerOptions).then(marker => {
-              //  marker.setIcon(icon);
-            });
-          });
-        }
-
-
-        //console.log(this.locations[1
-
-        if (this.canCheck) {
-          this.canCheck = false
-          this.checkForDriversAroundUser()
-          this.ready = true
-        }
-
-        // console.log(this.car_location);
-
-        //console.log(driverSnapshot.val().driver_details[2], this.location.length, driverSnapshot.val().driver_details[0], driverSnapshot.val().driver_details[1])
+      this.sigfox.getDevices().on('child_added', snapshot => {
+        console.log('child added');
+        this.processSnapshot(snapshot);
       })
-
-      this.myProf.getAllDrivers().on('child_changed', driverSnapshot => {
-
-        this.isCarAvailable = true;
-        id = [driverSnapshot.val().driver_details[0], driverSnapshot.val().driver_details[1], driverSnapshot.val().driver_details[2], driverSnapshot.key];
-        this.locations = [driverSnapshot.val().driver_details[0], driverSnapshot.val().driver_details[1]];
-
-        console.log(driverSnapshot.key)
-        // console.log(this.locations[1])
-
-        let marker, i;
-        //console.log(this.locations.length)
-
-
-        var CARS = [
-          {
-            position: {lat: this.locations[0], lng: this.locations[1]},
-            icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAoCAYAAAC4h3lxAAAJUklEQVRYR+2XB3AU1xnH/7u3V3UFSdydkJB0SKeGkA6EEIhiDITQjBMHQhHggAMyeBKwwam4BANOwtgBmwkwmWAIg2MbgzHYEKxQTLUJCCGQQZRTRZauSHfSSVe3ZHZvpKAuepjhzezMzr5v3/t+7/9933uPwGPeiMfcfzwBeNQKPlHgsVaAOwYKT4MlCLCPCuSOQoi7ABNY/IjhMK6ugUq7VNo7tLgyjLM4Q3wur9wHgsbAKHNpWqLrTAjFHUuK9RwkMuF+kHA9AuDOYTpL4DWvlzRtO5yMc+YEEFQYxBQl+ObxOGCKvoGZT11HtNYjfHM2UqhrknuY0AVXlCLr2sihH+99ECBdAvAhwqqwlQSe33UiBvvzs6FQqFv88HoaMHHgOcwaXQqS4Fq+c5DArchBRWAe/n38CvSaeqQr3z6jkLKvGZ7xHrufIF0CMPnYQXKY996+FFyqyoZIJBLm5jgOavENrMo5DaWcbuUPzalRqz+Mzw7k44sDhyASkRhkSsG8IVugljXC7qLyjHr3S7IRMN8PkA4BzsfFaWIWWVdpxzcu4yfJfX8k/FwYFJImaFUNSI+twrCU2iAMAIWEQZg6CHLZuRDhKauwfsP7YJgA4kLPIGfE+ZZ+lgXKLTK/SMRtiIn1vU6kwn8vIB0CFIyM2hD6omVxr2haSgUXHSwH8JPzj9sngstNQSFjoQsNIMCI4GgQC3b1TRJ8XTYThO8y5ow8j1BVa4WaneVzxOYQ3zBEeGZJsnHhbiHaAXAAcXmFsjBsApUGKhygnQDjRJMH2HUiCvnmfghwalCUSAilQMCLCI0NU4aUYkKmAxanHL2UNMLVgU594p3f/GUSzt+MhFzi5pY9W7Qya279H+8Goh2Adb1ikjvKd5BSMgApBWTJgCgUX5+1YvshLXS6qA7nqbbYECKuxbLnbiLd6EEgQCKqt6+Vrb1ejHW701B8KxIUFVSMbzQdwOTBRWcWjy4bl7F8kKqgoICPzx7tLe0VyMevqixY12pmsR6QJcHhYvHB3kaYrbFQhoS0MrlZUoYIvQ4kSSArLh9LplbB5aEQrfXB6yex7tNU5JsNEImCpbdtY1kWiRFm5+nL1OkGt2hz0cX8Az1RpD3AOcyrsmFHu58JCjSpg4fRw+oQY9MeEowoGhKxWAilwu+uIjU5UdgbAgEaybp8vDy9HBfNGmz8IhMEqRCqGEmSwiMUAI4THoZhwAME5bCwY9Mqlv/y7Vvv3RXAL2ZFR74y+9Z5qZjrw1eYOheFMBUtnLtpBqAkakCWAoiUOPqNHbuOhQvvpeWVMA1IaZnT5/djYvopBFg5vi0ZBbFY3OJ4R47xEIFAAH6/H7TfincXfbPaMNn7RncQLQokJyeHEwSRQNN0+MKp9gEzxjnW/uGDGFGVKxVKiR25E4vRP9aFYFUiAElfQBoHnx/46IAV+0+FwGhMbDVfg6seq+ccxZ/2ToJaHd6dL0I/w7CodTiRqC3An3NLdhNizCdMaOrsZwEgOTk5kWGYhNuNcqfUZX91dejv0lL7k6mp/XHq1HFMz/gMA+NdLWaFJRqY+vcBLeoDe60Pm3b74fTGQiaTtthQTDGeTrfjdMn4LhUIJjON6horrHYbNrx0DaPS6vmyfZkk8GNiCEo6guhQgWbDpJT+n6anp8ufmTwJf9+2HYzbjNdnHIVMzGHFlnjB7N3FZuSbtRicqoTTrUZJFYmtXyohU0QJu7DH68XSyV9h27HhkCoMHS6k28NXLRq22jp43XasfaEEYwY6W2xZoI4kMYPIwJG2A7RL4ttDSapQvbjw5/OnDs7IgNVqw4WCAozQrUNavBeXSpTCWDvy9OA44C9LzCgs08OUGguGUGL7XjsOng2BRCxDcmQJXp5uw5rdz0KpVLXKE5u9FjTNwlHvxJj0Grz601vQhbbfnFmAJoFlRCY23Q7R6VmIBwGQqI8xfJ4UF6cbNnQIzp47h6zInfQ4UwO/jwkqPP9Di5Dc/zyib1GksDwaRRV67D8ZgKuRE3bvvW9dwaUyHXb/ZwxIgoDd4YDH44FSUo8RA6yYOdqO+MjgSbarVumbtj1mxJ4FzTbdHqeNRqNWrlJ9qNNFjLpVXWOjvU1rVs6xGAYnuXI0SjaWIoHlm+PxswmWFkWCoVWKwgoDTKnRuFnuBkmXYWCcDVanHNV1EsglLGJ0Xmh7db5jdwRy3JWHvpqrbxgzlq3m+7sFaB7k9tBq/vbbedbhmUmuHKWMNUjF/1OkObQEkCXlgNQAiKMA33WEK6ohk3S3zp337yhYi6R+WuewH+SG3hFAT0A0IayBV6Q5tJpB+EQHKQOkRhCcB1qFGeKON+QuyRwuCofLXsHI5BtcH+nneiIDth4r0HbkrhRpC5JqaAQPJjSRGiKxBlplFURkj447wm/f26VY+lcjXp1Dg/JfB81yc7Pn48O7BuhKkV/PsQ7PSnLN1qjYfrzjNAv4fCR9skhNRYTSMBkbIRZLodX4wJ8qOFIFhowAydaBZIP3jOZW10Bh13Ed/pGnx09G2jHOVIkqG4F0IzfFMBUH7xmgO5ChSa7ZIQq235qdMRynGk9IJTKwrmNYMe0aF6ZiCE2fp1DkfQc+P42LFy8ioa8fRtlGHDrtwfnrKuRfVyKhrwe5kyshE7lQaaEAiip6a5thWnFx8fX7BtAdyEcnkpbOX7BU6XA4UFNjQWPNHvxm+lXIpCRCImeiKfRNBDgNystLES67iaP7fg+vn8PgBAdC+KzX5qLaYkdDxScXjxb1nvy3neXVd5XEPa0fbXNEIpevzMoamr3ohQX47soV3DSXYEzf9RjQz4MwDSBXqOEXxYPxWtDoqkWtw4eaWoChopEw9jACfg/XWL7xE9P4rTkEIdxkhXbfFegs2VmWjX9qzNgdI7KzSf4uUVB4CRrPZuSMtUIhA0LVwL/OBP/mWOCWXYrva2XQ66J8Q0bPLkrVnnxOkZZX2Xb8Bw5we2iRpCR30OBBa7OyhhDFV6+hpmJfw5tzq+y91Uy/KB2I9R+HoMEjgYwi6Eh94EpmgndjSv/Ajq4u/g8NoBkkJT1zAMEy7/A3Rtrv2cJxXCA2gpGNGeSK7BNOq91+siLvW3Xe/iOlwa29m/bQATpLdoqiajmOu1FcXNy6jv6/AtwOwr/fqeMPLYm7C4F77X9kIXSvjj9R4H6t4L2O81/vrNxWUEL/kAAAAABJRU5ErkJggg=='
-          },
-        ]
-
-        if (CARS.length <= 3) {
-
-          CARS.forEach((markerOptions) => {
-            this.map.addMarker(markerOptions).then(marker => {
-              //  marker.setIcon(icon);
-            });
-          });
-
-
-          this.cars.push(allCars);
-          console.log(this.cars)
-        }
-
-
-        //console.log(this.locations[1])
-
-        this.car_notificationIds.push(id)
-
-        if (this.canCheck) {
-          this.canCheck = false
-          this.checkForDriversAroundUser()
-        }
-
-        console.log(this.car_location);
-
-        //console.log(driverSnapshot.val().driver_details[2], this.location.length, driverSnapshot.val().driver_details[0], driverSnapshot.val().driver_details[1])
-      })
-
-
-      this.myProf.getAllDrivers().on('child_removed', driverSnapshot => {
-
-        console.log('something removed update id now')
-
-
-        this.car_notificationIds = []
-
-
-        setTimeout(() => {
-
-          this.myProf.getAllDrivers().on('child_added', driverSnapshot => {
-            id = [driverSnapshot.val().driver_details[0], driverSnapshot.val().driver_details[1], driverSnapshot.val().driver_details[2], driverSnapshot.key];
-            this.locations = [driverSnapshot.val().driver_details[0], driverSnapshot.val().driver_details[1]];
-
-            console.log(driverSnapshot.key)
-
-            this.car_notificationIds.push(id)
-            console.log(this.car_notificationIds)
-
-          })
-        }, 500);
-
-
+      this.sigfox.getDevices().on('child_changed', snapshot => {
+        console.log('child changed');
+        this.processSnapshot(snapshot);
       })
     })
   }
-
-
-  ///Loop through all drivers in the database and check who is closest to the current user
-  checkForDriversAroundUser() {
-    let timeout = setTimeout(() => {
-      this.NotifyTimes++
-      let driver_id = this.car_notificationIds[this.NotifyTimes];
-      console.log('This is Notify Times' + this.NotifyTimes, this.car_notificationIds.length)
-      if (this.NotifyTimes < this.car_notificationIds.length) {
-        let begin = new google.maps.LatLng(driver_id[0], driver_id[1])
-        let end;
-        if (!this.platform.is('cordova')) {
-          end = new google.maps.LatLng(5.4928165, 7.499176)
-        } else {
-          end = new google.maps.LatLng(this.lat, this.lng)
-        }
-
-        let suc = google.maps.geometry.spherical.computeDistanceBetween(begin, end)
-
-        let apart = suc / 60
-
-
-        if (apart <= 100) {
-          // console.log('A driver is Close Enough')
-          clearTimeout(timeout)
-          this.NotifyTimes = -1
-          document.getElementById("leftext").innerText = Math.floor(apart) + " mins";
-          this.canCheck = true
-          this.choseCar = true
-          //  let current_id = this.car_notificationIds[this.NotifyTimes][2]
-        } else {
-          if (this.NotifyTimes < this.car_notificationIds.length) {
-            document.getElementById("leftext").innerText = "No cars";
-            this.NotifyTimes = -1
-            this.canCheck = true
-            this.choseCar = false
-
-            this.isNoDriver = true;
-          } else {
-            this.checkForDriversAroundUser();
-
-
-          }
-
-        }
-
-
-      } else {
-        console.log('No drivers around');
-        this.isNoDriver = true;
-        clearTimeout(timeout)
-      }
-
-    }, 500);
-
-  }
-
 
 //Show distance between driver and User in the map
   setMarkers(driverlocation, uid) {
@@ -712,7 +410,6 @@ export class NativeMapContainerProvider {
     })
 
   }
-
 
 ///Change driver position on the map as reflect in the database
   moveDriver(driver) {

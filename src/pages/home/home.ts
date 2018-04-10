@@ -70,7 +70,15 @@ export class HomePage {
   lng: any;
   price: any;
 
-  constructor(public storage: Storage, private backgroundMode: BackgroundMode, public stB: StatusBar, public loadingCtrl: LoadingController, private vibration: Vibration, public alert: AlertController, public cMap: NativeMapContainerProvider, private call: CallNumber, public myGcode: GeocoderProvider, public dProvider: DirectionserviceProvider, public platform: Platform, public OneSignal: OnesignalProvider, public modalCtrl: ModalController, public menu: MenuController, public pop: PopUpProvider, public ph: ProfileProvider, public navCtrl: NavController, public eventProvider: EventProvider) {
+  constructor(public storage: Storage, private backgroundMode: BackgroundMode,
+              public stB: StatusBar, public loadingCtrl: LoadingController,
+              private vibration: Vibration, public alert: AlertController,
+              public cMap: NativeMapContainerProvider, private call: CallNumber,
+              public myGcode: GeocoderProvider, public dProvider: DirectionserviceProvider,
+              public platform: Platform, public OneSignal: OnesignalProvider,
+              public modalCtrl: ModalController, public menu: MenuController,
+              public pop: PopUpProvider, public ph: ProfileProvider,
+              public navCtrl: NavController, public eventProvider: EventProvider) {
     menu.swipeEnable(false, 'menu1');
     ph.isHome = true
   }
@@ -95,20 +103,7 @@ export class HomePage {
 
           if (!this.hasAlreadyStarted) {
             this.stB.hide();
-            //this.stB.show();
             this.waitingToLog = false;
-            if (!this.platform.is('cordova')) {
-              this.cMap.showDriversWithoutCordova();
-            }
-
-
-            //var otherDatabaseInfo = firebase.database().ref(`dashboard`);
-            //otherDatabaseInfo.on('value', userProfileSnapshot => {
-            //this.dProvider.fare = userProfileSnapshot.val().price;
-            //this.dProvider.pricePerKm = userProfileSnapshot.val().perkm;
-            //})
-
-
           }
           //wait for the map to get your current location.
           this.WaitForGeolocation();
@@ -129,10 +124,8 @@ export class HomePage {
       if (this.cMap.hasShown) {
         clearTimeout(location_tracker_loop);
         this.showMap();
-        console.log("We now have geolocation : connected");
       } else {
         this.WaitForGeolocation()
-        console.log("We are still waiting for geolocation!");
       }
     }, 1000)
   }
@@ -258,7 +251,6 @@ export class HomePage {
     this.startedNavigation = true;
     this.pop.onRequest = true;
     this.cMap.hasRequested = true;
-    this.cMap.isCarAvailable = false;
     this.dProvider.calculateBtn = false;
 
     this.ph.getAllDrivers().off("child_added");
