@@ -13,6 +13,7 @@ Where is my bike
 * change complains into questions
 * add rating this product at support page connected to appstore
 * add location of devices to maps
+* device pics are distorted !
 
 ## Using this project
 
