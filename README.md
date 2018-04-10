@@ -1,6 +1,19 @@
 Where is my bike
 =====================
 
+## Todo
+
+* when changing pictures, the popupprovider must be shown earlier
+* when entering home, the map doesn't cover the whole screen
+* at the add device page, when entering device id, popupprovider must be shown
+* at devices page, add live battery status icon with css
+* change phone auth from dev to prod
+* add onesignal popupprovider
+* change icon and splash
+* change complains into questions
+* add rating this product at support page connected to appstore
+* add location of devices to maps
+
 ## Using this project
 
 To install the project, install the node modules by running

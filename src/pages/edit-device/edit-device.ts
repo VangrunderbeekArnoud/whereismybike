@@ -149,7 +149,6 @@ export class EditDevicePage {
         {
           text: 'Save',
           handler: data => {
-            console.log(data[0])
             this.ph.updateDeviceNumber(this.device, data[0]);
           }
         }
