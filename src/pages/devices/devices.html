@@ -12,7 +12,7 @@
   <ion-list>
     <ion-item *ngFor="let device of devices">
       <ion-thumbnail item-start *ngIf="device.photoURL">
-        <img src="device.photoURL"/>
+        <img [src]="device.photoURL"/>
       </ion-thumbnail>
       <ion-thumbnail item-start *ngIf="!device.photoURL">
         <img *ngIf="device.pic" [src]="device.pic"/>
@@ -20,7 +20,7 @@
       </ion-thumbnail>
       <h2>{{device?.name}}</h2>
       <p>{{device?.brand}} - {{device?.type}}</p>
-      <button ion-button clear item-end color="primary">Edit</button>
+      <button ion-button clear item-end color="primary" (click)="goToEditDevicePage(device.sigfoxID)">Edit</button>
     </ion-item>
   </ion-list>
 </ion-content>

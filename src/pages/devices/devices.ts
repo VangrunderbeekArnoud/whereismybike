@@ -42,5 +42,10 @@ export class DevicesPage {
   goToAddDevicePage() {
     this.navCtrl.push('AddDevicePage');
   }
+  goToEditDevicePage(sigfoxID: any) {
+    this.navCtrl.push('EditDevicePage', {
+      sigfoxID: sigfoxID
+    });
+  }
 
 }
