@@ -12,4 +12,5 @@ export class SigfoxProvider {
   getDevice(id: any): firebase.database.Reference {
     return this.devices.child(id);
   }
+
 }

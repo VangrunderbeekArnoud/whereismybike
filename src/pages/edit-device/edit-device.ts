@@ -25,6 +25,7 @@ export class EditDevicePage {
   public number: any;
   public pic: any;
   public photoURL: any;
+  public battery: any;
 
 
   constructor(public navCtrl: NavController, public actionSheetCtrl: ActionSheetController,
@@ -33,25 +34,46 @@ export class EditDevicePage {
               public authProvider: AuthProvider, public sigfox: SigfoxProvider,
               public navParams: NavParams) {
     this.sigfoxID = navParams.get('sigfoxID');
-    console.log('which one is first? this, ...');
   }
 
   ionViewDidEnter() {
-    console.log('or this ??');
     this.device = this.ph.getDevice(this.sigfoxID);
-    this.ph.getDevice(this.sigfoxID).on('value', userProfileSnapshot => {
+    this.device.on('value', userProfileSnapshot => {
       this.sigfoxID = userProfileSnapshot.val().sigfoxID;
       this.name = userProfileSnapshot.val().name;
       this.brand = userProfileSnapshot.val().brand;
       this.type = userProfileSnapshot.val().type;
       this.number = userProfileSnapshot.val().number;
       this.pic = userProfileSnapshot.val().picture;
-      this.photoURL = userProfileSnapshot.val().photoURL
+      this.photoURL = userProfileSnapshot.val().photoURL;
     });
+    this.sigfox.getDevice(this.sigfoxID).on('value', snapshot => {
+      this.battery = snapshot.val().seqNumber;
+    })
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad AddDevicePage');
+  }
+
+  deleteDevice() {
+    const alert = this.alertCtrl.create({
+      message: "Delete device?",
+      buttons: [
+        {
+          text: 'Cancel',
+        },
+        {
+          text: 'Yes',
+          handler: data => {
+            this.device.off();
+            this.ph.deleteDevice(this.device);
+            this.navCtrl.pop();
+          }
+        }
+      ]
+    });
+    alert.present();
   }
 
   updateName() {
