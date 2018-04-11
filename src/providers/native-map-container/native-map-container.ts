@@ -1,5 +1,4 @@
 import {Injectable, NgZone} from '@angular/core';
-import {Http} from '@angular/http';
 import 'rxjs/add/operator/map';
 import {Platform} from 'ionic-angular';
 import {GeocoderProvider} from '../../providers/geocoder/geocoder';
@@ -9,73 +8,40 @@ import {
   GoogleMap,
   GoogleMapsEvent,
   GoogleMapOptions,
-  CameraPosition,
-  MarkerOptions,
-  Marker,
-  Geocoder,
-  LatLngBounds,
   LatLng
 } from '@ionic-native/google-maps';
 import {SigfoxProvider} from "../sigfox/sigfox";
 
 declare var google: any;
 
-/*
-  Generated class for the NativeMapContainerProvider provider.
-
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular DI.
-*/
 @Injectable()
 export class NativeMapContainerProvider {
   public onLocationbarHide: boolean = true;
   public onDestinatiobarHide: boolean = false;
   public lat: any;
   public lng: any;
-  public startPos: any;
   public client: any;
-  public driver: any;
   public speed: number = 50; // km/h
   public marker: any;
   public cars: any = [];
-  public car_location: any = [];
   public car_notificationIds: any = [];
   public delay: number = 100;
   public hasRequested: boolean = false;
   public uid: any
-  public onGpsEnabled: boolean = false;
   isNavigate: boolean = false;
   locations: any;
   location: any;
   timer1: any;
   map: GoogleMap;
-  choseCar: boolean = false;
-  public toggleNav: boolean = true;
-  public isClear: boolean = false;
-  public onbar: boolean = false;
-  public driver_Point: any;
   public classic: boolean = false;
-  public smallcar: boolean = false;
-  public bus: boolean = false;
-  public onbar1: boolean = false;
   public onbar2: boolean = false;
   public onbar3: boolean = false;
   public toggleBtn: boolean = false;
   public onPointerHide: boolean = false;
-  mapElement: HTMLElement;
-  public pan: number = 0;
-  NotifyTimes: number = -1;
   canCheck: boolean = true;
-  public isNoDriver: boolean = false;
-  public detectCarChange: any;
-  user_Point: any;
-  public hasDone: boolean = false;
   public hasStart: boolean = false;
   public hasShown: boolean = false;
-  public D_lat: any;
-  myTime: any;
   ready: boolean = false;
-  public D_lng: any;
 
   constructor(private googleMaps: GoogleMaps, public zone: NgZone, public ph: ProfileProvider,
               public gcode: GeocoderProvider, public platform: Platform, public sigfox: SigfoxProvider) {
@@ -317,168 +283,24 @@ export class NativeMapContainerProvider {
     })
   }
 
-  processSnapshot(snapshot: any) {
-    this.locations =  {
-      lat: snapshot.val().location.gps.lat,
-      lng: snapshot.val().location.gps.lng
-    };
-    var DEVICES = [
-      {
-        position: {lat: this.locations.lat, lng: this.locations.lng},
-        icon: 'data:image/png;base64,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'
-      },
-    ]
-    DEVICES.forEach((markerOptions) => {
-      this.map.addMarker(markerOptions).then(marker => {
-      });
-    });
-    if (this.canCheck) {
-      this.canCheck = false
-      this.ready = true
-    }
-  }
-
 ///Go through the databse and access the list of drivers available with thier informations.
   showDevicesOnMap() {
     this.platform.ready().then(() => {
-      this.sigfox.getDevices().on('child_added', snapshot => {
+      this.ph.getDevices().on('child_added', snapshot => {
         console.log('child added');
-        this.processSnapshot(snapshot);
-      })
-      this.sigfox.getDevices().on('child_changed', snapshot => {
+        this.map.addMarker({
+          position: { lat: snapshot.val().lat, lng: snapshot.val().lng},
+          icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAaCAYAAADFTB7LAAAAgXpUWHRSYXcgcHJvZmlsZSB0eXBlIGV4aWYAAHjaVY5dCoBACITfPUVHGH9y1+MEFXSDjp+LUewH6ig6SMd9nbQMGCBbW/dwR2JhIVuKjkIBFvComYu3KqeSFHv1pFLCozfYv2iYWeHdz2YZeaKQQyWj1tKDMF6I30C+b+Y5b7MxPZxBK23T36MtAAAKAmlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNC40LjAtRXhpdjIiPgogPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgeG1sbnM6ZXhpZj0iaHR0cDovL25zLmFkb2JlLmNvbS9leGlmLzEuMC8iCiAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyIKICAgZXhpZjpQaXhlbFhEaW1lbnNpb249IjQwIgogICBleGlmOlBpeGVsWURpbWVuc2lvbj0iMjYiCiAgIHRpZmY6SW1hZ2VXaWR0aD0iNDAiCiAgIHRpZmY6SW1hZ2VIZWlnaHQ9IjI2IgogICB0aWZmOk9yaWVudGF0aW9uPSIxIi8+CiA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAg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'
+        });
+      });
+      this.ph.getDevices().on('child_changed', snapshot => {
         console.log('child changed');
-        this.processSnapshot(snapshot);
-      })
-    })
-  }
-
-//Show distance between driver and User in the map
-  setMarkers(driverlocation, uid) {
-
-    //driver marker
-    this.driver = this.map.addMarker({
-      title: '',
-      icon: 'data:image/png;base64,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',
-      animation: 'DROP',
-      position: {
-        lat: driverlocation[0],
-        lng: driverlocation[1]
-      }
-    }).then(marker => {
-      this.detectCarChange = setInterval(() => {
-        this.moveDriver(marker)
-      }, 5000);
+      });
+      this.ph.getDevices().on('child_removed', snapshot => {
+        console.log('child_removed')
+      });
     });
-
-
-    //user marker
-    this.client = this.map.addMarker({
-      title: '',
-      icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAE/0lEQVR4Xu2aZ+i3UxjHP4+9iYx4ISSREdlblJHx4OnJ5gXZJUKRUBQhygjJlpGV7K3M7C3Ze2Uke/bRuet0+41zj9+5X/zuU/83v/91zvle33Nd17mu69wzmPIxY8r1pyegt4ApZ6B3gSk3gD4I9i7Qu8CUM9ClC6wDbAMsDnwG3AW8m/s8uiBgSeBKYIeSsn8DlwJHAb/lIiI3AYsCTwGrjlDwHmBHQEImPnITcCFwWIJWhwCXJMg1FslJwILAN8B8CahfA9ZIkGsskpOAjYEnKiBeBPixgnwt0ZwEGPEfqIByaeCrCvK1RHMSsALwXiLK78P1+E+ifG2xnAQI8llg3QS0FwOHJsg1FslNwCbAo8BcI5AbKA2AXzTWLmGB3AQcCJwFLDYC2/uA1+D9Cfgbi+QiYE7gCmDfRMT6/nHA2YnytcVyEXA6cEINlLsBt9WYlzwlBwFG/7eD33uyKXsWcp8CKwK/J2tUUTAFTMUl/yd+CnAy8AdwE7B3woJXA/sFuV2B2xPm1BLJQYDJj0nQfcBzwIkJSPcEzgGWDXHg2IQ5tURyEPACsDZwEfBdBQIsmjYDromsoZaSoyblIOAlYC3AStAML9UCvAq3AK4D9mld87BgT8CkmI3W7S2gd4EpjwFegeb+7wCzKgTBzwEbqB+GKnIi3pojCMbAT6tAwA0T0bi06KQJmCdcZVsB64VeQFwJfgR8DawGzB9h8/TtHTwZukjmEhMZkyLAR4/Dgd0BW+HDxpHABUBxUwyT0w2uBWyUfNImE20TYOFyLrBzCaQKPA5sCKwU/W8YAY8AdpElMm6eWBRdBpwEfNsGEW0SYLZmL3+BAEzzvjwUQG+G3+4Ftk0gwFrAGGBnePtQQPmSZF/BYbfIourhpiS0RcDBwTwLcKa7VnR/lgBWJSCeruWcGlWTVpd7ATc3IaENAjTTZ4KpqqCgLHoGjSYEFOtpCdcH6/gV2AB4pS4JbRBwB7BTePQw2nsyw0YbBLi2VaJxQpfQDbbuggDL26WC8l53Xlv6fTG8843u8fDhc7uEGLAHcGNp7szS3F2AZYKMbTMfU22le60mjyYW8AGw/IidDF6eeDy8yuKO0LBbwBMtB7gzgOPHaGb7TVzJowkBVwE+X2mORn4jfWwBBsLnS0g2D6Y7R/h9EAFvhOKpHECPAA6I1vOJ3X09+eLJbX/gy2TtExuU49bzo4aDgJcBHz5+GjNBU7ZL7Gk5z4aH7TLnqoikjEt2tgQeDDHgzuCG43AO/H8TCygWXC5EYT91eRqYDXxcC03apDjf+Dmk10WekbZCJNUGAS6nG9wNLBSetH3QOH/EdVgZKLApYIe5iPh+RmN1qQXUHm0RIAD7fkbuVQKaX8Kjxi3AQ8APA1AeHfzYgGfhEw+xrR4+lzEzjD+YMND5mxbXaLRJgEDmBY4BbGPHVd9fwOvAi8BbocY3WN0aiiVTaE9SdzLjU/H1gSVK2vnBxHnAmQmxJomYtgkoNtUV9FX/NgKKqJ8EqiTkK5E5hleo6fUgS6qz7n9zJkVADMiujlHblHVNYOVw0nMPQG0WaS/A7tGrIcU245vYU3kOAgadjvsuHKpFewZ+OmeO7+lO/KuQcqCpbT4tTCwyw8eClbSwZLUlurKAAqW5uwmQ97jJUfbRNQHZFS5v2BPQ+RF0DKC3gI4PoPPtewvo/Ag6BtBbQMcH0Pn2/wLJ+fdBzNOruQAAAABJRU5ErkJggg==',
-      animation: 'DROP',
-      position: {
-        lat: this.lat,
-        lng: this.lng
-      }
-    }).then(marker => {
-
-    })
-
-    let arrayOfLatLng = [new LatLng(driverlocation[0], driverlocation[1]), new LatLng(this.lat, this.lng)];
-
-    let bounds = new LatLngBounds(arrayOfLatLng);
-
-    let center = bounds.getCenter();
-
-    var mapElement = document.getElementById('map');
-    var mapDimensions = {
-      height: mapElement.offsetHeight,
-      width: mapElement.offsetWidth
-    };
-
-
-    var zoom = this.getBoundsZoomLevel(bounds, mapDimensions);
-
-    this.map.animateCamera({
-      target: center,
-      zoom: zoom,
-      duration: 1000
-    }).then(suc => {
-
-      this.isNavigate = true;
-
-    })
-
   }
-
-///Change driver position on the map as reflect in the database
-  moveDriver(driver) {
-    console.log('This is the marker: ' + driver)
-    let latLng = new LatLng(this.D_lat, this.D_lng)
-    let user_latLng = new LatLng(this.lat, this.lng)
-    console.log('This is the latlng: ' + this.D_lat, this.D_lng)
-    driver.setPosition(latLng);
-    // this.user_Point.setPosition(user_latLng);
-
-    let arrayOfLatLng = [new LatLng(this.D_lat, this.D_lng), new LatLng(this.lat, this.lng)];
-
-    let bounds = new LatLngBounds(arrayOfLatLng);
-
-    let center = bounds.getCenter();
-
-    var mapElement = document.getElementById('map');
-    var mapDimensions = {
-      height: mapElement.offsetHeight,
-      width: mapElement.offsetWidth
-    };
-
-
-    var zoom = this.getBoundsZoomLevel(bounds, mapDimensions);
-
-    this.map.animateCamera({
-      target: center,
-      zoom: zoom,
-      duration: 1000
-    }).then(suc => {
-
-      this.isNavigate = true;
-
-    })
-  }
-
-
-  getBoundsZoomLevel(bounds, mapDim) {
-
-    var WORLD_DIM = {height: 256 / 0.8, width: 256 / 0.8};
-    var ZOOM_MAX = 37;
-
-
-    var ne = bounds.northeast;
-    var sw = bounds.southwest;
-
-    var latFraction = (this.latRad(ne.lat) - this.latRad(sw.lat)) / Math.PI;
-
-    var lngDiff = ne.lng - sw.lng;
-    var lngFraction = ((lngDiff < 0) ? (lngDiff + 360 * 1.16) : lngDiff) / 360 * 1.16;
-
-    var latZoom = this.zoom(mapDim.height, WORLD_DIM.height, latFraction);
-    var lngZoom = this.zoom(mapDim.width, WORLD_DIM.width, lngFraction);
-
-    return Math.min(latZoom, lngZoom, ZOOM_MAX);
-  }
-
-
-  latRad(lat) {
-
-    var sin = Math.sin(lat * Math.PI / 180);
-    var radX2 = Math.log((1 + sin) / (1 - sin)) / 2;
-    return Math.max(Math.min(radX2, Math.PI), -Math.PI) / 2;
-  }
-
-  zoom(mapPx, worldPx, fraction) {
-    return Math.floor(Math.log(mapPx / worldPx / fraction) / Math.LN2);
-  }
-
 
 }
 
