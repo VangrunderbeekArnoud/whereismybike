@@ -31,6 +31,7 @@ export class ProfileProvider {
   public uid: any;
   public fare: any;
   public pricePerKm: any;
+  public devices: Array<any> = [];
   constructor(private sigfox: SigfoxProvider) {
     firebase.auth().onAuthStateChanged( user => {
       if (user) {
@@ -66,13 +67,43 @@ export class ProfileProvider {
 
          console.log(this.phone)
         });
-        this.getDevices().on('value', snapshot => {
-
-        });
+        this.deviceListeners();
       }
     });
   }
+  deviceListeners() {
+    this.getDevices().on('child_added', snapshot => {
+      console.log('a child is added');
+      this.sigfox.getDeviceBattery(snapshot.val().sigfoxID).on('value', snap => {
+        console.log('battery changed: ' + snap.val());
+        this.updateDeviceBattery(snapshot.val().sigfoxID, snap.val());
+      });
+      this.sigfox.getDeviceLocationGps(snapshot.val().sigfoxID).on('value', snap => {
+        this.updateDeviceLocation(snapshot.val().sigfoxID, snap.val().lat, snap.val().lng);
+      });
+      this.getDevice(snapshot.val().sigfoxID).on('value', snap => {
+        if ( !(snap.val() == null)) {
+          console.log('child_changed');
 
+        } else {
+          console.log('child_removed');
+          this.sigfox.getDeviceLocationGps(snapshot.val().sigfoxID).off();
+        }
+      });
+    });
+
+  }
+  updateDeviceBattery(sigfoxID: any, battery: any) {
+    this.getDevice(sigfoxID).update({
+      battery: battery
+    });
+  }
+  updateDeviceLocation(sigfoxID: any, lat: any, lng: any) {
+    this.getDevice(sigfoxID).update({
+      lat: lat,
+      lng: lng
+    });
+  }
   updateDeviceName(device: any, name: string): firebase.Promise<void> {
     return device.update({
       name: name
