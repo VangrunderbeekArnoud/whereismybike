@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import firebase from 'firebase';
+import {SigfoxProvider} from "../sigfox/sigfox";
 
 @Injectable()
 export class ProfileProvider {
@@ -30,7 +31,7 @@ export class ProfileProvider {
   public uid: any;
   public fare: any;
   public pricePerKm: any;
-  constructor() {
+  constructor(private sigfox: SigfoxProvider) {
     firebase.auth().onAuthStateChanged( user => {
       if (user) {
         //console.log(user)
@@ -64,7 +65,10 @@ export class ProfileProvider {
          this.month = userProfileSnapshot.val().Card_month;
 
          console.log(this.phone)
-        })
+        });
+        this.getDevices().on('value', snapshot => {
+
+        });
       }
     });
   }
@@ -89,26 +93,19 @@ export class ProfileProvider {
       number: number
     });
   }
-  updateDevicePic(device: any, name: string): firebase.Promise<void> {
-    return device.update({
-      name: name
-    });
-  }
-
-  getDevice(device: string): firebase.database.Reference {
-    return firebase.database().ref(`users/${this.user.uid}/devices/${device}`);
+  getDevice(sigfoxID: string): firebase.database.Reference {
+    return firebase.database().ref(`users/${this.user.uid}/devices/${sigfoxID}`);
   }
   getDevices(): firebase.database.Reference {
     return firebase.database().ref(`users/${this.user.uid}/devices`)
   }
-
-  addDevice(sigfoxID: string): firebase.Promise<any> {
-    return this.devicesProfile.child('/' + sigfoxID).update({
-      sigfoxID: sigfoxID
+  addDevice(sigfoxID: string) {
+    this.devicesProfile.child('/' + sigfoxID).update({
+      sigfoxID: sigfoxID,
     });
   }
-
   deleteDevice(device: any) {
+    // device.off()
     device.remove().then( f => {
       console.log(f);
     });

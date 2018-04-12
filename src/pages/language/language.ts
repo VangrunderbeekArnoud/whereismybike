@@ -22,12 +22,6 @@ export class LanguagePage {
   }
 
   ionViewDidEnter() {
-    this.sigfox.getDevices().on('child_added', snapshot => {
-      this.locations = [snapshot.val().location.gps.lat, snapshot.val().location.gps.lng];
-      console.log('the locations values');
-      console.log(this.locations[0]);
-      console.log(this.locations[1]);
-    });
   }
 
   ionViewDidLoad() {
