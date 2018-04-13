@@ -73,23 +73,17 @@ export class AddDevicePage {
         { text: 'Cancel'},
         { text: 'Save',
         handler: data => {
-          var self = this;
-          this.sigfox.getDevice(data[0]).once('value', function(snapshot1) {
-            if ( snapshot1.exists()) {
-              self.ph.getDevice(data[0]).once('value', function(snapshot2) {
-                if ( !snapshot2.exists()) {
-                  self.ph.addDevice(data[0]);
-                  self.initState = false;
-                  self.device = self.ph.getDevice(data[0]);
-                  self.listeners();
-                } else {
-                  self.pop.presentToast('Device already exists!')
-                }
-              });
+          this.ph.addDevice(data[0]).then((res) => {
+            if ( res == 1) {
+              this.pop.presentToast( 'Please enter a valid device ID.');
+            } else if ( res == 2) {
+              this.pop.presentToast( 'Device already exists!');
             } else {
-              self.pop.presentToast('Please enter a valid device ID.')
+              this.initState = false;
+              this.device = this.ph.getDevice(data[0]);
+              this.listeners();
             }
-          })
+          });
         }}
       ]
     });

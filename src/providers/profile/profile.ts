@@ -73,21 +73,16 @@ export class ProfileProvider {
   }
   deviceListeners() {
     this.getDevices().on('child_added', snapshot => {
-      console.log('a child is added');
-      this.sigfox.getDeviceBattery(snapshot.val().sigfoxID).on('value', snap => {
-        console.log('battery changed: ' + snap.val());
-        this.updateDeviceBattery(snapshot.val().sigfoxID, snap.val());
+      let sigfoxID = snapshot.val().sigfoxID;
+      this.sigfox.getDeviceBattery(sigfoxID).on('value', snap => {
+        this.updateDeviceBattery(sigfoxID, snap.val());
       });
-      this.sigfox.getDeviceLocationGps(snapshot.val().sigfoxID).on('value', snap => {
-        this.updateDeviceLocation(snapshot.val().sigfoxID, snap.val().lat, snap.val().lng);
+      this.sigfox.getDeviceLocationGps(sigfoxID).on('value', snap => {
+        this.updateDeviceLocation(sigfoxID, snap.val().lat, snap.val().lng);
       });
-      this.getDevice(snapshot.val().sigfoxID).on('value', snap => {
-        if ( !(snap.val() == null)) {
-          console.log('child_changed');
-
-        } else {
-          console.log('child_removed');
-          this.sigfox.getDeviceLocationGps(snapshot.val().sigfoxID).off();
+      this.getDevice(sigfoxID).on('value', snap => {
+        if ( (snap.val() == null)) {
+          this.sigfox.getDeviceLocationGps(sigfoxID).off();
         }
       });
     });
@@ -130,9 +125,33 @@ export class ProfileProvider {
   getDevices(): firebase.database.Reference {
     return firebase.database().ref(`users/${this.user.uid}/devices`)
   }
-  addDevice(sigfoxID: string) {
-    this.devicesProfile.child('/' + sigfoxID).update({
-      sigfoxID: sigfoxID,
+  deviceExists(id: any): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.getDevice(id).once('value', snapshot => {
+        if ( snapshot.exists()) {
+          resolve(true);
+        } else resolve(false);
+      });
+    });
+  }
+  addDevice(sigfoxID: string): Promise<number> {
+    return new Promise((resolve, reject) => {
+      this.sigfox.deviceExists(sigfoxID).then((res1) => {
+        if ( res1) {
+          this.deviceExists(sigfoxID).then((res2) => {
+            if ( res2) {
+              resolve(2);
+            } else {
+              this.devicesProfile.child('/' + sigfoxID).update({
+                sigfoxID: sigfoxID
+              });
+              resolve(0);
+            }
+          });
+        } else {
+          resolve(1);
+        }
+      });
     });
   }
   deleteDevice(device: any) {

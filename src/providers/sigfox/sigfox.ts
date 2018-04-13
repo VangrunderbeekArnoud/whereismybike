@@ -14,6 +14,15 @@ export class SigfoxProvider {
   getDevice(id: any): firebase.database.Reference {
     return this.devices.child(id);
   }
+  deviceExists(id: any): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.devices.child(id).once('value', snapshot => {
+        if ( snapshot.exists()) {
+          resolve(true);
+        } else resolve(false);
+      });
+    });
+  }
   getDeviceLocationGps(id: any): firebase.database.Reference {
     return this.devices.child(id).child('location').child('gps');
   }
