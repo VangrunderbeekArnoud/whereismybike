@@ -1,6 +1,10 @@
 Where is my bike
 =====================
 
+## Errors
+
+* add-device-page cancel, marker still exists!
+
 ## Todo
 
 * when changing pictures, the popupprovider must be shown earlier
