@@ -41,15 +41,13 @@ export class EditDevicePage {
     this.device.on('value', userProfileSnapshot => {
       this.sigfoxID = userProfileSnapshot.val().sigfoxID;
       this.name = userProfileSnapshot.val().name;
+      this.battery = userProfileSnapshot.val().battery;
       this.brand = userProfileSnapshot.val().brand;
       this.type = userProfileSnapshot.val().type;
       this.number = userProfileSnapshot.val().number;
       this.pic = userProfileSnapshot.val().picture;
       this.photoURL = userProfileSnapshot.val().photoURL;
     });
-    this.sigfox.getDevice(this.sigfoxID).on('value', snapshot => {
-      this.battery = snapshot.val().seqNumber;
-    })
   }
 
   ionViewDidLoad() {
