@@ -31,7 +31,6 @@ import { MyApp } from './app.component';
 import { AuthProvider } from '../providers/auth/auth';
 import { EventProvider } from '../providers/event/event';
 import { ProfileProvider } from '../providers/profile/profile';
-import { RatePage } from '../pages/rate/rate';
 import { GeocoderProvider } from '../providers/geocoder/geocoder';
 import { DirectionserviceProvider } from '../providers/directionservice/directionservice';
 import { PopUpProvider } from '../providers/pop-up/pop-up';
@@ -58,7 +57,6 @@ firebase.initializeApp(firebaseConfig);
 @NgModule({
   declarations: [
     MyApp,
-    RatePage,
   ],
   imports: [
     BrowserModule,
@@ -71,7 +69,6 @@ firebase.initializeApp(firebaseConfig);
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    RatePage,
   ],
   providers: [
     StatusBar,
@@ -98,7 +95,6 @@ firebase.initializeApp(firebaseConfig);
     Firebase,
     Stripe,
     PayPal,
-    RatePage,
     NativeMapContainerProvider,
     GoogleMaps,
     Vibration,

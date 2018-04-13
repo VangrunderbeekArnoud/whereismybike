@@ -5,7 +5,6 @@ import { ProfileProvider } from '../../providers/profile/profile';
 
 import firebase from 'firebase';
 import { Storage } from '@ionic/storage';
-import { RatePage } from '../../pages/rate/rate';
 import { ToastController } from 'ionic-angular';
 /*
   Generated class for the PopUpProvider provider.
@@ -126,25 +125,6 @@ pickup(){
 
 
 
-showPayMentAlert(title, subtitle, canLeave ){
-  let alert = this.alert.create({
-    title: title,
-    subTitle: subtitle,
-    buttons: [ {
-      text: "Okay",
-      role: 'cancel',
-      handler: () => {
-       if (canLeave){
-        this.navCtrl.push(RatePage);
-       }
-      }
-    },],
-    enableBackdropDismiss: false
-  });
-  alert.present();
-}
-
-
 
 showPomp(title, message ){
   let alert = this.alert.create({
@@ -236,10 +216,6 @@ refactor(){
 }
 
 
-
-GotoPage(){
-  this.navCtrl.push(RatePage);
-}
 
 clearAll(uid, can){
   console.log(uid)

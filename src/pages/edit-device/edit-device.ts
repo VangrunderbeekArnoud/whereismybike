@@ -33,6 +33,7 @@ export class EditDevicePage {
               public alertCtrl: AlertController, public ph: ProfileProvider,
               public authProvider: AuthProvider, public sigfox: SigfoxProvider,
               public navParams: NavParams) {
+    ph.isHome = false;
     this.sigfoxID = navParams.get('sigfoxID');
   }
 

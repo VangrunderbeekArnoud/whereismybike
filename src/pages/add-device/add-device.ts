@@ -89,7 +89,6 @@ export class AddDevicePage {
     });
     alert.present();
   }
-
   updateName() {
     const alert = this.alertCtrl.create({
       message: "Your Name",
