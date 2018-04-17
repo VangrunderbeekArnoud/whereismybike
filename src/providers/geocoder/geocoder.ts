@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
-// import { DirectionserviceProvider } from '../../providers/directionservice/directionservice';
 declare var google;
 /*
   Generated class for the GeocoderProvider provider.
@@ -14,15 +13,15 @@ export class GeocoderProvider {
   public lat: any;
   public lng: any;
   public geocoder: any = new google.maps.Geocoder;
-  
+
   constructor(public platform: Platform, ){
 
   }
-  
+
 
 
   Geocode(address) {
-    
+
     this.geocoder.geocode( { 'address': address}, (results, status) => {
       if (status == 'OK') {
        var position = results[0].geometry.location
@@ -37,11 +36,11 @@ export class GeocoderProvider {
   }
 
 
-  
- 
+
+
 
   Reverse_Geocode(lat, lng, map, driverMode){
-    
+
     let latlng = {lat: parseFloat(lat), lng: parseFloat(lng)};
     this.geocoder.geocode({'location': latlng}, (results, status) => {
       if (status === 'OK') {
@@ -66,19 +65,19 @@ export class GeocoderProvider {
 
 
   Simple_Geocode(lat, lng){
-    
+
     let latlng = {lat: parseFloat(lat), lng: parseFloat(lng)};
     let result;
     this.geocoder.geocode({'location': latlng}, (results, status) => {
       if (status === 'OK') {
         if (results[0]) {
-         
+
          result = results[0].formatted_address
-      
+
         }
       }
     });
-   
+
     return result
   }
 

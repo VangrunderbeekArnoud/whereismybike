@@ -7,11 +7,9 @@ import {
   AlertController,
   LoadingController
 } from 'ionic-angular';
-import {EventProvider} from '../../providers/event/event';
 import {NativeMapContainerProvider} from '../../providers/native-map-container/native-map-container';
 import {ProfileProvider} from '../../providers/profile/profile';
 import {PopUpProvider} from '../../providers/pop-up/pop-up';
-import {DirectionserviceProvider} from '../../providers/directionservice/directionservice';
 import {OnesignalProvider} from '../../providers/onesignal/onesignal';
 import {GeocoderProvider} from '../../providers/geocoder/geocoder';
 import {CallNumber} from '@ionic-native/call-number';
@@ -28,7 +26,7 @@ declare var google;
   selector: 'page-home',
   templateUrl: 'home.html',
   providers: [NativeMapContainerProvider, ProfileProvider, PopUpProvider,
-    DirectionserviceProvider, OnesignalProvider, GeocoderProvider],
+    OnesignalProvider, GeocoderProvider],
 })
 
 export class HomePage {
@@ -51,11 +49,11 @@ export class HomePage {
               public stB: StatusBar, public loadingCtrl: LoadingController,
               private vibration: Vibration, public alert: AlertController,
               public cMap: NativeMapContainerProvider, private call: CallNumber,
-              public myGcode: GeocoderProvider, public dProvider: DirectionserviceProvider,
+              public myGcode: GeocoderProvider,
               public platform: Platform, public OneSignal: OnesignalProvider,
               public modalCtrl: ModalController, public menu: MenuController,
               public pop: PopUpProvider, public ph: ProfileProvider,
-              public navCtrl: NavController, public eventProvider: EventProvider) {
+              public navCtrl: NavController) {
     menu.swipeEnable(false, 'menu1');
     ph.isHome = true
   }
@@ -118,7 +116,6 @@ export class HomePage {
         this.hideFunctions();
         this.returningUser = true;
         this.pop.uid = this.uid;
-        this.dProvider.id = this.uid;
       } else {
         this.storage.remove(`currentUserId`);
       }
@@ -142,7 +139,6 @@ export class HomePage {
     this.startedNavigation = true;
     this.pop.onRequest = true;
     this.cMap.hasRequested = true;
-    this.dProvider.calculateBtn = false;
 
     this.cMap.map.clear();
   }

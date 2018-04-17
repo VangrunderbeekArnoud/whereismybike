@@ -29,14 +29,11 @@ import { MyApp } from './app.component';
 
 //providers
 import { AuthProvider } from '../providers/auth/auth';
-import { EventProvider } from '../providers/event/event';
 import { ProfileProvider } from '../providers/profile/profile';
 import { GeocoderProvider } from '../providers/geocoder/geocoder';
-import { DirectionserviceProvider } from '../providers/directionservice/directionservice';
 import { PopUpProvider } from '../providers/pop-up/pop-up';
 import { OnesignalProvider } from '../providers/onesignal/onesignal';
 import { NativeMapContainerProvider } from '../providers/native-map-container/native-map-container';
-import { ApiProvider } from '../providers/api/api';
 import { SigfoxProvider, VirtualSigfoxProvider } from "../providers/sigfox/sigfox";
 
 
@@ -75,7 +72,6 @@ firebase.initializeApp(firebaseConfig);
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     AuthProvider,
-    EventProvider,
     ProfileProvider,
     CardIO,
     BrowserTab,
@@ -83,7 +79,6 @@ firebase.initializeApp(firebaseConfig);
     Camera,
     Facebook,
     GeocoderProvider,
-    DirectionserviceProvider,
     PopUpProvider,
     OnesignalProvider,
     BackgroundMode,
@@ -98,7 +93,6 @@ firebase.initializeApp(firebaseConfig);
     NativeMapContainerProvider,
     GoogleMaps,
     Vibration,
-    ApiProvider,
     SigfoxProvider,
     VirtualSigfoxProvider
   ]
