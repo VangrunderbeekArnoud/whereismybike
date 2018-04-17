@@ -144,51 +144,7 @@ export class HomePage {
     this.cMap.hasRequested = true;
     this.dProvider.calculateBtn = false;
 
-    this.ph.getAllDrivers().off("child_added");
-    this.ph.getAllDrivers().off("child_changed");
     this.cMap.map.clear();
-  }
-
-  showAddressModal(selectedBar) {
-    clearTimeout(this.cMap.timer1)
-    console.log(this.myGcode.locationName)
-    let modal = this.modalCtrl.create('AutocompletePage');
-    modal.onDidDismiss(data => {
-      //Open the address modal on location bar click to change location
-      console.log(data)
-      if (selectedBar == 1 && data != null) {
-        if (!this.startedNavigation) {
-          document.getElementById("location").innerText = data;
-          this.myGcode.locationName = data
-          this.cMap.RefreshMap(data)
-        }
-      }
-      //Open the address modal on destination bar click to change destination
-      if (selectedBar == 2 && data != null) {
-        document.getElementById("destination").innerText = data;
-        this.destinationSetName = data
-        let myPos = new google.maps.LatLng(this.cMap.lat, this.cMap.lng)
-        ///After data input, check to see if user selected to add a destination or to calculate distance.
-        this.myGcode.geocoder.geocode({'address': data}, (results, status) => {
-          if (status == 'OK') {
-            var position = results[0].geometry.location
-            let calPos = new google.maps.LatLng(position.lat(), position.lng())
-            if (!this.dProvider.calculateBtn) {
-              this.dProvider.calcRoute(myPos, calPos, false, true, data)
-              console.log('started the destination input' + data);
-
-            } else {
-              console.log(data);
-              this.dProvider.calcRoute(myPos, calPos, false, false, data)
-            }
-          } else {
-
-          }
-        });
-
-      }
-    });
-    modal.present();
   }
 
 }

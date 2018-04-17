@@ -6,12 +6,7 @@ import { ProfileProvider } from '../../providers/profile/profile';
 import firebase from 'firebase';
 import { Storage } from '@ionic/storage';
 import { ToastController } from 'ionic-angular';
-/*
-  Generated class for the PopUpProvider provider.
 
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular DI.
-*/
 @Injectable()
 export class PopUpProvider {
   public onRequest: boolean = false;
@@ -95,37 +90,6 @@ presentToast2(message) {
   toast.present();
 }
 
-
-pickup(){
-  let alert = this.alert.create({
-    title: "Have You Been Picked Up?",
-    subTitle: "",
-    buttons: [ {
-      text: "No",
-      role: 'cancel',
-      handler: () => {
-        this.ph.ApprovePickup(false, this.uid)
-      }
-    },
-    {
-      text: "Yes",
-      handler: () => {
-        this.ph.ApprovePickup(false, this.uid)
-        this.allowed = false
-       //picked up true, disable cancel of navigation
-      }
-    },],
-    enableBackdropDismiss: false
-  });
-  alert.present();
-}
-
-
-
-
-
-
-
 showPomp(title, message ){
   let alert = this.alert.create({
     title: title,
@@ -142,7 +106,6 @@ showPomp(title, message ){
   alert.present();
 }
 
-
 showPimp(title ){
   let alert = this.alert.create({
     title: title,
@@ -156,8 +119,6 @@ showPimp(title ){
   });
   alert.present();
 }
-
-
 
 show(title ){
   let alert = this.alert.create({
@@ -173,9 +134,6 @@ show(title ){
   });
   alert.present();
 }
-
-
-
 
 Send(id) {
   let alert = this.alert.create({
@@ -205,8 +163,6 @@ Send(id) {
   alert.present();
 }
 
-
-
 refactor(){
 
         this.cMap.onDestinatiobarHide = false;
@@ -214,8 +170,6 @@ refactor(){
         document.getElementById("destination").innerHTML = "Set Destination";
 
 }
-
-
 
 clearAll(uid, can){
   console.log(uid)
@@ -252,30 +206,6 @@ clearAll(uid, can){
 
 }
 
-
-locatePosition(lat, lng){
- // this.cMap.map.setCenter(lat, lng);
-}
-
-
-
-presentRouteLoader(message) {
-  let loading = this.load.create({
-    content: message
-  });
-
-  loading.present();
-
-  let myInterval = setInterval(() => {
-  if (this.canDismiss){
-    loading.dismiss();
-    clearInterval(myInterval)
-  }
-
-  }, 1000);
-}
-
-
 presentLoader(message) {
   this.dismissLoader = this.load.create({
     content: message
@@ -285,49 +215,6 @@ presentLoader(message) {
 
 hideLoader(){
   this.dismissLoader.dismiss();
-}
-
-
-showAlertComplex(title, message, accept, reject, iscancel){
-  let alert = this.alert.create({
-    title: title,
-    message: message,
-    inputs: [
-      {
-        name: 'long',
-        label: 'Long Pickup',
-        type: "checkbox",
-        value: "true",
-        checked: false
-      },
-      {
-        name: 'incorrect',
-        label: 'Incorrect Request',
-        type: "checkbox",
-        value: "false",
-        checked: false
-      }
-    ],
-    buttons: [
-      {
-        text: reject,
-        role: 'cancel',
-        handler: () => {
-
-        }
-      },
-      {
-        text: accept,
-        handler: () => {
-          if (iscancel){
-            this.clearAll(this.uid, true);
-          }
-        }
-      }
-    ],
-    enableBackdropDismiss: false
-  });
-  alert.present();
 }
 
 }

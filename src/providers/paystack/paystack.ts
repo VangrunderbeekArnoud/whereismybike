@@ -11,20 +11,7 @@ import { ProfileProvider } from '../../providers/profile/profile';
 */
 @Injectable()
 export class PaystackProvider {
-  public isDone: boolean = false;
-  public cardCharge: boolean = false;
   constructor( private ph: ProfileProvider, public eProvider: EventProvider, public platform: Platform, public pop: PopUpProvider) {
-    
+
   }
-
-  UpdateCard(card: string, month: any, year: any, cvc: any, amount: any, email: any, driverPay: any){
-    this.eProvider.UpdateCard(card, month, year, cvc, amount, email, driverPay).then(success => {
-    
-    }).catch(error =>{})
-  }
-
-
-
-
-
 }
