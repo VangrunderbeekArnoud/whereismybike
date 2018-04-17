@@ -27,25 +27,6 @@ export class PopUpProvider {
     return this.injector.get(NavController);
   }
 
-showAlertNormal(title, subtitle, network){
-  let alert = this.alert.create({
-    title: title,
-    subTitle: subtitle,
-    buttons: [ {
-      text: "Try Again",
-      role: 'cancel',
-      handler: () => {
-        if (network){
-          this.clearAll(this.uid, true);
-          }
-      }
-    },],
-    enableBackdropDismiss: false
-  });
-  alert.present();
-}
-
-
 showAlert(title, subtitle){
   let alert = this.alert.create({
     title: title,
@@ -88,22 +69,6 @@ presentToast2(message) {
   });
 
   toast.present();
-}
-
-showPomp(title, message ){
-  let alert = this.alert.create({
-    title: title,
-    subTitle: message,
-    buttons: [ {
-      text: "Okay",
-      role: 'cancel',
-      handler: () => {
-        this.clearAll(this.uid, true);
-      }
-    },],
-    enableBackdropDismiss: false
-  });
-  alert.present();
 }
 
 showPimp(title ){
@@ -168,41 +133,6 @@ refactor(){
         this.cMap.onDestinatiobarHide = false;
         this.calculateBtn = false;
         document.getElementById("destination").innerHTML = "Set Destination";
-
-}
-
-clearAll(uid, can){
-  console.log(uid)
-  let customer = firebase.database().ref(`Customer/${uid}`);
-  customer.remove().then((success) =>{
-    // this.cMap.toggleFlipAnim('flipped');
-    // this.cMap.toggleFadeAnim('invisible');
-    // this.cMap.toggleBounceAnim("out");
-
-    this.cMap.onbar2 = false
-    this.cMap.onbar3 = false
-    this.cMap.isNavigate = false;
-    this.cMap.map.clear().then(s=>{
-      this.cMap.Reset();
-     // this.presentRouteLoader("Cancelling...");
-    });
-    //this.cMap.element = this.mapComponent
-    this.cMap.hasRequested = false;
-    this.onRequest = false;
-    this.cMap.toggleBtn = false;
-    this.cMap.onPointerHide = false;
-    this.cMap.onDestinatiobarHide = false;
-    this.allowed = true;
-    this.cMap.map.setClickable(true);
-    document.getElementById("header").innerText = "Requesting A Ride";
-    //this.cMap.map.setOptions({draggable: true});
-    this.cMap.car_notificationIds = [];
-    this.canDismiss = true
-    this.storage.remove(`currentUserId`);
-    this.cMap.cars = [];
-  }).catch((error)=>{
-   // this.showAlertNormal("Network Error", "please make sure you have a strong network and try Again", false)
-  })
 
 }
 

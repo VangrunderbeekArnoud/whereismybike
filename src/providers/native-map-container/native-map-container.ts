@@ -21,23 +21,16 @@ export class NativeMapContainerProvider {
   public lat: any;
   public lng: any;
   public client: any;
-  public speed: number = 50; // km/h
   public marker: any;
-  public cars: any = [];
-  public car_notificationIds: any = [];
   public delay: number = 100;
   public hasRequested: boolean = false;
   public uid: any
-  isNavigate: boolean = false;
   locations: any;
   location: any;
   timer1: any;
   map: GoogleMap;
   public classic: boolean = false;
   public onbar2: boolean = false;
-  public onbar3: boolean = false;
-  public toggleBtn: boolean = false;
-  public onPointerHide: boolean = false;
   canCheck: boolean = true;
   public hasStart: boolean = false;
   public hasShown: boolean = false;
@@ -91,7 +84,6 @@ export class NativeMapContainerProvider {
       });
   }
 
-
   //check if gps is available by trying to get location info which automatically handles everything
   checkGps() {
     let mapOptions: GoogleMapOptions = {
@@ -102,7 +94,6 @@ export class NativeMapContainerProvider {
       console.log('location now on')
     })
   }
-
 
 //Start the map touch detection
   PumpControls() {
@@ -182,81 +173,6 @@ export class NativeMapContainerProvider {
 
     })
 
-  }
-
-//Change the pointer/marker to reflect changed position.
-  RefreshMap(address) {
-    let centerBar = document.getElementById("onbar")
-    centerBar.style.display = 'none'
-    var geocode = new google.maps.Geocoder;
-    geocode.geocode({'address': address}, (results, status) => {
-      if (status == 'OK') {
-        var position = results[0].geometry.location
-        let matLatr = new LatLng(position.lat(), position.lng());
-        this.map.animateCamera({
-          target: matLatr,
-          zoom: 17,
-          tilt: 0,
-          bearing: 0,
-          duration: 1000
-        }).then(suc => {
-          let centerBar = document.getElementById("onbar")
-          centerBar.style.display = 'block';
-          console.log(this.lat)
-          this.lat = position.lat()
-          this.lng = position.lng()
-          if (this.canCheck) {
-            this.canCheck = false
-          }
-        })
-      } else {
-        // alert('Geocode was not successful for the following reason: ' + status);
-      }
-    })
-  }
-
-//recreate the map class to clear previous markers and positions
-  Reset() {
-    let centerBar = document.getElementById("onbar")
-    centerBar.style.display = 'none'
-    this.map.animateCamera({
-      target: this.location.latLng,
-      zoom: 17,
-      tilt: 0,
-      bearing: 0,
-      duration: 1000
-    }).then(suc => {
-      console.log('camera done')
-      this.lat = this.location.latLng.lat
-      this.lng = this.location.latLng.lng
-      this.showDevicesOnMap();
-      console.log(this.lat, this.lng)
-      let centerBar = document.getElementById("onbar")
-      centerBar.style.display = 'block'
-      this.hasRequested = false;
-      this.map.addMarker({
-        title: this.ph.name,
-        icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAEcUlEQVRIS7WVfUxVZRzHf7/nuQx8QZJLEC81MXpZsjSuZOrEc869CDhoZTW16GXiRXvbrCxa/lFuQdqLmE5mMuacq1Z3gxISHPc8B1dopGEMxlTYNZp6s4WUFl2unOdp5+DFc4GL9EdnO9vdOc/9fH+/7+/lIPzPF96Ej7mS5OCIRQIxi3OeZJynAL8iIe0c4BBj7BQAiEiciAK5suy8JsR7lJBsrutXgJB2iug3QBwgRej6A4TSWQjQhkKUNWva0YlExgk4HI6o2bGxOwQhLwEAQyHeHxZCbWlpGbYCJEmyEUJyAaAMAZYj5zuHAV4fey5MwIDfEhf3Jdf1FcRmK1VV9bPJ0r8uiE6n8xkQYi8ANMTb7Ws8Ho8eCiZMwCVJu3Uh1tkIWdGsaa1Tqf/iwicfjNYDF6MCA3dyxCYuRJWmaa+NEzA854heQCxWVfXTqcCz1m5Wfk5fVT3zSt+lub7aVbZ/fl8pEGsAMUdV1W8NRigDlCSpjRJyVWXMNQVbwID3pRXV9KflzDF6aM7pgydmnDuanxj0fU0QicrY0lGBXElayAk5gULkezXtiPEiLy8veZjSWPXw4bNjszHh6UU1/ckj8NB9T8dHx5PPNeyghHi4EAs0TeswM3DK8lbO+SaBaDe6YNHDa5Mu3P1o7bXouBm3d9cVn6zb2xUSMeFzi2r6U8LhMX/7A2m+r7bcdb5+T2Bw8DJSWsEYKzcFFEWpF0LM1DRNdjxRGjeQuqTZN//ZbCOytDP13Um+hjU/evZ1Zj29Wem744YtocgNeEZXdWXXwbffMniSJB0jhPgZY4+ZApIk/WAjpHeY83W/ZK4+4svemGNNPaX3m+64/tObfkvM3hfyfBT+lz+Q0XkDbjqiKB4ASDHqECbgZeypee6KD3uyN7wcjI6PsorEn2/TL6csouYzPuJ7TAh+YCTy0DVOwClJhwQhsxhjknEo012+qydr/fND0xNtVhHr75ir/kBGR3Vl1xh4yCJK6UVVVR83M3Apyju6rr8SKrLxbF5J+Z6ehe7S4PRbx4mY8FMTwwsKCqKDQ0MDgPiuqqoVpoAsyw6CeFIArGSMNYZSvW99eVWvw+22isT8GRlu+u90PgJC1CEh93u93s7RQXMpynEOEGCMydZByyzZWnU2+wV3cFqCLeYPfyDjp+rKrv3hnlvsNwa2FRF1TdOWWScZcmV5OUdsAcTnVFU9YC3avRu27bqULpeknmn6eBI4uGS5VCB+IgCWMsaOhQmYtZCkSkHIRiJE/tj9vrRg9UOtjV98H2lHKYqiCF1vpJRWehl7c8Jtaux4SsjnAFCIQrzo1bT9U9hL6JJlt875bkJpbbzdXhxxXV9vMRsibieIr3IhvgOADxISEpo8Hk/QGr3ZLcFgga7rb1BCFiPA9tl2+xYrfJxFYcPidC4DIbYBwBKu64MCsYMScsE4o3OeSglZAADTjCAQsSzk+VgLb/bRN1p4PiIWAkAWAtxmAka+ze2IWG+0YqS6TJrBZH/6L+/+BedwGDdvfYzpAAAAAElFTkSuQmCC",
-        animation: 'DROP',
-        position: this.location.latLng,
-      })
-        .then(marker => {
-          this.marker = marker
-          console.log('marker added')
-          this.map.addCircle({
-            'center': this.location.latLng,
-            'radius': 900,
-            'strokeColor': '#A0BAE7',
-            'strokeWidth': 5,
-            'fillColor': '#5992F5'
-          }).then(circle => {
-            let y = setTimeout(() => {
-              circle.setRadius(0)
-              // this.startChecking()
-            }, 1500)
-          });
-        })
-    })
   }
 
 //Reset map position to user current position on location btn press
