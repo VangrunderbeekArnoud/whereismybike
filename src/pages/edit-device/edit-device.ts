@@ -65,7 +65,7 @@ export class EditDevicePage {
         {
           text: 'Yes',
           handler: data => {
-            this.device.off();
+            //this.device.off();
             this.ph.deleteDevice(this.device);
             this.navCtrl.pop();
           }

@@ -57,7 +57,7 @@ export class AddDevicePage {
 
   cancel() {
     if ( this.device) { // Delete device in the database
-      this.device.off();
+      //this.device.off();
       this.ph.deleteDevice(this.device);
     }
     this.navCtrl.pop();
