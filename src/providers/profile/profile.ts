@@ -1,21 +1,15 @@
 import { Injectable } from '@angular/core';
 import firebase from 'firebase';
+import {SigfoxProvider} from "../sigfox/sigfox";
 
 @Injectable()
 export class ProfileProvider {
   public userProfile:firebase.database.Reference;
   public customer:firebase.database.Reference;
   public devicesProfile:firebase.database.Reference;
-  public currentUser:firebase.User;
   public user: any;
   public phone: number;
-  public appPrice: any;
-  public drivers: any;
   public name: any;
-  public CustomerOwnPropertyRef: firebase.database.Reference;
-  public driver: any;
-  public userOtherProfile: any;
-  public paymentType: any;
   public card: any;
   public email: any;
   public cvc: any;
@@ -28,47 +22,55 @@ export class ProfileProvider {
   public pic: any;
   public id: any;
   public uid: any;
-  public fare: any;
-  public pricePerKm: any;
-  constructor() {
+  constructor(private sigfox: SigfoxProvider) {
     firebase.auth().onAuthStateChanged( user => {
       if (user) {
-        //console.log(user)
         this.user = user;
-        //console.log(this.user)
         this.id = this.user.uid;
         this.userProfile = firebase.database().ref(`users/${user.uid}`);
-        this.appPrice = firebase.database().ref(`dashboard`);
-        this.userOtherProfile = firebase.database().ref(`driverProfile/${user.uid}`);
-
-        this.getUserOtherProfile().on('value', userProfileSnapshot => {
-          this.driver = userProfileSnapshot.val()
-         })
-
-
-        this.drivers = firebase.database().ref(`Drivers`);
-        this.CustomerOwnPropertyRef = firebase.database().ref(`Customer/${user.uid}/client`);
         this.devicesProfile = firebase.database().ref(`users/${user.uid}/devices`);
-
-        this.getUserProfile().on('value', userProfileSnapshot => {
-         //this.userProfile = userProfileSnapshot.val();
-         this.phone = userProfileSnapshot.val().phoneNumber;
-         this.pic = userProfileSnapshot.val().picture;
-         this.verificationID = userProfileSnapshot.val().random;
-         this.name = userProfileSnapshot.val().name;
-         this.paymentType = userProfileSnapshot.val().payWith;
-         this.card = userProfileSnapshot.val().Card_Number;
-         this.email = userProfileSnapshot.val().Card_email;
-         this.cvc = userProfileSnapshot.val().Card_Cvc;
-         this.year = userProfileSnapshot.val().Card_Year;
-         this.month = userProfileSnapshot.val().Card_month;
-
-         console.log(this.phone)
-        })
+        this.userListeners();
+        this.deviceListeners();
       }
     });
   }
-
+  userListeners() {
+    this.getUserProfile().on('value', userProfileSnapshot => {
+      //this.userProfile = userProfileSnapshot.val();
+      this.phone = userProfileSnapshot.val().phoneNumber;
+      this.pic = userProfileSnapshot.val().picture;
+      this.verificationID = userProfileSnapshot.val().random;
+      this.name = userProfileSnapshot.val().name;
+    });
+  }
+  deviceListeners() {
+    this.getDevices().on('child_added', snapshot => {
+      let sigfoxID = snapshot.val().sigfoxID;
+      this.sigfox.getDeviceBattery(sigfoxID).on('value', snap => {
+        this.updateDeviceBattery(sigfoxID, snap.val());
+      });
+      this.sigfox.getDeviceLocationGps(sigfoxID).on('value', snap => {
+        this.updateDeviceLocation(sigfoxID, snap.val().lat, snap.val().lng);
+      });
+      this.getDevice(sigfoxID).on('value', snap => {
+        if ( (snap.val() == null)) {
+          this.sigfox.getDeviceLocationGps(sigfoxID).off();
+          this.sigfox.getDeviceBattery(sigfoxID).off();
+        }
+      });
+    });
+  }
+  updateDeviceBattery(sigfoxID: any, battery: any) {
+    this.getDevice(sigfoxID).update({
+      battery: battery
+    });
+  }
+  updateDeviceLocation(sigfoxID: any, lat: any, lng: any) {
+    this.getDevice(sigfoxID).update({
+      lat: lat,
+      lng: lng
+    });
+  }
   updateDeviceName(device: any, name: string): firebase.Promise<void> {
     return device.update({
       name: name
@@ -89,26 +91,43 @@ export class ProfileProvider {
       number: number
     });
   }
-  updateDevicePic(device: any, name: string): firebase.Promise<void> {
-    return device.update({
-      name: name
-    });
-  }
-
-  getDevice(device: string): firebase.database.Reference {
-    return firebase.database().ref(`users/${this.user.uid}/devices/${device}`);
+  getDevice(sigfoxID: string): firebase.database.Reference {
+    return firebase.database().ref(`users/${this.user.uid}/devices/${sigfoxID}`);
   }
   getDevices(): firebase.database.Reference {
     return firebase.database().ref(`users/${this.user.uid}/devices`)
   }
-
-  addDevice(sigfoxID: string): firebase.Promise<any> {
-    return this.devicesProfile.child('/' + sigfoxID).update({
-      sigfoxID: sigfoxID
+  deviceExists(id: any): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.getDevice(id).once('value', snapshot => {
+        if ( snapshot.exists()) {
+          resolve(true);
+        } else resolve(false);
+      });
     });
   }
-
+  addDevice(sigfoxID: string): Promise<number> {
+    return new Promise((resolve, reject) => {
+      this.sigfox.deviceExists(sigfoxID).then((res1) => {
+        if ( res1) {
+          this.deviceExists(sigfoxID).then((res2) => {
+            if ( res2) {
+              resolve(2); // Device already exist
+            } else {
+              this.devicesProfile.child('/' + sigfoxID).update({
+                sigfoxID: sigfoxID
+              });
+              resolve(0); // Correct
+            }
+          });
+        } else {
+          resolve(1); // Please enter a valid device ID
+        }
+      });
+    });
+  }
   deleteDevice(device: any) {
+    device.off();
     device.remove().then( f => {
       console.log(f);
     });
@@ -118,18 +137,6 @@ export class ProfileProvider {
     return this.userProfile;
   }
 
-  getUserOtherProfile(): firebase.database.Reference {
-    return this.userOtherProfile;
-  }
-
-
-  getUserAsClientInfo(): firebase.database.Reference {
-    return this.customer;
-  }
-
-  getAllDrivers(): firebase.database.Reference {
-    return this.drivers;
-  }
 
   updateName(username: string): firebase.Promise<void> {
     return this.userProfile.update({
@@ -144,41 +151,6 @@ export class ProfileProvider {
     });
   }
 
-  UpdateHome(
-    number: number): firebase.Promise<any> {
-    return this.userProfile.update({
-      Home: number,
-    });
-  }
-
-
-  UpdateWork(
-    number: number): firebase.Promise<any> {
-    return this.userProfile.update({
-      Work: number,
-    });
-  }
-
-  updateDestination(
-    number: number): firebase.Promise<any> {
-    return this.userProfile.update({
-      Work: number,
-    });
-  }
-
-
-  createHistory(name: string, price: number, date: any,
-    location: number, destination: number): firebase.Promise<any> {
-    return this.userProfile.child('/eventList').push({
-      name: name,
-      price: price,
-      date: date,
-      location: location,
-      destination: destination
-    });
-
-  }
-
   UpdatePhoto(
     pic: any): firebase.Promise<any> {
     return this.userProfile.update({
@@ -191,39 +163,12 @@ export class ProfileProvider {
     });
   }
 
-  PushRandomNumber(
-    number: number): firebase.Promise<any> {
-    return this.userProfile.update({
-      random: number,
-    });
-  }
-
   Complain(
     value: any): firebase.Promise<any> {
     return  firebase.database().ref(`dashboard/complains`).push({
       complain: value,
-      email: this.user.email
-    });
-  }
-
-
-  RateDriver(id: any, rScore: any, text: any, value: boolean): firebase.Promise<any> {
-    return firebase.database().ref(`Customer/${id}/client`).update({
-      Client_HasRated: value,
-      Client_RateValue: rScore,
-      Client_RateText: text
-    });
-  }
-
-  ApprovePickup(value: boolean, id: any): firebase.Promise<any> {
-    return firebase.database().ref(`Customer/${id}/client`).update({
-      Client_PickedUp: value,
-    });
-  }
-
-  ApproveDrop(value: boolean, id: any): firebase.Promise<any> {
-    return firebase.database().ref(`Customer/${id}/client`).update({
-      Client_Dropped: value,
+      email: this.user.email,
+      phoneNumber: this.phone
     });
   }
 
@@ -232,20 +177,5 @@ export class ProfileProvider {
       Client_Message: value,
     });
   }
-
-  CanCharge(value: boolean, id: any): firebase.Promise<any> {
-    return firebase.database().ref(`Customer/${id}/client`).update({
-      Client_CanChargeCard: value,
-    });
-  }
-
-
-  UpdatePaymentType(
-    number: number): firebase.Promise<any> {
-    return this.userProfile.update({
-      payWith: number,
-    });
-  }
-
 
 }

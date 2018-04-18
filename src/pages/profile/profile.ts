@@ -190,31 +190,6 @@ export class ProfilePage {
     alert.present();
   }
 
-
-  updateHome() {
-    let modal = this.modalCtrl.create('AutocompletePage');
-    modal.onDidDismiss(data => {
-      if (data != null) {
-        this.ph.UpdateHome(data);
-      }
-    })
-
-    modal.present()
-
-  }
-
-
-  updateWork() {
-    let modal = this.modalCtrl.create('AutocompletePage');
-    modal.onDidDismiss(data => {
-      if (data != null) {
-        this.ph.UpdateWork(data);
-      }
-    })
-    modal.present()
-  }
-
-
   logOut() {
     const alert = this.alertCtrl.create({
       message: "Are You Sure To Logout ?",

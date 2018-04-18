@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {SigfoxProvider, VirtualSigfoxProvider} from "../../providers/sigfox/sigfox";
+import {ProfileProvider} from "../../providers/profile/profile";
 
 /**
  * Generated class for the LanguagePage page.
@@ -14,8 +16,14 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'language.html',
 })
 export class LanguagePage {
+  public locations: any
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+              public sigfox: SigfoxProvider, public ph: ProfileProvider, public vsp: VirtualSigfoxProvider) {
+  }
+
+  ionViewDidEnter() {
+
   }
 
   ionViewDidLoad() {

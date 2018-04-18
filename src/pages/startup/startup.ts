@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, LoadingController, Loading, NavParams } from 'ionic-angular';
-import { RatePage } from '../../pages/rate/rate';
 /**
  * Generated class for the StartupPage page.
  *
@@ -35,7 +34,7 @@ presentRouteLoader(message) {
     loading.dismiss();
    this.navCtrl.setRoot('PhonePage')
     clearInterval(myInterval)
-    
+
   }, 1000);
 }
 

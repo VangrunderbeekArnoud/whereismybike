@@ -33,6 +33,7 @@ export class EditDevicePage {
               public alertCtrl: AlertController, public ph: ProfileProvider,
               public authProvider: AuthProvider, public sigfox: SigfoxProvider,
               public navParams: NavParams) {
+    ph.isHome = false;
     this.sigfoxID = navParams.get('sigfoxID');
   }
 
@@ -41,15 +42,13 @@ export class EditDevicePage {
     this.device.on('value', userProfileSnapshot => {
       this.sigfoxID = userProfileSnapshot.val().sigfoxID;
       this.name = userProfileSnapshot.val().name;
+      this.battery = userProfileSnapshot.val().battery;
       this.brand = userProfileSnapshot.val().brand;
       this.type = userProfileSnapshot.val().type;
       this.number = userProfileSnapshot.val().number;
       this.pic = userProfileSnapshot.val().picture;
       this.photoURL = userProfileSnapshot.val().photoURL;
     });
-    this.sigfox.getDevice(this.sigfoxID).on('value', snapshot => {
-      this.battery = snapshot.val().seqNumber;
-    })
   }
 
   ionViewDidLoad() {
@@ -66,7 +65,7 @@ export class EditDevicePage {
         {
           text: 'Yes',
           handler: data => {
-            this.device.off();
+            //this.device.off();
             this.ph.deleteDevice(this.device);
             this.navCtrl.pop();
           }
@@ -155,12 +154,6 @@ export class EditDevicePage {
       ]
     });
     alert.present();
-  }
-
-  remove(): void {
-    this.authProvider.logoutUser().then(() => {
-      this.navCtrl.setRoot('LoginPage');
-    });
   }
 
   choosePic() {

@@ -1,6 +1,10 @@
 Where is my bike
 =====================
 
+## Errors
+
+* add-device-page cancel, marker still exists!
+
 ## Todo
 
 * when changing pictures, the popupprovider must be shown earlier
@@ -14,6 +18,7 @@ Where is my bike
 * add rating this product at support page connected to appstore
 * add location of devices to maps
 * device pics are distorted !
+* when adding a device, the name popup says 'your name', change it !
 
 ## Using this project
 
