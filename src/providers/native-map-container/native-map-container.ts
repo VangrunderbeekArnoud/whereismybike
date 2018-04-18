@@ -60,7 +60,6 @@ export class NativeMapContainerProvider {
           this.addUserToMap(location.latLng);
           this.addDevicesToMap();
           this.setLocation(location.latLng);
-          this.PumpControls();
           this.hasShown = true;
           this.location = location;
           this.userLocation = location.latLng;
@@ -137,14 +136,6 @@ export class NativeMapContainerProvider {
     }).then( suc => {
       this.lat = location.lat;
       this.lng = location.lng;
-    });
-  }
-
-//Start the map touch detection
-  PumpControls() {
-    this.map.on(GoogleMapsEvent.CAMERA_MOVE_START).subscribe(start => {
-    });
-    this.map.on(GoogleMapsEvent.CAMERA_MOVE_END).subscribe(start => {
     });
   }
 
