@@ -36,7 +36,15 @@ export class GeocoderProvider {
   }
 
 
-
+  Reverse_Geocode_return(location) {
+    this.geocoder.geocode({'location': location}, (results, status) => {
+      if ( status === 'OK') {
+        if ( results[0]) {
+          document.getElementById("location").innerText = results[0].formatted_address;
+        }
+      }
+    });
+  }
 
 
   Reverse_Geocode(lat, lng, map, driverMode){

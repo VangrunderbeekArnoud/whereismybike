@@ -130,7 +130,6 @@ Send(id) {
 
 refactor(){
 
-        this.cMap.onDestinatiobarHide = false;
         this.calculateBtn = false;
         document.getElementById("destination").innerHTML = "Set Destination";
 

@@ -1,5 +1,20 @@
 page-home {
 
+  ion-scroll {
+    height: 60vh;
+  }
+
+  .itemselect {
+    z-index: 3;
+    margin-left: 6%;
+    margin-right: 6%;
+    //background: white;
+    padding: 10px;
+    //border-radius: 4px;
+    //margin-top: 20px;
+    //margin-top: -50px;
+  }
+
   .topBar {
     height: 50px;
     width: 100%;
@@ -513,7 +528,10 @@ page-home {
   #location {
     text-align: center;
     padding-left: 17px;
-
+  }
+  #mlocation {
+    text-align: center;
+    padding-left: 17px;
   }
 
   #destination {
@@ -525,8 +543,8 @@ page-home {
   .locate_button {
     z-index: 3;
     margin-left: 85%;
-    margin-top: 5%;
-    width: 16%;
+    //margin-top: 5%;
+    //width: 16%;
     background: none !important;
     .locate_icon {
       position: fixed;

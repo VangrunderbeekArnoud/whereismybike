@@ -17,24 +17,21 @@ declare var google: any;
 @Injectable()
 export class NativeMapContainerProvider {
   public onLocationbarHide: boolean = true;
-  public onDestinatiobarHide: boolean = false;
   public lat: any;
   public lng: any;
   public client: any;
-  public marker: any;
   public delay: number = 100;
-  public hasRequested: boolean = false;
   public uid: any
   locations: any;
   location: any;
-  timer1: any;
+  public userLocation: any;
   map: GoogleMap;
   public classic: boolean = false;
   public onbar2: boolean = false;
   canCheck: boolean = true;
-  public hasStart: boolean = false;
   public hasShown: boolean = false;
   ready: boolean = false;
+  private startLocation: any = {lat: 46.1634787, lng: 104.3458401}; // Mongolie
 
   constructor(private googleMaps: GoogleMaps, public zone: NgZone, public ph: ProfileProvider,
               public gcode: GeocoderProvider, public platform: Platform, public sigfox: SigfoxProvider) {
@@ -42,40 +39,31 @@ export class NativeMapContainerProvider {
 
   ///Start the cordova map
   loadMap() {
-    console.log('map called')
-
-    let lat;
-    let lng;
-    let zoom;
-    lat = 46.1634787
-    lng = 104.3458401
-    zoom = 5
-
-    let mapOptions: GoogleMapOptions = {
-      camera: {
-        target: {
-          lat: lat,
-          lng: lng
-        },
-        zoom: zoom,
+    console.log('loadMap(): map called')
+    let mapOptions: GoogleMapOptions = { camera: {
+        target: this.startLocation,
+        zoom: 5,
         tilt: 0
       }
     };
-
     this.map = this.googleMaps.create(document.getElementById("map"), mapOptions);
     this.map.setClickable(false)
     // Wait the MAP_READY before using any methods.
     this.map.one(GoogleMapsEvent.MAP_READY)
       .then(() => {
-        console.log('Map is ready!');
+        console.log('loadMap(): map ready!');
         this.map.setCompassEnabled(false)
         this.map.setTrafficEnabled(false)
         this.map.setIndoorEnabled(false)
-        this.hasStart = true;
         this.map.getMyLocation().then(location => {
-          console.log('sucess location found');
-          this.AnimateToLoc(location);
+          console.log('loadMap(): location found');
+          this.addUserToMap(location.latLng);
+          this.addDevicesToMap();
+          this.setLocation(location.latLng);
+          this.PumpControls();
+          this.hasShown = true;
           this.location = location;
+          this.userLocation = location.latLng;
           this.map.setClickable(true)
           this.gcode.Reverse_Geocode(location.latLng.lat, location.latLng.lng, this.map, false)
         }).catch(er => {
@@ -83,81 +71,16 @@ export class NativeMapContainerProvider {
         })
       });
   }
-
-  //check if gps is available by trying to get location info which automatically handles everything
-  checkGps() {
-    let mapOptions: GoogleMapOptions = {
-      camera: {}
-    };
-    this.map = this.googleMaps.create(document.getElementById("op"), mapOptions);
-    this.map.getMyLocation().then(location => {
-      console.log('location now on')
-    })
-  }
-
-//Start the map touch detection
-  PumpControls() {
-    this.map.on(GoogleMapsEvent.CAMERA_MOVE_START).subscribe(start => {
-      if (!this.hasRequested) {
-        // this.map.refreshLayout();
-        let centerBar = document.getElementById("onbar").style.display = 'none'
-        // let location = document.getElementById("location").style.marginTop = '-140px'
-        this.onDestinatiobarHide = false
-        clearTimeout(this.timer1);
-        let bottomBar1 = document.getElementById("bar2").style.display = 'none'
-      }
-    });
-    this.map.on(GoogleMapsEvent.CAMERA_MOVE_END).subscribe(start => {
-      //Check if the user has already booked a ride
-      if (!this.hasRequested) {
-        let centerBar = document.getElementById("onbar").style.display = 'block'
-        this.onDestinatiobarHide = false
-        //let location = document.getElementById("location").style.marginTop = '-50px'
-        let center = this.map.getCameraPosition();
-        this.lat = center.target.lat;
-        this.lng = center.target.lng;
-        if (this.canCheck && this.ready) {
-          this.canCheck = false
-          console.log('move ended')
-        }
-        // if (this.locations != null)
-        // this.showCloseDrivers(this.lat, this.lng)
-        console.log('should animate end')
-        this.gcode.Reverse_Geocode(this.lat, this.lng, this.map, false)
-      }
-    });
-  }
-
-  ///Animate to user location
-  AnimateToLoc(location) {
-    console.log('animante to loc')
-    this.map.animateCamera({
-      target: location.latLng,
-      zoom: 17,
-      tilt: 0,
-      bearing: 0,
-      duration: 1000
-    }).then(suc => {
-      console.log('camera done')
-      this.lat = location.latLng.lat
-      this.lng = location.latLng.lng
-      console.log(this.lat, this.lng)
-      this.PumpControls();
-      this.showDevicesOnMap();
-      this.hasShown = true
-      let centerBar = document.getElementById("onbar")
-      centerBar.style.display = 'block'
-      this.hasRequested = false;
+  addUserToMap(location) {
+    this.platform.ready().then( () => {
       this.map.addMarker({
-        title: this.ph.name,
         icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAEcUlEQVRIS7WVfUxVZRzHf7/nuQx8QZJLEC81MXpZsjSuZOrEc869CDhoZTW16GXiRXvbrCxa/lFuQdqLmE5mMuacq1Z3gxISHPc8B1dopGEMxlTYNZp6s4WUFl2unOdp5+DFc4GL9EdnO9vdOc/9fH+/7+/lIPzPF96Ej7mS5OCIRQIxi3OeZJynAL8iIe0c4BBj7BQAiEiciAK5suy8JsR7lJBsrutXgJB2iug3QBwgRej6A4TSWQjQhkKUNWva0YlExgk4HI6o2bGxOwQhLwEAQyHeHxZCbWlpGbYCJEmyEUJyAaAMAZYj5zuHAV4fey5MwIDfEhf3Jdf1FcRmK1VV9bPJ0r8uiE6n8xkQYi8ANMTb7Ws8Ho8eCiZMwCVJu3Uh1tkIWdGsaa1Tqf/iwicfjNYDF6MCA3dyxCYuRJWmaa+NEzA854heQCxWVfXTqcCz1m5Wfk5fVT3zSt+lub7aVbZ/fl8pEGsAMUdV1W8NRigDlCSpjRJyVWXMNQVbwID3pRXV9KflzDF6aM7pgydmnDuanxj0fU0QicrY0lGBXElayAk5gULkezXtiPEiLy8veZjSWPXw4bNjszHh6UU1/ckj8NB9T8dHx5PPNeyghHi4EAs0TeswM3DK8lbO+SaBaDe6YNHDa5Mu3P1o7bXouBm3d9cVn6zb2xUSMeFzi2r6U8LhMX/7A2m+r7bcdb5+T2Bw8DJSWsEYKzcFFEWpF0LM1DRNdjxRGjeQuqTZN//ZbCOytDP13Um+hjU/evZ1Zj29Wem744YtocgNeEZXdWXXwbffMniSJB0jhPgZY4+ZApIk/WAjpHeY83W/ZK4+4svemGNNPaX3m+64/tObfkvM3hfyfBT+lz+Q0XkDbjqiKB4ASDHqECbgZeypee6KD3uyN7wcjI6PsorEn2/TL6csouYzPuJ7TAh+YCTy0DVOwClJhwQhsxhjknEo012+qydr/fND0xNtVhHr75ir/kBGR3Vl1xh4yCJK6UVVVR83M3Apyju6rr8SKrLxbF5J+Z6ehe7S4PRbx4mY8FMTwwsKCqKDQ0MDgPiuqqoVpoAsyw6CeFIArGSMNYZSvW99eVWvw+22isT8GRlu+u90PgJC1CEh93u93s7RQXMpynEOEGCMydZByyzZWnU2+wV3cFqCLeYPfyDjp+rKrv3hnlvsNwa2FRF1TdOWWScZcmV5OUdsAcTnVFU9YC3avRu27bqULpeknmn6eBI4uGS5VCB+IgCWMsaOhQmYtZCkSkHIRiJE/tj9vrRg9UOtjV98H2lHKYqiCF1vpJRWehl7c8Jtaux4SsjnAFCIQrzo1bT9U9hL6JJlt875bkJpbbzdXhxxXV9vMRsibieIr3IhvgOADxISEpo8Hk/QGr3ZLcFgga7rb1BCFiPA9tl2+xYrfJxFYcPidC4DIbYBwBKu64MCsYMScsE4o3OeSglZAADTjCAQsSzk+VgLb/bRN1p4PiIWAkAWAtxmAka+ze2IWG+0YqS6TJrBZH/6L+/+BedwGDdvfYzpAAAAAElFTkSuQmCC",
-        position: location.latLng,
+        position: location,
       })
         .then(marker => {
-          this.marker = marker
           console.log('marker added')
           this.map.addCircle({
-            'center': location.latLng,
+            'center': location,
             'radius': 300,
             'strokeColor': '#A0BAE7',
             'strokeWidth': 5,
@@ -169,38 +92,13 @@ export class NativeMapContainerProvider {
               // this.startChecking()
             }, 1500)
           });
-        })
-
-    })
-
+          this.ph.getUserProfile().child('name').on('value', snapshot => {
+            marker.setTitle(snapshot.val());
+          });
+        });
+    });
   }
-
-//Reset map position to user current position on location btn press
-  ResetMe() {
-    let centerBar = document.getElementById("onbar")
-    centerBar.style.display = 'none'
-    this.map.animateCamera({
-      target: this.location.latLng,
-      zoom: 17,
-      tilt: 0,
-      bearing: 0,
-      duration: 1000
-    }).then(suc => {
-      console.log('camera done')
-      this.lat = this.location.latLng.lat
-      this.lng = this.location.latLng.lng
-      //  this.showDevicesOnMap();
-
-      // this.startChecking(
-      console.log(this.lat, this.lng)
-      let centerBar = document.getElementById("onbar")
-      centerBar.style.display = 'block'
-      // this.hasRequested = false;
-    })
-  }
-
-///Go through the databse and access the list of drivers available with thier informations.
-  showDevicesOnMap() {
+  addDevicesToMap() {
     this.platform.ready().then(() => {
       this.ph.getDevices().on('child_added', snapshot => {
         let sigfoxID = snapshot.val().sigfoxID;
@@ -224,17 +122,41 @@ export class NativeMapContainerProvider {
               marker.setPosition({lat: snap.val().lat, lng: snap.val().lng});
             }
           });
-          //this.ph.getDevice(sigfoxID).on('value', snap => {
-          //  if(!(snap.val() == null)) {
-          //    marker.setTitle(snap.val().name);
-          //    marker.setPosition({lat: snap.val().lat, lng: snap.val().lng});
-          //  } else {
-          //    marker.remove();
-          //  }
-          //});
         });
       });
     });
+  }
+  setLocation(location) {
+    this.gcode.Reverse_Geocode_return(location);
+    this.map.animateCamera( {
+      target: location,
+      zoom: 17,
+      tilt: 0,
+      bearing: 0,
+      duration: 1000
+    }).then( suc => {
+      this.lat = location.lat;
+      this.lng = location.lng;
+    });
+  }
+
+//Start the map touch detection
+  PumpControls() {
+    this.map.on(GoogleMapsEvent.CAMERA_MOVE_START).subscribe(start => {
+    });
+    this.map.on(GoogleMapsEvent.CAMERA_MOVE_END).subscribe(start => {
+    });
+  }
+
+  //check if gps is available by trying to get location info which automatically handles everything
+  checkGps() {
+    let mapOptions: GoogleMapOptions = {
+      camera: {}
+    };
+    this.map = this.googleMaps.create(document.getElementById("op"), mapOptions);
+    this.map.getMyLocation().then(location => {
+      console.log('location now on')
+    })
   }
 
 }

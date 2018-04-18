@@ -34,16 +34,14 @@ export class HomePage {
   public name;
   public picture;
   public number;
-  returningUser: boolean = false;
+  public selector: boolean = false;
   started: boolean = false;
   uid: any;
   startedNavigation: boolean = false;
-  destinationSetName: any;
   added: boolean = true;
   type: any = 'arrow-dropdown';
   lat: any;
   lng: any;
-  price: any;
 
   constructor(public storage: Storage, private backgroundMode: BackgroundMode,
               public stB: StatusBar, public loadingCtrl: LoadingController,
@@ -87,6 +85,21 @@ export class HomePage {
 
   }
 
+  showSelectDevice() {
+    if ( this.selector) {
+      this.selector = false;
+      this.setLocation();
+    } else {
+      this.selector = true;
+    }
+  }
+  setLocation() {
+    this.cMap.setLocation({lat: 50.8616995, lng: 4.6726563});
+  }
+  focus() {
+    this.cMap.setLocation(this.cMap.userLocation);
+  }
+
   WaitForGeolocation() {
     //A timer to detect if the location has been found.
     let location_tracker_loop = setTimeout(() => {
@@ -104,43 +117,7 @@ export class HomePage {
     this.lat = this.cMap.lat;
     this.lng = this.cMap.lng;
     //Check if user already has a connection, maybe lost due to unexpected device shut down and application exit
-    this.CheckForPreviousData();
-  }
-
-  //Check if there is a key available in the storage, if not, return. This is to ensure that we dont lose information
-  //If the user mistakenly closes the application.
-  CheckForPreviousData() {
-    this.storage.get('currentUserId').then((value) => {
-      if (value != null) {
-        this.uid = value;
-        this.hideFunctions();
-        this.returningUser = true;
-        this.pop.uid = this.uid;
-      } else {
-        this.storage.remove(`currentUserId`);
-      }
-
-    }).catch(er => {
-      console.log("error")
-    });
-
-  }
-
-  hideFunctions() {
-    ///hide and remove some properties on user request.
-    let bottomBar1 = document.getElementById("bar2").style.display = 'none'
-    this.cMap.onbar2 = true
-    clearTimeout(this.cMap.timer1)
     let centerBar = document.getElementById("onbar")
     centerBar.style.display = 'none'
-
-    document.getElementById("destination").innerHTML = 'Set Destination';
-    this.cMap.map.setCameraZoom(6);
-    this.startedNavigation = true;
-    this.pop.onRequest = true;
-    this.cMap.hasRequested = true;
-
-    this.cMap.map.clear();
   }
-
 }
