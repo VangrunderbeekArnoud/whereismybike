@@ -35,6 +35,7 @@ export class HomePage {
   public picture;
   public number;
   public selector: boolean = false;
+  public devices: Array<any>;
   started: boolean = false;
   uid: any;
   startedNavigation: boolean = false;
@@ -79,25 +80,43 @@ export class HomePage {
           if (this.platform.is('cordova')) {
             //  this.SmartLoader('Please Wait..   If this is taking too long, Please check Your Connection')
           }
+          this.location = this.cMap.userLocation;
+          this.loadDevices();
         })
       }
     });
-
+  }
+  loadDevices() {
+    this.ph.getDevices().on('value', snapshot => {
+      this.devices = [];
+      snapshot.forEach(snap => {
+        this.devices.push({
+          sigfoxID: snap.val().sigfoxID,
+          name: snap.val().name,
+          brand: snap.val().brand,
+          type: snap.val().type,
+          number: snap.val().number,
+          pic: snap.val().picture,
+          photoURL: snap.val().photoURL,
+          lat: snap.val().lat,
+          lng: snap.val().lng
+        });
+        return false;
+      });
+    });
   }
 
   showSelectDevice() {
     if ( this.selector) {
       this.selector = false;
-      this.setLocation();
     } else {
       this.selector = true;
     }
   }
-  setLocation() {
-    this.cMap.setLocation({lat: 50.8616995, lng: 4.6726563});
-  }
-  focus() {
-    this.cMap.setLocation(this.cMap.userLocation);
+  setLocation(lat, lng) {
+    this.location = {lat: lat, lng: lng};
+    this.cMap.setLocation({lat: lat, lng: lng});
+    this.selector = false;
   }
 
   WaitForGeolocation() {

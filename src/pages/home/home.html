@@ -28,15 +28,19 @@
     <div class="itemselect" *ngIf="selector" >
       <ion-scroll scrollY="true" scrollX="false">
         <ion-list>
-          <ion-item>hello</ion-item>
-          <ion-item>hello</ion-item>
+          <ion-item (click)="setLocation(cMap.userLocation.lat, cMap.userLocation.lng)">
+            {{ph.name}}
+          </ion-item>
+          <ion-item (click)="setLocation(device.lat, device.lng)" *ngFor="let device of devices">
+            {{device?.name}}
+          </ion-item>
         </ion-list>
       </ion-scroll>
     </div>
 
     <!-- This is the little location btn on the top left corner -->
     <button *ngIf='!(startedNavigation||selector)' class='locate_button' no-lines detail-none icon-only clear
-            (click)="focus()">
+            (click)="setLocation(location.lat, location.lng)">
       <ion-icon class='locate_icon' color='primary' name="locate"></ion-icon>
     </button>
 
