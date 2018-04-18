@@ -55,6 +55,7 @@ export class ProfileProvider {
       this.getDevice(sigfoxID).on('value', snap => {
         if ( (snap.val() == null)) {
           this.sigfox.getDeviceLocationGps(sigfoxID).off();
+          this.sigfox.getDeviceBattery(sigfoxID).off();
         }
       });
     });
@@ -111,22 +112,22 @@ export class ProfileProvider {
         if ( res1) {
           this.deviceExists(sigfoxID).then((res2) => {
             if ( res2) {
-              resolve(2);
+              resolve(2); // Device already exist
             } else {
               this.devicesProfile.child('/' + sigfoxID).update({
                 sigfoxID: sigfoxID
               });
-              resolve(0);
+              resolve(0); // Correct
             }
           });
         } else {
-          resolve(1);
+          resolve(1); // Please enter a valid device ID
         }
       });
     });
   }
   deleteDevice(device: any) {
-    // device.off()
+    device.off();
     device.remove().then( f => {
       console.log(f);
     });
@@ -166,7 +167,8 @@ export class ProfileProvider {
     value: any): firebase.Promise<any> {
     return  firebase.database().ref(`dashboard/complains`).push({
       complain: value,
-      email: this.user.email
+      email: this.user.email,
+      phoneNumber: this.phone
     });
   }
 

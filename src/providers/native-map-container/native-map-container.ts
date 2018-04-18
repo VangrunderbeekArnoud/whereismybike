@@ -211,14 +211,27 @@ export class NativeMapContainerProvider {
           //icon: './assets/img/bicycle_pin_01.png'
         }).then((marker: Marker) => {
           // Error: sigfoxID == null when remove device !
-          this.ph.getDevice(sigfoxID).on('value', snap => {
-            if(!(snap.val() == null)) {
-              marker.setTitle(snap.val().name);
-              marker.setPosition({lat: snap.val().lat, lng: snap.val().lng});
-            } else {
+          this.ph.getDevices().on('child_removed', snap => {
+            if ( sigfoxID == snap.val().sigfoxID) {
+              console.log('showDevicesOnMap: child_removed;');
               marker.remove();
             }
           });
+          this.ph.getDevices().on('child_changed', snap => {
+            if ( sigfoxID == snap.val().sigfoxID) {
+              console.log('showDevicesOnMap: child_changed');
+              marker.setTitle(snap.val().name);
+              marker.setPosition({lat: snap.val().lat, lng: snap.val().lng});
+            }
+          });
+          //this.ph.getDevice(sigfoxID).on('value', snap => {
+          //  if(!(snap.val() == null)) {
+          //    marker.setTitle(snap.val().name);
+          //    marker.setPosition({lat: snap.val().lat, lng: snap.val().lng});
+          //  } else {
+          //    marker.remove();
+          //  }
+          //});
         });
       });
     });
