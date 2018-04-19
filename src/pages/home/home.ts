@@ -36,6 +36,8 @@ export class HomePage {
   public number;
   public selector: boolean = false;
   public devices: Array<any>;
+  public height: Number;
+  public scroll: boolean = false;
   started: boolean = false;
   uid: any;
   startedNavigation: boolean = false;
@@ -56,7 +58,6 @@ export class HomePage {
     menu.swipeEnable(false, 'menu1');
     ph.isHome = true
   }
-
   ngOnInit() {
     //detecting authentication changes in firebase.
     const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
@@ -110,6 +111,14 @@ export class HomePage {
     if ( this.selector) {
       this.selector = false;
     } else {
+      var length = (this.devices.length +1)*10;
+      if ( length <= 60) {
+        this.height = length;
+        this.scroll = false;
+      } else {
+        this.height = 60;
+        this.scroll = true;
+      }
       this.selector = true;
     }
   }

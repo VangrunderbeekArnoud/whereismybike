@@ -19,19 +19,19 @@
     <div class="bars">
       <!-- location bar -->
       <button no-lines detail-none (click)="showSelectDevice()" [hidden]="!cMap.onLocationbarHide" ion-item class="bars-locate" icon-start>
-        <ion-icon color='deep' name="ios-menu"></ion-icon>
+        <ion-icon color='deep' name="locate"></ion-icon>
         <div *ngIf="!selector" id="location">Set Pin On Location</div>
         <div *ngIf="selector" id="mlocation">Set focus on Device</div>
       </button>
     </div>
 
     <div class="itemselect" *ngIf="selector" >
-      <ion-scroll scrollY="true" scrollX="false">
-        <ion-list>
-          <ion-item (click)="setLocation(cMap.userLocation.lat, cMap.userLocation.lng)">
+      <ion-scroll id="scrollid" [style.height.vh]="height" scrollY="{{scroll}}" scrollX="false">
+        <ion-list #listStyle>
+          <ion-item class="itemHeight" (click)="setLocation(cMap.userLocation.lat, cMap.userLocation.lng)">
             {{ph.name}}
           </ion-item>
-          <ion-item (click)="setLocation(device.lat, device.lng)" *ngFor="let device of devices">
+          <ion-item class="itemHeight" (click)="setLocation(device.lat, device.lng)" *ngFor="let device of devices">
             {{device?.name}}
           </ion-item>
         </ion-list>
