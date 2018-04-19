@@ -3,11 +3,10 @@ Where is my bike
 
 ## Pages
 
-![login_entrance](./resources/readme/login_entrance.png?raw=true "login_entrance")
-![login](./resources/readme/login.png?raw=true "login_entrance")
-![login](./resources/readme/login.png?raw=true "login_entrance")
-![login](./resources/readme/login.png?raw=true "login_entrance")
-![login](./resources/readme/login.png?raw=true "login_entrance")
+<img src="resources/readme/login_entrance.png" alt="login_entrance" style="width: 200px;"/>
+<img src="resources/readme/login_entrance.png" alt="login_entrance" style="width: 200px;"/>
+<img src="resources/readme/login_entrance.png" alt="login_entrance" style="width: 200px;"/>
+<img src="resources/readme/login_entrance.png" alt="login_entrance" style="width: 200px;"/>
 
 ## Using this project
 
