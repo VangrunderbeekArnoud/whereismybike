@@ -12,6 +12,10 @@
   </div> -->
   <form [formGroup]="signupForm" (submit)="signupUser()" novalidate>
 
+      <ion-label color="primary" stacked>Name</ion-label>
+    <ion-input formControlName="name" type="name" placeholder="Your name"
+    [class.invalid]="!signupForm.controls.name.valid && signupForm.controls.name.dirty"></ion-input>
+
       <ion-label color='primary' stacked>Email</ion-label>
       <ion-input formControlName="email" type="email" placeholder="Your email address"
         [class.invalid]="!signupForm.controls.email.valid && signupForm.controls.email.dirty">

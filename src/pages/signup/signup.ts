@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { 
-  NavController, 
+import {
+  NavController,
   Loading,
   LoadingController,
   AlertController } from 'ionic-angular';
@@ -17,11 +17,12 @@ import { ProfileProvider } from '../../providers/profile/profile';
 export class SignupPage {
   public signupForm: FormGroup;
   loading: Loading;
-  constructor(public navCtrl: NavController, public authProvider: AuthProvider, 
-    public formBuilder: FormBuilder, public loadingCtrl: LoadingController,public ph: ProfileProvider, 
+  constructor(public navCtrl: NavController, public authProvider: AuthProvider,
+    public formBuilder: FormBuilder, public loadingCtrl: LoadingController,public ph: ProfileProvider,
     public alertCtrl: AlertController) {
 
       this.signupForm = formBuilder.group({
+        name: ['', Validators.compose([Validators.required])],
         email: ['', Validators.compose([Validators.required, EmailValidator.isValid])],
         password: ['', Validators.compose([Validators.minLength(6), Validators.required])]
       });
@@ -34,6 +35,7 @@ export class SignupPage {
       this.authProvider.signupUser(this.signupForm.value.email, this.signupForm.value.password)
       .then(() => {
         this.loading.dismiss().then( () => {
+          this.ph.updateName(this.signupForm.value.name);
           if (this.ph.phone == null)
             this.navCtrl.push('StartupPage');
             else
