@@ -3,12 +3,6 @@ Where is my bike
 
 ## Pages
 
-![login_entrance](./resources/readme/login_entrance.png?raw=true&s=100 "login_entrance")
-![login_entrance](./resources/readme/login_entrance.png?raw=true&s=100 "login_entrance")
-![login_entrance](./resources/readme/login_entrance.png?raw=true&s=100 "login_entrance")
-![login_entrance](./resources/readme/login_entrance.png?raw=true&s=100 "login_entrance")
-![login_entrance](./resources/readme/login_entrance.png?raw=true&s=100 "login_entrance")
-
 ## Using this project
 
 To install the project, install the node modules by running
