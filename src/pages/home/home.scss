@@ -92,6 +92,26 @@ page-home {
       overflow: hidden;
     }
 
+    .lock-button {
+      display: block;
+      border-radius: 50%;
+      width: 50px; // standard 70px
+      height: 50px; // standard 70px
+      box-shadow: 8px 8px 8px color($colors, nav-shadow, base);
+      z-index: 3;
+      border-left: 1.1px solid color($colors, nav-border-bottom, base);
+      border-right: 1.1px solid color($colors, nav-border-bottom, base);
+      border-top: 1px solid color($colors, nav-border-bottom, base);
+      border-bottom: 1px solid color($colors, nav-border-bottom, base);
+      overflow: hidden;
+      position: absolute;
+      bottom: 20px;
+      left: 0;
+      right: 0;
+      margin-left: 80%;
+      margin-right: 20%;
+    }
+
     .bars {
       margin-top: 13%;
       padding-top: 18px;
