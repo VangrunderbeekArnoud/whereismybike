@@ -69,6 +69,7 @@ export class HomePage {
         this.stB.hide();
       } else {
         unsubscribe();
+        document.getElementById("location").innerText = ' ';
         this.cMap.loadMap();
         this.ph.getUserProfile().on('value', userProfileSnapshot => {
           if (userProfileSnapshot.val().phoneNumber == null || userProfileSnapshot.val().phoneNumber == undefined) {
