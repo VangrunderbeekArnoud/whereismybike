@@ -108,6 +108,13 @@ export class NativeMapContainerProvider {
           //icon: './assets/img/bicycle_pin_01.png'
         }).then((marker: Marker) => {
           // Error: sigfoxID == null when remove device !
+          this.gcode.Reverse_Geocode_return({lat: snapshot.val().lat, lng: snapshot.val().lng})
+            .then((reverse_location) => {
+              marker.setTitle(reverse_location);
+            });
+          marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
+            // change the name of the location bar !
+          });
           this.ph.getDevices().on('child_removed', snap => {
             if ( sigfoxID == snap.val().sigfoxID) {
               console.log('showDevicesOnMap: child_removed;');
@@ -117,7 +124,11 @@ export class NativeMapContainerProvider {
           this.ph.getDevices().on('child_changed', snap => {
             if ( sigfoxID == snap.val().sigfoxID) {
               console.log('showDevicesOnMap: child_changed');
-              marker.setTitle(snap.val().name);
+              let location = {lat: snap.val().lat, lng: snap.val().lng};
+              this.gcode.Reverse_Geocode_return(location).then((reverse_location) => {
+                marker.setTitle(reverse_location);
+              });
+              //marker.setTitle(snap.val().name);
               marker.setPosition({lat: snap.val().lat, lng: snap.val().lng});
             }
           });
@@ -126,7 +137,6 @@ export class NativeMapContainerProvider {
     });
   }
   setLocation(location) {
-    this.gcode.Reverse_Geocode_return(location);
     this.map.animateCamera( {
       target: location,
       zoom: 17,

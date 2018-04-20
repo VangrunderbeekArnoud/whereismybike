@@ -36,13 +36,17 @@ export class GeocoderProvider {
   }
 
 
-  Reverse_Geocode_return(location) {
-    this.geocoder.geocode({'location': location}, (results, status) => {
-      if ( status === 'OK') {
-        if ( results[0]) {
-          document.getElementById("location").innerText = results[0].formatted_address;
+  Reverse_Geocode_return(location): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.geocoder.geocode({'location': location}, (results, status) => {
+        if ( status === 'OK') {
+          if ( results[0]) {
+            console.log(results[0].formatted_address);
+            resolve(results[0].formatted_address);
+          }
         }
-      }
+        resolve(null);
+      });
     });
   }
 
@@ -54,7 +58,7 @@ export class GeocoderProvider {
       if (status === 'OK') {
         if (results[0]) {
           if (!driverMode){
-          document.getElementById("location").innerText = results[0].formatted_address;
+          //document.getElementById("location").innerText = results[0].formatted_address;
           this.locationName = results[0].formatted_address;
           }else{
           var driver_location = results[0].formatted_address;

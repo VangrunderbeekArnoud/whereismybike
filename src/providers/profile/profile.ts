@@ -137,7 +137,9 @@ export class ProfileProvider {
     return this.userProfile;
   }
 
-
+  getName(): firebase.database.Reference {
+    return this.userProfile.child('name');
+  }
   updateName(username: string): firebase.Promise<void> {
     return this.userProfile.update({
       name: username,

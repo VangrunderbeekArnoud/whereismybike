@@ -30,8 +30,6 @@ declare var google;
 })
 
 export class HomePage {
-  public location;
-  public name;
   public picture;
   public number;
   public selector: boolean = false;
@@ -45,6 +43,7 @@ export class HomePage {
   type: any = 'arrow-dropdown';
   lat: any;
   lng: any;
+  private name: any;
 
   constructor(public storage: Storage, private backgroundMode: BackgroundMode,
               public stB: StatusBar, public loadingCtrl: LoadingController,
@@ -81,7 +80,7 @@ export class HomePage {
           if (this.platform.is('cordova')) {
             //  this.SmartLoader('Please Wait..   If this is taking too long, Please check Your Connection')
           }
-          this.location = this.cMap.userLocation;
+          this.name = this.ph.name;
           this.loadDevices();
         })
       }
@@ -122,8 +121,8 @@ export class HomePage {
       this.selector = true;
     }
   }
-  setLocation(lat, lng) {
-    this.location = {lat: lat, lng: lng};
+  setLocation(name, lat, lng) {
+    this.name = name;
     this.cMap.setLocation({lat: lat, lng: lng});
     this.selector = false;
   }
