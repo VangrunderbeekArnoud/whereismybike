@@ -71,6 +71,11 @@ export class ProfileProvider {
       lng: lng
     });
   }
+  updateDeviceLock(sigfoxID: any, lock: boolean): firebase.Promise<void> {
+    return this.getDevice(sigfoxID).child('lock').update({
+      status: lock
+    });
+  }
   updateDeviceName(device: any, name: string): firebase.Promise<void> {
     return device.update({
       name: name
@@ -115,7 +120,10 @@ export class ProfileProvider {
               resolve(2); // Device already exist
             } else {
               this.devicesProfile.child('/' + sigfoxID).update({
-                sigfoxID: sigfoxID
+                sigfoxID: sigfoxID,
+                lock: {
+                  status: false
+                }
               });
               resolve(0); // Correct
             }

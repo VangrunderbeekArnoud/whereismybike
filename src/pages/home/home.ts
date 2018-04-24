@@ -41,9 +41,10 @@ export class HomePage {
   startedNavigation: boolean = false;
   added: boolean = true;
   type: any = 'arrow-dropdown';
-  lat: any;
-  lng: any;
   private name: any;
+  private sigfoxID: any;
+  private lat: any;
+  private lng: any;
 
   constructor(public storage: Storage, private backgroundMode: BackgroundMode,
               public stB: StatusBar, public loadingCtrl: LoadingController,
@@ -100,7 +101,10 @@ export class HomePage {
           pic: snap.val().picture,
           photoURL: snap.val().photoURL,
           lat: snap.val().lat,
-          lng: snap.val().lng
+          lng: snap.val().lng,
+          lock: {
+            status: snap.child('lock').child('status').val()
+          }
         });
         return false;
       });
@@ -122,30 +126,41 @@ export class HomePage {
       this.selector = true;
     }
   }
-  setLocation(name, lat, lng) {
+  setLocation(name, sigfoxID, lat, lng) {
     this.name = name;
+    this.sigfoxID = sigfoxID;
+    this.lat = lat;
+    this.lng = lng;
     this.cMap.setLocation({lat: lat, lng: lng});
     this.selector = false;
   }
-
+  lock() {
+    this.selector = false;
+    if ( this.sigfoxID == null) { // the user is selected
+      console.log('person selected');
+      this.setLocation(this.name, this.sigfoxID, this.lat, this.lng);
+    } else { // a device is selected
+      this.ph.getDevice(this.sigfoxID).once('value', snapshot => {
+        this.setLocation(snapshot.val().name, snapshot.key, snapshot.val().lat, snapshot.val().lng);
+        if ( snapshot.child('lock').child('status').val()) {
+          console.log('device selected, lock = false now !');
+          this.ph.updateDeviceLock(snapshot.key,false);
+        } else {
+          console.log('device selected, lock = true now !');
+          this.ph.updateDeviceLock(snapshot.key, true);
+        }
+      });
+    }
+  }
   WaitForGeolocation() {
     //A timer to detect if the location has been found.
     let location_tracker_loop = setTimeout(() => {
       if (this.cMap.hasShown) {
         clearTimeout(location_tracker_loop);
-        this.showMap();
       } else {
         this.WaitForGeolocation()
       }
     }, 1000)
   }
 
-  showMap() {
-    //display the map set variables for better access
-    this.lat = this.cMap.lat;
-    this.lng = this.cMap.lng;
-    //Check if user already has a connection, maybe lost due to unexpected device shut down and application exit
-    let centerBar = document.getElementById("onbar")
-    centerBar.style.display = 'none'
-  }
 }
