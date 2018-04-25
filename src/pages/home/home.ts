@@ -72,8 +72,8 @@ export class HomePage {
         unsubscribe();
         document.getElementById("location").innerText = ' ';
         this.cMap.loadMap();
-        this.ph.getUserPhoneReference().once('value', snapshot => { // it was on, now once !
-          if (snapshot.val() == null || snapshot.val() == undefined) {
+        this.ph.getUserReference().once('value', snapshot => { // it was on, now once !
+          if (snapshot.val().phone == null || snapshot.val().phone == undefined) {
             this.navCtrl.setRoot('PhonePage');
           }
           this.stB.hide();
