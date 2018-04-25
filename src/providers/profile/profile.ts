@@ -7,7 +7,6 @@ export class ProfileProvider {
   public userProfile:firebase.database.Reference;
   public customer:firebase.database.Reference;
   public devicesProfile:firebase.database.Reference;
-  public user: any;
   public phone: number;
   public name: any;
   public card: any;
@@ -22,11 +21,11 @@ export class ProfileProvider {
   public pic: any;
   public id: any;
   public uid: any;
+  public user: boolean = true;
   constructor(private sigfox: SigfoxProvider) {
     firebase.auth().onAuthStateChanged( user => {
       if (user) {
-        this.user = user;
-        this.id = this.user.uid;
+        this.id = user.uid;
         this.userProfile = firebase.database().ref(`users/${user.uid}`);
         this.devicesProfile = firebase.database().ref(`users/${user.uid}/devices`);
         this.userListeners();
@@ -34,15 +33,59 @@ export class ProfileProvider {
       }
     });
   }
+  // user
+  // ====================================================================================
   userListeners() {
-    this.getUserProfile().on('value', userProfileSnapshot => {
-      //this.userProfile = userProfileSnapshot.val();
-      this.phone = userProfileSnapshot.val().phoneNumber;
-      this.pic = userProfileSnapshot.val().picture;
-      this.verificationID = userProfileSnapshot.val().random;
-      this.name = userProfileSnapshot.val().name;
+    this.getUserProfile().on('value', snapshot => {
+      this.email = snapshot.val().email;
+      this.phone = snapshot.val().phoneNumber;
+      this.pic = snapshot.val().picture;
+      this.verificationID = snapshot.val().random;
+      this.name = snapshot.val().name;
     });
   }
+  getUserProfile(): firebase.database.Reference {
+    return this.userProfile;
+  }
+
+  getName(): firebase.database.Reference {
+    return this.userProfile.child('name');
+  }
+  updateName(username: string): firebase.Promise<void> {
+    return this.userProfile.update({
+      name: username,
+    });
+  }
+
+  UpdateNumber(
+    number: number): firebase.Promise<any> {
+    return this.userProfile.update({
+      phoneNumber: number,
+    });
+  }
+
+  UpdatePhoto(
+    pic: any): firebase.Promise<any> {
+    return this.userProfile.update({
+      picture: pic,
+    });
+  }
+  Complain(
+    value: any): firebase.Promise<any> {
+    return  firebase.database().ref(`dashboard/complains`).push({
+      complain: value,
+      email: this.email,
+      phoneNumber: this.phone
+    });
+  }
+  SendMessage(value: string, id: any): firebase.Promise<any> {
+    return firebase.database().ref(`Customer/${id}/client`).update({
+      Client_Message: value,
+    });
+  }
+
+  // devices
+  // ====================================================================================
   deviceListeners() {
     this.getDevices().on('child_added', snapshot => {
       let sigfoxID = snapshot.key;
@@ -97,10 +140,10 @@ export class ProfileProvider {
     });
   }
   getDevice(sigfoxID: string): firebase.database.Reference {
-    return firebase.database().ref(`users/${this.user.uid}/devices/${sigfoxID}`);
+    return firebase.database().ref(`users/${this.id}/devices/${sigfoxID}`);
   }
   getDevices(): firebase.database.Reference {
-    return firebase.database().ref(`users/${this.user.uid}/devices`)
+    return firebase.database().ref(`users/${this.id}/devices`)
   }
   deviceExists(id: any): Promise<boolean> {
     return new Promise((resolve, reject) => {
@@ -140,51 +183,11 @@ export class ProfileProvider {
     });
   }
 
-  getUserProfile(): firebase.database.Reference {
-    return this.userProfile;
-  }
-
-  getName(): firebase.database.Reference {
-    return this.userProfile.child('name');
-  }
-  updateName(username: string): firebase.Promise<void> {
-    return this.userProfile.update({
-      name: username,
-    });
-  }
-
-  UpdateNumber(
-    number: number): firebase.Promise<any> {
-    return this.userProfile.update({
-      phoneNumber: number,
-    });
-  }
-
-  UpdatePhoto(
-    pic: any): firebase.Promise<any> {
-    return this.userProfile.update({
-      picture: pic,
-    });
-  }
   UpdateDevicePhoto(device: any, pic: any): firebase.Promise<any> {
     return device.update({
       picture: pic
     });
   }
 
-  Complain(
-    value: any): firebase.Promise<any> {
-    return  firebase.database().ref(`dashboard/complains`).push({
-      complain: value,
-      email: this.user.email,
-      phoneNumber: this.phone
-    });
-  }
-
-  SendMessage(value: string, id: any): firebase.Promise<any> {
-    return firebase.database().ref(`Customer/${id}/client`).update({
-      Client_Message: value,
-    });
-  }
 
 }
