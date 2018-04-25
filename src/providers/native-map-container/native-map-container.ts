@@ -91,7 +91,7 @@ export class NativeMapContainerProvider {
               // this.startChecking()
             }, 1500)
           });
-          this.ph.getUserReference().child('name').on('value', snapshot => {
+          this.ph.getUserNameReference().on('value', snapshot => {
             marker.setTitle(snapshot.val());
           });
         });

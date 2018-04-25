@@ -16,6 +16,7 @@ export class ProfileProvider {
   public devicesProfile:firebase.database.Reference;
   public isHome: boolean = true;
   constructor(private sigfox: SigfoxProvider) {
+    console.log('constructor profile called');
     firebase.auth().onAuthStateChanged( user => {
       if (user) {
         this.user.uid = user.uid;
@@ -37,24 +38,22 @@ export class ProfileProvider {
     });
   }
   updateName(username: string): firebase.Promise<void> {
-    return this.userReference.update({
-      name: username,
-    });
+    return this.userReference.update({ name: username});
   }
-  updatePhone(
-    phone: number): firebase.Promise<any> {
-    return this.userReference.update({
-      phone: phone,
-    });
+  updatePhone( phone: number): firebase.Promise<any> {
+    return this.userReference.update({ phone: phone});
   }
-  updatePhoto(
-    photo: any): firebase.Promise<any> {
-    return this.userReference.update({
-      photo: photo,
-    });
+  updatePhoto( photo: any): firebase.Promise<any> {
+    return this.userReference.update({ photo: photo});
   }
   getUserReference(): firebase.database.Reference {
     return this.userReference;
+  }
+  getUserNameReference(): firebase.database.Reference {
+    return this.userReference.child('name');
+  }
+  getUserPhoneReference(): firebase.database.Reference {
+    return this.userReference.child('phone');
   }
   Complain(
     value: any): firebase.Promise<any> {

@@ -48,10 +48,12 @@ export class LoginPage {
       this.authProvider.loginUser(this.loginForm.value.email, this.loginForm.value.password)
       .then( authData => {
         this.loading.dismiss().then( () => {
-          if ( this.ph.user.phone == null)
-            this.navCtrl.setRoot('StartupPage');
-          else
-            this.navCtrl.setRoot('HomePage');
+          this.ph.getUserPhoneReference().on('value', snapshot => {
+            if ( snapshot.val() == null)
+              this.navCtrl.setRoot('StartupPage');
+            else
+              this.navCtrl.setRoot('HomePage');
+          });
         });
       }, error => {
         this.loading.dismiss().then( () => {
