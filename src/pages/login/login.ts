@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import {
   Loading,
   Platform,
-  LoadingController, 
+  LoadingController,
   NavController,
   AlertController, MenuController } from 'ionic-angular';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
@@ -22,7 +22,7 @@ export class LoginPage {
   loading: Loading;
   public initState: boolean =  false;
 
-  constructor(public navCtrl: NavController, public ntP: NativeMapContainerProvider,  public platform: Platform, public menu: MenuController, public loadingCtrl: LoadingController, 
+  constructor(public navCtrl: NavController, public ntP: NativeMapContainerProvider,  public platform: Platform, public menu: MenuController, public loadingCtrl: LoadingController,
     public alertCtrl: AlertController, public authProvider: AuthProvider, public ph: ProfileProvider,
     public formBuilder: FormBuilder) {
       menu.swipeEnable(false, 'menu1');
@@ -49,7 +49,7 @@ export class LoginPage {
       .then( authData => {
         this.loading.dismiss().then( () => {
           this.ph.getUserProfile().on('value', userProfileSnapshot => {
-            let phone = userProfileSnapshot.val().phoneNumber
+            let phone = userProfileSnapshot.val().phone
               if (phone == null)
               this.navCtrl.setRoot('StartupPage');
               else
@@ -70,7 +70,7 @@ export class LoginPage {
           alert.present();
         });
       });
-      
+
       this.loading = this.loadingCtrl.create();
       this.loading.present();
     }
@@ -84,7 +84,7 @@ export class LoginPage {
       this.loading.dismiss().then( () => {
             this.navCtrl.setRoot('StartupPage');
       });
-    
+
     }, error => {
       this.loading.dismiss().then( () => {
         let alert = this.alertCtrl.create({
@@ -99,12 +99,12 @@ export class LoginPage {
         alert.present();
       });
     });
-    
+
     this.loading = this.loadingCtrl.create(
       {content: 'Authenticating..'}
     );
     this.loading.present();
-  
+
   }
 
   goToSignup(): void {
@@ -115,6 +115,6 @@ export class LoginPage {
     this.navCtrl.push('ResetPasswordPage');
   }
 
-  
+
 
 }

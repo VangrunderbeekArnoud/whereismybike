@@ -72,8 +72,8 @@ export class HomePage {
         unsubscribe();
         document.getElementById("location").innerText = ' ';
         this.cMap.loadMap();
-        this.ph.getUserProfile().once('value', userProfileSnapshot => { // it was on, now once !
-          if (userProfileSnapshot.val().phoneNumber == null || userProfileSnapshot.val().phoneNumber == undefined) {
+        this.ph.getUserProfile().once('value', snapshot => { // it was on, now once !
+          if (snapshot.val().phone == null || snapshot.val().phone == undefined) {
             this.navCtrl.setRoot('PhonePage');
           }
           this.stB.hide();
@@ -82,7 +82,7 @@ export class HomePage {
           if (this.platform.is('cordova')) {
             //  this.SmartLoader('Please Wait..   If this is taking too long, Please check Your Connection')
           }
-          this.name = this.ph.name;
+          this.name = this.ph.user.name;
           this.loadDevices();
         })
       }
@@ -93,7 +93,7 @@ export class HomePage {
       this.devices = [];
       snapshot.forEach(snap => {
         this.devices.push({
-          sigfoxID: snap.D,
+          sigfoxID: snap.key,
           name: snap.val().name,
           brand: snap.val().brand,
           type: snap.val().type,

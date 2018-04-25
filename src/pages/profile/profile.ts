@@ -16,8 +16,6 @@ export class ProfilePage {
   public userProfile: any;
   public birthDate: string;
   public phoneNumber: any;
-  public work: any;
-  public home: any;
   public name: any;
   public pic: any;
   public captureDataUrl: any;
@@ -28,13 +26,11 @@ export class ProfilePage {
   }
 
   ionViewDidEnter() {
-    this.ph.getUserProfile().on('value', userProfileSnapshot => {
-      this.userProfile = userProfileSnapshot.val();
-      this.phoneNumber = userProfileSnapshot.val().phoneNumber;
-      this.pic = userProfileSnapshot.val().picture;
-      this.home = userProfileSnapshot.val().Home;
-      this.name = userProfileSnapshot.val().name;
-      this.work = userProfileSnapshot.val().Work;
+    this.ph.getUserProfile().on('value', snapshot => {
+      this.userProfile = snapshot.val();
+      this.phoneNumber = snapshot.val().phone;
+      this.pic = snapshot.val().photo;
+      this.name = snapshot.val().name;
     });
   }
 
@@ -121,7 +117,7 @@ export class ProfilePage {
     imageRef.putString(captureData, firebase.storage.StringFormat.DATA_URL).then((snapshot) => {
       imageRef.getDownloadURL().then(url => {
         //console.log(url)
-        this.ph.UpdatePhoto(url).then(success => {
+        this.ph.updatePhoto(url).then(success => {
           //  console.log(url)
           this.pop.hideLoader();
           //console.log("done")
@@ -156,7 +152,7 @@ export class ProfilePage {
           text: 'Save',
           handler: data => {
             console.log(data[0])
-            this.ph.UpdateNumber(data[0]);
+            this.ph.updatePhone(data[0]);
           }
         }
       ]

@@ -28,8 +28,8 @@
     <div class="itemselect" *ngIf="selector" >
       <ion-scroll id="scrollid" [style.height.vh]="height" scrollY="{{scroll}}" scrollX="false">
         <ion-list #listStyle>
-          <ion-item class="itemHeight" (click)="setLocation(ph.name, null, cMap.userLocation.lat, cMap.userLocation.lng)">
-            {{ph.name}}
+          <ion-item class="itemHeight" (click)="setLocation(ph.user.name, null, cMap.userLocation.lat, cMap.userLocation.lng)">
+            {{ph.user.name}}
           </ion-item>
           <ion-item class="itemHeight" (click)="setLocation(device.name, device.sigfoxID, device.location.lat, device.location.lng)" *ngFor="let device of devices">
             {{device?.name}}

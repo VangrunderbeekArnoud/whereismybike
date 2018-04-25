@@ -24,21 +24,21 @@ export class OtpPage {
   roleSelection() {
     this.pop.presentLoader('Verifying...');
     // var signInCredential = firebase.auth.PhoneAuthProvider.credential(this.verification_id,this.otp);
-    // firebase.auth().signInWithCredential(signInCredential).then(()=>{    
+    // firebase.auth().signInWithCredential(signInCredential).then(()=>{
     //   console.log(signInCredential);
       // setTimeout(()=>{
-        this.ph.UpdateNumber(this.verification_id).then(()=>{
+        this.ph.updatePhone(this.verification_id).then(()=>{
           this.pop.hideLoader();
           // this.pop.presentToast('OTP Verified');
            this.navCtrl.setRoot('HomePage');
         })
       // }, 2000);
-     
+
     // }).catch(()=>{
     //   this.pop.hideLoader();
     //   this.pop.showAlert('OTP Failed','Failed to verify OTP');
     //   console.log('Erorr in OTP');
     // });
-    
+
   }
 }

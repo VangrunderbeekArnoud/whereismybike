@@ -36,7 +36,7 @@ export class SignupPage {
       .then(() => {
         this.loading.dismiss().then( () => {
           this.ph.updateName(this.signupForm.value.name);
-          if (this.ph.phone == null)
+          if (this.ph.user.phone == null)
             this.navCtrl.push('StartupPage');
             else
             this.navCtrl.setRoot('HomePage');
