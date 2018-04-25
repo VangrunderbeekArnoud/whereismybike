@@ -42,7 +42,7 @@ export class AddDevicePage {
 
   listeners() {
     this.reference = this.device.on('value', snapshot => {
-      this.sigfoxID = snapshot.val().sigfoxID;
+      this.sigfoxID = snapshot.key;
       this.name = snapshot.val().name;
       this.brand = snapshot.val().brand;
       this.type = snapshot.val().type;

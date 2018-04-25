@@ -40,7 +40,7 @@ export class EditDevicePage {
   ionViewDidEnter() {
     this.device = this.ph.getDevice(this.sigfoxID);
     this.device.on('value', userProfileSnapshot => {
-      this.sigfoxID = userProfileSnapshot.val().sigfoxID;
+      this.sigfoxID = userProfileSnapshot.key;
       this.name = userProfileSnapshot.val().name;
       this.battery = userProfileSnapshot.val().battery;
       this.brand = userProfileSnapshot.val().brand;

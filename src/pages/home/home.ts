@@ -93,7 +93,7 @@ export class HomePage {
       this.devices = [];
       snapshot.forEach(snap => {
         this.devices.push({
-          sigfoxID: snap.val().sigfoxID,
+          sigfoxID: snap.key,
           name: snap.val().name,
           brand: snap.val().brand,
           type: snap.val().type,

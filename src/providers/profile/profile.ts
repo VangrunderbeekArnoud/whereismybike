@@ -45,7 +45,7 @@ export class ProfileProvider {
   }
   deviceListeners() {
     this.getDevices().on('child_added', snapshot => {
-      let sigfoxID = snapshot.val().sigfoxID;
+      let sigfoxID = snapshot.key;
       this.sigfox.getDeviceBattery(sigfoxID).on('value', snap => {
         this.updateDeviceBattery(sigfoxID, snap.val());
       });
@@ -120,7 +120,6 @@ export class ProfileProvider {
               resolve(2); // Device already exist
             } else {
               this.devicesProfile.child('/' + sigfoxID).update({
-                sigfoxID: sigfoxID,
                 lock: {
                   status: false
                 }

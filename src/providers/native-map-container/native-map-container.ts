@@ -100,7 +100,7 @@ export class NativeMapContainerProvider {
   addDevicesToMap() {
     this.platform.ready().then(() => {
       this.ph.getDevices().on('child_added', snapshot => {
-        let sigfoxID = snapshot.val().sigfoxID;
+        let sigfoxID = snapshot.key;
         this.map.addMarker({
           title: snapshot.val().name,
           position: { lat: snapshot.child('location').child('lat').val(), lng: snapshot.child('location').child('lng').val()},
@@ -116,13 +116,13 @@ export class NativeMapContainerProvider {
             // change the name of the location bar !
           });
           this.ph.getDevices().on('child_removed', snap => {
-            if ( sigfoxID == snap.val().sigfoxID) {
+            if ( sigfoxID == snap.key) {
               console.log('showDevicesOnMap: child_removed;');
               marker.remove();
             }
           });
           this.ph.getDevices().on('child_changed', snap => {
-            if ( sigfoxID == snap.val().sigfoxID) {
+            if ( sigfoxID == snap.key) {
               console.log('showDevicesOnMap: child_changed');
               let location = {lat: snap.child('location').child('lat').val(), lng: snap.child('location').child('lng').val()};
               this.gcode.Reverse_Geocode_return(location).then((reverse_location) => {
