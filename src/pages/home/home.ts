@@ -72,7 +72,7 @@ export class HomePage {
         unsubscribe();
         document.getElementById("location").innerText = ' ';
         this.cMap.loadMap();
-        this.ph.getUserProfile().on('value', userProfileSnapshot => {
+        this.ph.getUserProfile().once('value', userProfileSnapshot => { // it was on, now once !
           if (userProfileSnapshot.val().phoneNumber == null || userProfileSnapshot.val().phoneNumber == undefined) {
             this.navCtrl.setRoot('PhonePage');
           }
@@ -137,16 +137,13 @@ export class HomePage {
   lock() {
     this.selector = false;
     if ( this.sigfoxID == null) { // the user is selected
-      console.log('person selected');
       this.setLocation(this.name, this.sigfoxID, this.lat, this.lng);
     } else { // a device is selected
       this.ph.getDevice(this.sigfoxID).once('value', snapshot => {
         this.setLocation(snapshot.val().name, snapshot.key, snapshot.val().lat, snapshot.val().lng);
         if ( snapshot.child('lock').child('status').val()) {
-          console.log('device selected, lock = false now !');
           this.ph.updateDeviceLock(snapshot.key,false);
         } else {
-          console.log('device selected, lock = true now !');
           this.ph.updateDeviceLock(snapshot.key, true);
         }
       });
