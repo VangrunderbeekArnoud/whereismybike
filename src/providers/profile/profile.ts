@@ -5,22 +5,13 @@ import {SigfoxProvider} from "../sigfox/sigfox";
 @Injectable()
 export class ProfileProvider {
   public userProfile:firebase.database.Reference;
-  public customer:firebase.database.Reference;
   public devicesProfile:firebase.database.Reference;
   public phone: number;
   public name: any;
-  public card: any;
   public email: any;
-  public cvc: any;
-  public home: any;
-  public work: any;
-  public verificationID: any;
-  public year: any;
-  public month: any;
   public isHome: boolean = true;
   public pic: any;
   public id: any;
-  public uid: any;
   public user: boolean = true;
   constructor(private sigfox: SigfoxProvider) {
     firebase.auth().onAuthStateChanged( user => {
@@ -40,7 +31,6 @@ export class ProfileProvider {
       this.email = snapshot.val().email;
       this.phone = snapshot.val().phoneNumber;
       this.pic = snapshot.val().picture;
-      this.verificationID = snapshot.val().random;
       this.name = snapshot.val().name;
     });
   }
