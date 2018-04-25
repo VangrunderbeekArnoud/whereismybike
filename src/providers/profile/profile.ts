@@ -12,7 +12,7 @@ export class ProfileProvider {
     photo: null
   };
   private userReference: firebase.database.Reference;
-
+  private dashboardReference: firebase.database.Reference;
   public devicesProfile:firebase.database.Reference;
   public isHome: boolean = true;
   constructor(private sigfox: SigfoxProvider) {
@@ -20,6 +20,7 @@ export class ProfileProvider {
     firebase.auth().onAuthStateChanged( user => {
       if (user) {
         this.user.uid = user.uid;
+        this.dashboardReference = firebase.database().ref(`dashboard/`);
         this.userReference = firebase.database().ref(`users/${this.user.uid}`);
         this.devicesProfile = firebase.database().ref(`users/${this.user.uid}/devices`);
         this.userListeners();
@@ -54,6 +55,9 @@ export class ProfileProvider {
   }
   getUserPhoneReference(): firebase.database.Reference {
     return this.userReference.child('phone');
+  }
+  getDashboardReference(): firebase.database.Reference {
+    return this.dashboardReference;
   }
   Complain(
     value: any): firebase.Promise<any> {
