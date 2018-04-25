@@ -13,34 +13,16 @@ import firebase from 'firebase/app';
   templateUrl: 'profile.html',
 })
 export class ProfilePage {
-  public userProfile: any;
-  public birthDate: string;
-  public phoneNumber: any;
-  public name: any;
-  public pic: any;
-  public captureDataUrl: any;
 
   constructor(public navCtrl: NavController, public actionSheetCtrl: ActionSheetController, public modalCtrl: ModalController, private pop: PopUpProvider, private camera: Camera, public alertCtrl: AlertController,
               public ph: ProfileProvider, public authProvider: AuthProvider) {
     ph.isHome = false;
   }
-
-  ionViewDidEnter() {
-    this.ph.getUserProfile().on('value', snapshot => {
-      this.userProfile = snapshot.val();
-      this.phoneNumber = snapshot.val().phone;
-      this.pic = snapshot.val().photo;
-      this.name = snapshot.val().name;
-    });
-  }
-
   remove(): void {
     this.authProvider.logoutUser().then(() => {
       this.navCtrl.setRoot('LoginPage');
     });
   }
-
-
   choosePic() {
     let actionSheet = this.actionSheetCtrl.create({
       title: 'Choose From',
@@ -69,49 +51,36 @@ export class ProfilePage {
     });
     actionSheet.present();
   }
-
-
   changePic() {
-
     const cameraOptions: CameraOptions = {
       quality: 20,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,
     };
-
     this.camera.getPicture(cameraOptions).then((imageData) => {
-      this.captureDataUrl = 'data:image/jpeg;base64,' + imageData;
-
-      this.processProfilePicture(this.captureDataUrl)
-
-    })
-
+      let captureDataUrl = 'data:image/jpeg;base64,' + imageData;
+      this.processProfilePicture(captureDataUrl);
+    });
   }
-
-
   changePicFromFile() {
-
     const cameraOptions: CameraOptions = {
       sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
       destinationType: this.camera.DestinationType.DATA_URL,
       quality: 20,
       encodingType: this.camera.EncodingType.PNG,
     };
-
     this.camera.getPicture(cameraOptions).then((imageData) => {
-      this.captureDataUrl = 'data:image/jpeg;base64,' + imageData;
-
-      this.processProfilePicture(this.captureDataUrl)
-
-    })
+      let captureDataUrl = 'data:image/jpeg;base64,' + imageData;
+      this.processProfilePicture(captureDataUrl);
+    });
   }
 
   processProfilePicture(captureData) {
     let storageRef = firebase.storage().ref();
     // Create a timestamp as filename
     const filename = Math.floor(Date.now() / 1000);
-    this.pop.presentLoader('Processing image..')
+    this.pop.presentLoader('Processing image..');
     // Create a reference to 'images/todays-date.jpg'
     const imageRef = storageRef.child(`userPictures/${filename}.jpg`);
     imageRef.putString(captureData, firebase.storage.StringFormat.DATA_URL).then((snapshot) => {
@@ -122,7 +91,6 @@ export class ProfilePage {
           this.pop.hideLoader();
           //console.log("done")
           //this.profileUploaded = true
-
         }).catch(error => {
           alert(error)
         });
@@ -133,25 +101,18 @@ export class ProfilePage {
       alert(error)
     });
   }
-
-
   updateNumber() {
     const alert = this.alertCtrl.create({
       message: "Your New Number",
       inputs: [
-        {
-
-          value: this.userProfile.phoneNumber
-        },
+        { value: this.ph.user.phone},
       ],
       buttons: [
-        {
-          text: 'Cancel',
-        },
+        { text: 'Cancel'},
         {
           text: 'Save',
           handler: data => {
-            console.log(data[0])
+            console.log(data[0]);
             this.ph.updatePhone(data[0]);
           }
         }
@@ -165,19 +126,14 @@ export class ProfilePage {
     const alert = this.alertCtrl.create({
       message: "Your Name",
       inputs: [
-        {
-
-          value: this.userProfile.name
-        },
+        { value: this.ph.user.name},
       ],
       buttons: [
-        {
-          text: 'Cancel',
-        },
+        { text: 'Cancel'},
         {
           text: 'Save',
           handler: data => {
-            console.log(data[0])
+            console.log(data[0]);
             this.ph.updateName(data[0]);
           }
         }
@@ -190,13 +146,11 @@ export class ProfilePage {
     const alert = this.alertCtrl.create({
       message: "Are You Sure To Logout ?",
       buttons: [
-        {
-          text: 'Cancel',
-        },
+        { text: 'Cancel'},
         {
           text: 'Yes',
           handler: data => {
-            this.remove()
+            this.remove();
           }
         }
       ]

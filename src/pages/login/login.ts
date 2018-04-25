@@ -48,7 +48,7 @@ export class LoginPage {
       this.authProvider.loginUser(this.loginForm.value.email, this.loginForm.value.password)
       .then( authData => {
         this.loading.dismiss().then( () => {
-          this.ph.getUserProfile().on('value', userProfileSnapshot => {
+          this.ph.getUserReference().on('value', userProfileSnapshot => {
             let phone = userProfileSnapshot.val().phone
               if (phone == null)
               this.navCtrl.setRoot('StartupPage');

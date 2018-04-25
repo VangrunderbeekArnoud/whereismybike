@@ -72,7 +72,7 @@ export class HomePage {
         unsubscribe();
         document.getElementById("location").innerText = ' ';
         this.cMap.loadMap();
-        this.ph.getUserProfile().once('value', snapshot => { // it was on, now once !
+        this.ph.getUserReference().once('value', snapshot => { // it was on, now once !
           if (snapshot.val().phone == null || snapshot.val().phone == undefined) {
             this.navCtrl.setRoot('PhonePage');
           }

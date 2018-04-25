@@ -11,15 +11,15 @@ export class ProfileProvider {
     phone: null,
     photo: null
   };
+  private userReference: firebase.database.Reference;
 
-  public userProfile:firebase.database.Reference;
   public devicesProfile:firebase.database.Reference;
   public isHome: boolean = true;
   constructor(private sigfox: SigfoxProvider) {
     firebase.auth().onAuthStateChanged( user => {
       if (user) {
         this.user.uid = user.uid;
-        this.userProfile = firebase.database().ref(`users/${this.user.uid}`);
+        this.userReference = firebase.database().ref(`users/${this.user.uid}`);
         this.devicesProfile = firebase.database().ref(`users/${this.user.uid}/devices`);
         this.userListeners();
         this.deviceListeners();
@@ -29,7 +29,7 @@ export class ProfileProvider {
   // user
   // ====================================================================================
   userListeners() {
-    this.getUserProfile().on('value', snapshot => {
+    this.userReference.on('value', snapshot => {
       this.user.name = snapshot.val().name;
       this.user.email = snapshot.val().email;
       this.user.phone = snapshot.val().phone;
@@ -37,24 +37,24 @@ export class ProfileProvider {
     });
   }
   updateName(username: string): firebase.Promise<void> {
-    return this.userProfile.update({
+    return this.userReference.update({
       name: username,
     });
   }
   updatePhone(
     phone: number): firebase.Promise<any> {
-    return this.userProfile.update({
+    return this.userReference.update({
       phone: phone,
     });
   }
   updatePhoto(
     photo: any): firebase.Promise<any> {
-    return this.userProfile.update({
+    return this.userReference.update({
       photo: photo,
     });
   }
-  getUserProfile(): firebase.database.Reference {
-    return this.userProfile;
+  getUserReference(): firebase.database.Reference {
+    return this.userReference;
   }
   Complain(
     value: any): firebase.Promise<any> {
