@@ -31,7 +31,7 @@
           <ion-item class="itemHeight" (click)="setLocation(ph.name, null, cMap.userLocation.lat, cMap.userLocation.lng)">
             {{ph.name}}
           </ion-item>
-          <ion-item class="itemHeight" (click)="setLocation(device.name, device.sigfoxID, device.lat, device.lng)" *ngFor="let device of devices">
+          <ion-item class="itemHeight" (click)="setLocation(device.name, device.sigfoxID, device.location.lat, device.location.lng)" *ngFor="let device of devices">
             {{device?.name}}
           </ion-item>
         </ion-list>

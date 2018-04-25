@@ -100,8 +100,10 @@ export class HomePage {
           number: snap.val().number,
           pic: snap.val().picture,
           photoURL: snap.val().photoURL,
-          lat: snap.val().lat,
-          lng: snap.val().lng,
+          location: {
+            lat: snap.child('location').child('lat').val(),
+            lng: snap.child('location').child('lng').val()
+          },
           lock: {
             status: snap.child('lock').child('status').val()
           }
@@ -140,7 +142,7 @@ export class HomePage {
       this.setLocation(this.name, this.sigfoxID, this.lat, this.lng);
     } else { // a device is selected
       this.ph.getDevice(this.sigfoxID).once('value', snapshot => {
-        this.setLocation(snapshot.val().name, snapshot.key, snapshot.val().lat, snapshot.val().lng);
+        this.setLocation(snapshot.val().name, snapshot.key, snapshot.child('location').child('lat').val(), snapshot.child('location').child('lng').val());
         if ( snapshot.child('lock').child('status').val()) {
           this.ph.updateDeviceLock(snapshot.key,false);
         } else {

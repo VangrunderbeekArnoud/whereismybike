@@ -66,7 +66,7 @@ export class ProfileProvider {
     });
   }
   updateDeviceLocation(sigfoxID: any, lat: any, lng: any) {
-    this.getDevice(sigfoxID).update({
+    this.getDevice(sigfoxID).child('location').update({
       lat: lat,
       lng: lng
     });
