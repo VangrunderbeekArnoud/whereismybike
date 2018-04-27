@@ -146,7 +146,7 @@ export class HomePage {
         this.setLocation(snapshot.val().name, snapshot.key, snapshot.child('location').child('lat').val(), snapshot.child('location').child('lng').val());
         if ( snapshot.child('lock').child('status').val()) {
           this.ph.updateDeviceLock(snapshot.key,false);
-          this.pop.presentToast('Unlocked your bike!');
+          this.pop.presentToast('Bike is unlocked!');
         } else {
           this.ph.updateDeviceLock(snapshot.key, true);
           this.pop.presentToast('Bike is locked!');

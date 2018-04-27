@@ -44,6 +44,9 @@ export class NativeMapContainerProvider {
         target: this.startLocation,
         zoom: 5,
         tilt: 0
+      }, controls: {
+        'myLocationButton': false,
+        'mapToolbar': false
       }
     };
     this.map = this.googleMaps.create(document.getElementById("map"), mapOptions);
