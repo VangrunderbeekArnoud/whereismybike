@@ -24,7 +24,7 @@ export class ProfileProvider {
         this.userReference = firebase.database().ref(`users/${this.user.uid}`);
         this.devicesProfile = firebase.database().ref(`users/${this.user.uid}/devices`);
         this.userListeners();
-        this.deviceListeners();
+        //this.deviceListeners();
       }
     });
   }
