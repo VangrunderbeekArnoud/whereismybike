@@ -100,40 +100,62 @@ export class NativeMapContainerProvider {
   addDevicesToMap() {
     this.platform.ready().then(() => {
       this.ph.getDevices().on('child_added', snapshot => {
-        let sigfoxID = snapshot.key;
-        this.map.addMarker({
-          title: snapshot.val().name,
-          position: { lat: snapshot.child('location').child('lat').val(), lng: snapshot.child('location').child('lng').val()},
-          icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAaCAYAAADFTB7LAAAAgXpUWHRSYXcgcHJvZmlsZSB0eXBlIGV4aWYAAHjaVY5dCoBACITfPUVHGH9y1+MEFXSDjp+LUewH6ig6SMd9nbQMGCBbW/dwR2JhIVuKjkIBFvComYu3KqeSFHv1pFLCozfYv2iYWeHdz2YZeaKQQyWj1tKDMF6I30C+b+Y5b7MxPZxBK23T36MtAAAKAmlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNC40LjAtRXhpdjIiPgogPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgeG1sbnM6ZXhpZj0iaHR0cDovL25zLmFkb2JlLmNvbS9leGlmLzEuMC8iCiAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyIKICAgZXhpZjpQaXhlbFhEaW1lbnNpb249IjQwIgogICBleGlmOlBpeGVsWURpbWVuc2lvbj0iMjYiCiAgIHRpZmY6SW1hZ2VXaWR0aD0iNDAiCiAgIHRpZmY6SW1hZ2VIZWlnaHQ9IjI2IgogICB0aWZmOk9yaWVudGF0aW9uPSIxIi8+CiA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAg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'
-          //icon: './assets/img/bicycle_pin_01.png'
-        }).then((marker: Marker) => {
-          // Error: sigfoxID == null when remove device !
-          this.gcode.Reverse_Geocode_return({lat: snapshot.child('location').child('lat').val(), lng: snapshot.child('location').child('lng').val()})
-            .then((reverse_location) => {
-              marker.setTitle(reverse_location);
-            });
-          marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
-            // change the name of the location bar !
-          });
-          this.ph.getDevices().on('child_removed', snap => {
-            if ( sigfoxID == snap.key) {
-              console.log('showDevicesOnMap: child_removed;');
-              marker.remove();
-            }
-          });
-          this.ph.getDevices().on('child_changed', snap => {
-            if ( sigfoxID == snap.key) {
-              console.log('showDevicesOnMap: child_changed');
-              let location = {lat: snap.child('location').child('lat').val(), lng: snap.child('location').child('lng').val()};
-              this.gcode.Reverse_Geocode_return(location).then((reverse_location) => {
-                marker.setTitle(reverse_location);
-              });
-              //marker.setTitle(snap.val().name);
-              marker.setPosition(location);
-            }
-          });
-        });
+        this.addMarker(snapshot);
+        this.addCircle(snapshot, 60);
       });
+    });
+  }
+  addMarker(device) {
+    let sigfoxID = device.key;
+    let location = { lat: device.child('location').child('lat').val(), lng: device.child('location').child('lng').val()}
+    this.map.addMarker({
+      title: device.val().name,
+      position: location,
+      icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAaCAYAAADFTB7LAAAAgXpUWHRSYXcgcHJvZmlsZSB0eXBlIGV4aWYAAHjaVY5dCoBACITfPUVHGH9y1+MEFXSDjp+LUewH6ig6SMd9nbQMGCBbW/dwR2JhIVuKjkIBFvComYu3KqeSFHv1pFLCozfYv2iYWeHdz2YZeaKQQyWj1tKDMF6I30C+b+Y5b7MxPZxBK23T36MtAAAKAmlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNC40LjAtRXhpdjIiPgogPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgeG1sbnM6ZXhpZj0iaHR0cDovL25zLmFkb2JlLmNvbS9leGlmLzEuMC8iCiAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyIKICAgZXhpZjpQaXhlbFhEaW1lbnNpb249IjQwIgogICBleGlmOlBpeGVsWURpbWVuc2lvbj0iMjYiCiAgIHRpZmY6SW1hZ2VXaWR0aD0iNDAiCiAgIHRpZmY6SW1hZ2VIZWlnaHQ9IjI2IgogICB0aWZmOk9yaWVudGF0aW9uPSIxIi8+CiA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAg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'
+      //icon: './assets/img/bicycle_pin_01.png'
+    }).then((marker: Marker) => {
+      // Error: sigfoxID == null when remove device !
+      this.gcode.Reverse_Geocode_return(location)
+        .then((reverse_location) => {
+          marker.setTitle(reverse_location);
+        });
+      marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
+        // change the name of the location bar !
+      });
+      device.ref.child('location').on('value', snapshot => {
+        if ( snapshot.exists()) {
+          let location = {lat: snapshot.val().lat, lng: snapshot.val().lng};
+          marker.setPosition(location);
+          this.gcode.Reverse_Geocode_return(location).then(reverse_location => {
+            marker.setTitle(reverse_location);
+          });
+        }
+      }, err => console.log(err));
+      device.ref.parent.on('child_removed', snapshot => {
+        if ( sigfoxID == snapshot.key) marker.remove();
+      }, err => console.log(err));
+    });
+  }
+  addCircle(device, radius) {
+    let sigfoxID = device.key;
+    let location = { lat: device.child('location').child('lat').val(), lng: device.child('location').child('lng').val()}
+    this.map.addCircle({
+      'center': location,
+      'radius': radius,
+      'strokeColor': '#f66555',
+      'strokeWidth': 0.00000001,
+      'visible': false,
+      'fillColor': '#f66555'
+    }).then(circle => {
+      device.ref.child('lock').child('status').on('value', snapshot => {
+        if ( snapshot.exists()) circle.setVisible(snapshot.val());
+      }, err => console.log(err));
+      device.ref.child('location').on('value', snapshot => {
+        if ( snapshot.exists()) circle.setCenter({lat: snapshot.val().lat, lng: snapshot.val().lng});
+      }, err => console.log(err));
+      device.ref.parent.on('child_removed', snapshot => {
+        if ( sigfoxID == snapshot.key) circle.remove();
+      }, err => console.log(err));
     });
   }
   setLocation(location) {
