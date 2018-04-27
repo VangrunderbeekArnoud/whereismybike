@@ -122,9 +122,13 @@ export class NativeMapContainerProvider {
         .then((reverse_location) => {
           marker.setTitle(reverse_location);
         });
-      marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
-        // change the name of the location bar !
+      marker.on(GoogleMapsEvent.INFO_OPEN).subscribe(() => {
+        this.showLocationButton();
       });
+      marker.on(GoogleMapsEvent.INFO_CLOSE).subscribe(() => {
+        this.hideLocationButton();
+      });
+      marker.on(GoogleMapsEvent.MARKER_)
       device.ref.child('location').on('value', snapshot => {
         if ( snapshot.exists()) {
           let location = {lat: snapshot.val().lat, lng: snapshot.val().lng};
@@ -172,6 +176,12 @@ export class NativeMapContainerProvider {
       this.lat = location.lat;
       this.lng = location.lng;
     });
+  }
+  showLocationButton() {
+
+  }
+  hideLocationButton() {
+
   }
 
   //check if gps is available by trying to get location info which automatically handles everything
