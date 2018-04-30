@@ -7,6 +7,8 @@ import {Camera, CameraOptions} from '@ionic-native/camera';
 import {PopUpProvider} from '../../providers/pop-up/pop-up';
 import firebase from 'firebase/app';
 import { SigfoxProvider } from "../../providers/sigfox/sigfox";
+import {TranslateService} from "ng2-translate";
+import {LanguageProvider} from "../../providers/language/language";
 
 @IonicPage()
 @Component({
@@ -32,7 +34,8 @@ export class EditDevicePage {
               public modalCtrl: ModalController, private pop: PopUpProvider, private camera: Camera,
               public alertCtrl: AlertController, public ph: ProfileProvider,
               public authProvider: AuthProvider, public sigfox: SigfoxProvider,
-              public navParams: NavParams) {
+              public navParams: NavParams, private translate: TranslateService,
+              private language: LanguageProvider) {
     ph.isHome = false;
     this.sigfoxID = navParams.get('sigfoxID');
   }
@@ -57,13 +60,13 @@ export class EditDevicePage {
 
   deleteDevice() {
     const alert = this.alertCtrl.create({
-      message: "Delete device?",
+      message: this.language.DeleteDevice,
       buttons: [
         {
-          text: 'Cancel',
+          text: this.language.Cancel,
         },
         {
-          text: 'Yes',
+          text: this.language.Yes,
           handler: data => {
             //this.device.off();
             this.ph.deleteDevice(this.device);
@@ -77,7 +80,7 @@ export class EditDevicePage {
 
   updateName() {
     const alert = this.alertCtrl.create({
-      message: "Your Name",
+      message: this.language.Name,
       inputs: [
         {
           value: this.name
@@ -85,10 +88,10 @@ export class EditDevicePage {
       ],
       buttons: [
         {
-          text: 'Cancel',
+          text: this.language.Cancel,
         },
         {
-          text: 'Save',
+          text: this.language.Save,
           handler: data => {
             console.log(data[0])
             this.ph.updateDeviceName(this.device, data[0]);
@@ -100,13 +103,13 @@ export class EditDevicePage {
   }
   updateBrand() {
     const alert = this.alertCtrl.create({
-      message: "Brand name of your bike",
+      message: this.language.Brand,
       inputs: [
         { value: this.brand },
       ],
       buttons: [
-        { text: 'Cancel'},
-        { text: 'Save',
+        { text: this.language.Cancel},
+        { text: this.language.Save,
           handler: data => {
             console.log(data[0]);
             this.ph.updateDeviceBrand(this.device, data[0]);
@@ -117,13 +120,13 @@ export class EditDevicePage {
   }
   updateType() {
     const alert = this.alertCtrl.create({
-      message: "Type of the bike",
+      message: this.language.Type,
       inputs: [
         { value: this.type },
       ],
       buttons: [
-        { text: 'Cancel'},
-        { text: 'Save',
+        { text: this.language.Cancel},
+        { text: this.language.Save,
           handler: data => {
             console.log(data[0]);
             this.ph.updateDeviceType(this.device, data[0]);
@@ -135,7 +138,7 @@ export class EditDevicePage {
 
   updateNumber() {
     const alert = this.alertCtrl.create({
-      message: "Bike engravings number",
+      message: this.language.EngrNr,
       inputs: [
         {
           value: this.number
@@ -143,10 +146,10 @@ export class EditDevicePage {
       ],
       buttons: [
         {
-          text: 'Cancel',
+          text: this.language.Cancel,
         },
         {
-          text: 'Save',
+          text: this.language.Save,
           handler: data => {
             this.ph.updateDeviceNumber(this.device, data[0]);
           }
@@ -158,22 +161,22 @@ export class EditDevicePage {
 
   choosePic() {
     let actionSheet = this.actionSheetCtrl.create({
-      title: 'Choose From',
+      title: this.language.ChooseFrom,
       buttons: [
         {
-          text: 'Camera',
+          text: this.language.Camera,
           icon: 'ios-camera',
           handler: () => {
             this.changePic()
           }
         }, {
-          text: 'File',
+          text: this.language.File,
           icon: 'ios-folder',
           handler: () => {
             this.changePicFromFile()
           }
         }, {
-          text: 'Cancel',
+          text: this.language.Cancel,
           icon: 'close',
           role: 'cancel',
           handler: () => {
@@ -215,7 +218,7 @@ export class EditDevicePage {
     let storageRef = firebase.storage().ref();
     // Create a timestamp as filename
     const filename = Math.floor(Date.now() / 1000);
-    this.pop.presentLoader('Processing image..')
+    this.pop.presentLoader(this.language.ProcessingImg);
     // Create a reference to 'images/todays-date.jpg'
     const imageRef = storageRef.child(`userPictures/${filename}.jpg`);
     imageRef.putString(captureData, firebase.storage.StringFormat.DATA_URL).then((snapshot) => {

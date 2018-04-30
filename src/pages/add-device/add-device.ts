@@ -7,6 +7,8 @@ import {Camera, CameraOptions} from '@ionic-native/camera';
 import {PopUpProvider} from '../../providers/pop-up/pop-up';
 import firebase from 'firebase/app';
 import { SigfoxProvider } from "../../providers/sigfox/sigfox";
+import {TranslateService} from "ng2-translate";
+import {LanguageProvider} from "../../providers/language/language";
 
 @IonicPage()
 @Component({
@@ -27,8 +29,11 @@ export class AddDevicePage {
   public device: any;
   private reference: any;
 
-  constructor(public navCtrl: NavController, public actionSheetCtrl: ActionSheetController, public modalCtrl: ModalController, private pop: PopUpProvider, private camera: Camera, public alertCtrl: AlertController,
-              public ph: ProfileProvider, public authProvider: AuthProvider, public sigfox: SigfoxProvider) {
+  constructor(public navCtrl: NavController, public actionSheetCtrl: ActionSheetController,
+              public modalCtrl: ModalController, private pop: PopUpProvider, private camera: Camera,
+              public alertCtrl: AlertController, public ph: ProfileProvider,
+              public authProvider: AuthProvider, public sigfox: SigfoxProvider,
+              private translate: TranslateService, private language: LanguageProvider) {
     ph.isHome = false;
   }
 
@@ -65,19 +70,19 @@ export class AddDevicePage {
 
   addDevice() {
     const alert = this.alertCtrl.create({
-      message: "Device ID",
+      message: this.language.DeviceID,
       inputs: [
         { },
       ],
       buttons: [
-        { text: 'Cancel'},
-        { text: 'Save',
+        { text: this.language.Cancel},
+        { text: this.language.Save,
         handler: data => {
           this.ph.addDevice(data[0]).then((res) => {
             if ( res == 1) {
-              this.pop.presentToast( 'Please enter a valid device ID.');
+              this.pop.presentToast( this.language.ValidID);
             } else if ( res == 2) {
-              this.pop.presentToast( 'Device already exists!');
+              this.pop.presentToast( this.language.DeviceExist);
             } else {
               this.initState = false;
               this.device = this.ph.getDevice(data[0]);
@@ -91,7 +96,7 @@ export class AddDevicePage {
   }
   updateName() {
     const alert = this.alertCtrl.create({
-      message: "Your Name",
+      message: this.language.Name,
       inputs: [
         {
           value: this.device.name
@@ -99,10 +104,10 @@ export class AddDevicePage {
       ],
       buttons: [
         {
-          text: 'Cancel',
+          text: this.language.Cancel,
         },
         {
-          text: 'Save',
+          text: this.language.Save,
           handler: data => {
             console.log(data[0])
             this.ph.updateDeviceName(this.device, data[0]);
@@ -114,13 +119,13 @@ export class AddDevicePage {
   }
   updateBrand() {
     const alert = this.alertCtrl.create({
-      message: "Brand name of your bike",
+      message: this.language.Brand,
       inputs: [
         { value: this.device.brand },
       ],
       buttons: [
-        { text: 'Cancel'},
-        { text: 'Save',
+        { text: this.language.Cancel},
+        { text: this.language.Save,
           handler: data => {
             console.log(data[0]);
             this.ph.updateDeviceBrand(this.device, data[0]);
@@ -131,13 +136,13 @@ export class AddDevicePage {
   }
   updateType() {
     const alert = this.alertCtrl.create({
-      message: "Type of the bike",
+      message: this.language.Type,
       inputs: [
         { value: this.device.type },
       ],
       buttons: [
-        { text: 'Cancel'},
-        { text: 'Save',
+        { text: this.language.Cancel},
+        { text: this.language.Save,
           handler: data => {
             console.log(data[0]);
             this.ph.updateDeviceType(this.device, data[0]);
@@ -149,7 +154,7 @@ export class AddDevicePage {
 
   updateNumber() {
     const alert = this.alertCtrl.create({
-      message: "Bike engravings number",
+      message: this.language.EngrNr,
       inputs: [
         {
           value: this.device.number
@@ -157,10 +162,10 @@ export class AddDevicePage {
       ],
       buttons: [
         {
-          text: 'Cancel',
+          text: this.language.Cancel,
         },
         {
-          text: 'Save',
+          text: this.language.Save,
           handler: data => {
             console.log(data[0])
             this.ph.updateDeviceNumber(this.device, data[0]);
@@ -179,22 +184,22 @@ export class AddDevicePage {
 
   choosePic() {
     let actionSheet = this.actionSheetCtrl.create({
-      title: 'Choose From',
+      title: this.language.ChooseFrom,
       buttons: [
         {
-          text: 'Camera',
+          text: this.language.Camera,
           icon: 'ios-camera',
           handler: () => {
             this.changePic()
           }
         }, {
-          text: 'File',
+          text: this.language.File,
           icon: 'ios-folder',
           handler: () => {
             this.changePicFromFile()
           }
         }, {
-          text: 'Cancel',
+          text: this.language.Cancel,
           icon: 'close',
           role: 'cancel',
           handler: () => {
@@ -236,7 +241,7 @@ export class AddDevicePage {
     let storageRef = firebase.storage().ref();
     // Create a timestamp as filename
     const filename = Math.floor(Date.now() / 1000);
-    this.pop.presentLoader('Processing image..')
+    this.pop.presentLoader(this.language.ProcessingImg);
     // Create a reference to 'images/todays-date.jpg'
     const imageRef = storageRef.child(`userPictures/${filename}.jpg`);
     imageRef.putString(captureData, firebase.storage.StringFormat.DATA_URL).then((snapshot) => {

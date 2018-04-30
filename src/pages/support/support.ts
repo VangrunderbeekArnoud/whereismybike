@@ -2,12 +2,13 @@ import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { IonicPage } from 'ionic-angular';
 import { CallNumber } from '@ionic-native/call-number';
-const newLocal = 'YourPhoneNumberHere';
 import { PopUpProvider } from '../../providers/pop-up/pop-up';
 import { ProfileProvider } from '../../providers/profile/profile';
 import { InAppBrowser } from "@ionic-native/in-app-browser";
 import { BrowserTab } from "@ionic-native/browser-tab";
+import {TranslateService} from "ng2-translate";
 
+const newLocal = 'YourPhoneNumberHere';
 const newLocal_1 = 'YourEmailHere';
 
 @IonicPage()
@@ -26,7 +27,9 @@ export class SupportPage {
   todo: any = {
     description: ''
   }
-  constructor( public browsertab: BrowserTab, public iab: InAppBrowser, public navCtrl: NavController, public pop: PopUpProvider, public prof: ProfileProvider, public navParams: NavParams, public call: CallNumber) {
+  constructor( public browsertab: BrowserTab, public iab: InAppBrowser, public navCtrl: NavController,
+               public pop: PopUpProvider, public prof: ProfileProvider, public navParams: NavParams,
+               public call: CallNumber, private translate: TranslateService) {
   }
 
   ionViewDidLoad() {

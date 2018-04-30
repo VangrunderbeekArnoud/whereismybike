@@ -38,7 +38,7 @@
       <ion-list id='sidebarList' no-lines>
         <button  color="secondary" [ngStyle]="{'height': 60 + 'px', 'margin-top': 0 + 'px', 'margin-bottom': 0 + 'px'}" menuClose icon-start ion-item *ngFor="let p of pages" (click)="openPage(p)">
           <ion-icon  name="{{p.icon}}" [ngStyle]="{'margin': 10 + 'px'}"></ion-icon>
-          {{p.title}}
+          {{p.title | translate}}
         </button>
       </ion-list>
     </ion-content>

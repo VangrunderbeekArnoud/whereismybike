@@ -1,6 +1,6 @@
 <ion-header no-border>
   <ion-navbar color="nav-color" [hideBackButton]="false">
-      <ion-title>Edit Device</ion-title>
+      <ion-title>{{'Edit device'|translate}}</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -11,7 +11,7 @@
       <ion-grid>
         <ion-row>
           <ion-col padding col-5>
-            Device ID:
+            {{'Device ID'|translate}}:
           </ion-col>
           <ion-col padding col-5 *ngIf="sigfoxID">
             <ion-icon name="md-key"></ion-icon>
@@ -30,7 +30,7 @@
       <ion-grid>
         <ion-row>
           <ion-col padding col-5>
-            Battery:
+            {{'Battery'|translate}}:
           </ion-col>
           <ion-col padding col-5 *ngIf="battery">
             <ion-icon name="ios-battery-full"></ion-icon>
@@ -53,7 +53,7 @@
       <ion-grid>
         <ion-row>
           <ion-col padding col-5>
-            Name:
+            {{'Name'|translate}}:
           </ion-col>
           <ion-col padding col-5 *ngIf="name">
             <ion-icon name="ios-create"></ion-icon>
@@ -72,7 +72,7 @@
       <ion-grid>
         <ion-row>
           <ion-col padding col-5>
-            Brand:
+            {{'Brand'|translate}}:
           </ion-col>
           <ion-col padding col-5 *ngIf="brand">
             <ion-icon name="ios-create"></ion-icon>
@@ -91,7 +91,7 @@
       <ion-grid>
         <ion-row>
           <ion-col padding col-5>
-            Type:
+            {{'Type'|translate}}:
           </ion-col>
           <ion-col padding col-5 *ngIf="type">
             <ion-icon name="ios-create"></ion-icon>
@@ -110,7 +110,7 @@
       <ion-grid>
         <ion-row>
           <ion-col padding col-5>
-            Engraving nr:
+            {{'Engravings nr'|translate}}:
           </ion-col>
           <ion-col padding col-5 *ngIf="number">
             <ion-icon name="ios-create"></ion-icon>
@@ -142,12 +142,12 @@
           </ion-col>
           <ion-col padding col-5>
             <div text-right>
-              <button class="editButton" ion-button color="primary" (click)="choosePic()">Edit</button>
+              <button class="editButton" ion-button color="primary" (click)="choosePic()">{{'Edit'|translate}}</button>
             </div>
           </ion-col>
         </ion-row>
       </ion-grid>
     </ion-item>
   </ion-list>
-  <button ion-button full color="danger" (click)="deleteDevice()">Delete</button>
+  <button ion-button full color="danger" (click)="deleteDevice()">{{'Delete'|translate}}</button>
 </ion-content>

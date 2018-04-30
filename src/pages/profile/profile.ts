@@ -6,6 +6,8 @@ import {IonicPage} from 'ionic-angular';
 import {Camera, CameraOptions} from '@ionic-native/camera';
 import {PopUpProvider} from '../../providers/pop-up/pop-up';
 import firebase from 'firebase/app';
+import { TranslateService} from "ng2-translate";
+import {LanguageProvider} from "../../providers/language/language";
 
 @IonicPage()
 @Component({
@@ -14,10 +16,11 @@ import firebase from 'firebase/app';
 })
 export class ProfilePage {
 
-  constructor(public navCtrl: NavController, public actionSheetCtrl: ActionSheetController, public modalCtrl: ModalController, private pop: PopUpProvider, private camera: Camera, public alertCtrl: AlertController,
-              public ph: ProfileProvider, public authProvider: AuthProvider) {
+  constructor(private translate: TranslateService, public navCtrl: NavController, public actionSheetCtrl: ActionSheetController, public modalCtrl: ModalController, private pop: PopUpProvider, private camera: Camera, public alertCtrl: AlertController,
+              public ph: ProfileProvider, public authProvider: AuthProvider, private language: LanguageProvider) {
     ph.isHome = false;
   }
+
   remove(): void {
     this.authProvider.logoutUser().then(() => {
       this.navCtrl.setRoot('LoginPage');
@@ -25,22 +28,22 @@ export class ProfilePage {
   }
   choosePic() {
     let actionSheet = this.actionSheetCtrl.create({
-      title: 'Choose From',
+      title: this.language.ChooseFrom,
       buttons: [
         {
-          text: 'Camera',
+          text: this.language.Camera,
           icon: 'ios-camera',
           handler: () => {
             this.changePic()
           }
         }, {
-          text: 'File',
+          text: this.language.File,
           icon: 'ios-folder',
           handler: () => {
             this.changePicFromFile()
           }
         }, {
-          text: 'Cancel',
+          text: this.language.Cancel,
           icon: 'close',
           role: 'cancel',
           handler: () => {
@@ -80,7 +83,7 @@ export class ProfilePage {
     let storageRef = firebase.storage().ref();
     // Create a timestamp as filename
     const filename = Math.floor(Date.now() / 1000);
-    this.pop.presentLoader('Processing image..');
+    this.pop.presentLoader(this.language.ProcessingImg);
     // Create a reference to 'images/todays-date.jpg'
     const imageRef = storageRef.child(`userPictures/${filename}.jpg`);
     imageRef.putString(captureData, firebase.storage.StringFormat.DATA_URL).then((snapshot) => {
@@ -103,14 +106,14 @@ export class ProfilePage {
   }
   updateNumber() {
     const alert = this.alertCtrl.create({
-      message: "Your New Number",
+      message: this.language.Phone,
       inputs: [
         { value: this.ph.user.phone},
       ],
       buttons: [
-        { text: 'Cancel'},
+        { text: this.language.Cancel},
         {
-          text: 'Save',
+          text: this.language.Save,
           handler: data => {
             console.log(data[0]);
             this.ph.updatePhone(data[0]);
@@ -124,14 +127,14 @@ export class ProfilePage {
 
   updateName() {
     const alert = this.alertCtrl.create({
-      message: "Your Name",
+      message: this.language.Name,
       inputs: [
         { value: this.ph.user.name},
       ],
       buttons: [
-        { text: 'Cancel'},
+        { text: this.language.Cancel},
         {
-          text: 'Save',
+          text: this.language.Save,
           handler: data => {
             console.log(data[0]);
             this.ph.updateName(data[0]);
@@ -144,11 +147,11 @@ export class ProfilePage {
 
   logOut() {
     const alert = this.alertCtrl.create({
-      message: "Are You Sure To Logout ?",
+      message: this.language.Logout,
       buttons: [
-        { text: 'Cancel'},
+        { text: this.language.Cancel},
         {
-          text: 'Yes',
+          text: this.language.Yes,
           handler: data => {
             this.remove();
           }

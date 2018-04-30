@@ -1,8 +1,8 @@
 <ion-header no-border>
   <ion-navbar color="nav-color">
-    <ion-title>devices</ion-title>
+    <ion-title>{{'Devices'|translate}}</ion-title>
     <ion-buttons end>
-      <button ion-button solid color="primary" (click)="goToAddDevicePage()">Add New</button>
+      <button ion-button solid color="primary" (click)="goToAddDevicePage()">{{'Add new'|translate}}</button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
@@ -20,7 +20,7 @@
       </ion-thumbnail>
       <h2>{{device?.name}}</h2>
       <p>{{device?.brand}} - {{device?.type}}</p>
-      <button ion-button clear item-end color="primary" (click)="goToEditDevicePage(device.sigfoxID)">Edit</button>
+      <button ion-button clear item-end color="primary" (click)="goToEditDevicePage(device.sigfoxID)">{{'Edit'|translate}}</button>
     </ion-item>
   </ion-list>
 </ion-content>

@@ -19,6 +19,7 @@ import {Vibration} from '@ionic-native/vibration';
 import {IonicPage} from 'ionic-angular';
 import {StatusBar} from '@ionic-native/status-bar';
 import {BackgroundMode} from '@ionic-native/background-mode';
+import {TranslateService} from "ng2-translate";
 declare var google;
 
 @IonicPage()
@@ -54,7 +55,7 @@ export class HomePage {
               public platform: Platform, public OneSignal: OnesignalProvider,
               public modalCtrl: ModalController, public menu: MenuController,
               public pop: PopUpProvider, public ph: ProfileProvider,
-              public navCtrl: NavController) {
+              public navCtrl: NavController, private translate: TranslateService) {
     menu.swipeEnable(false, 'menu1');
     ph.isHome = true
   }

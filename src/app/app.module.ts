@@ -39,6 +39,7 @@ import { PopUpProvider } from '../providers/pop-up/pop-up';
 import { OnesignalProvider } from '../providers/onesignal/onesignal';
 import { NativeMapContainerProvider } from '../providers/native-map-container/native-map-container';
 import { SigfoxProvider, VirtualSigfoxProvider } from "../providers/sigfox/sigfox";
+import { LanguageProvider} from "../providers/language/language";
 
 export function createTranslateLoader( http: Http) {
   return new TranslateStaticLoader(http, 'assets/languages', '.json');
@@ -55,8 +56,6 @@ export const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-
-
 
 @NgModule({
   declarations: [
@@ -107,7 +106,8 @@ firebase.initializeApp(firebaseConfig);
     Vibration,
     SigfoxProvider,
     VirtualSigfoxProvider,
-    Globalization
+    Globalization,
+    LanguageProvider
   ]
 })
 export class AppModule {}

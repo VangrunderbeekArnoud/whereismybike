@@ -2,6 +2,8 @@ import {Component} from '@angular/core';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {ProfileProvider} from "../../providers/profile/profile";
 import {PopUpProvider} from "../../providers/pop-up/pop-up";
+import {TranslateService} from "ng2-translate";
+import {LanguageProvider} from "../../providers/language/language";
 
 @IonicPage()
 @Component({
@@ -12,11 +14,11 @@ export class DevicesPage {
   public devices: Array<any>;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public ph: ProfileProvider,
-              public pop: PopUpProvider) {
+              public pop: PopUpProvider, private translate: TranslateService, private language: LanguageProvider) {
   }
 
   ionViewDidEnter() {
-    this.pop.presentLoader('Retrieving all items...');
+    this.pop.presentLoader(this.language.Retrieving);
     this.ph.getDevices().on('value', snapshot => {
       this.devices = [];
       this.pop.hideLoader();
