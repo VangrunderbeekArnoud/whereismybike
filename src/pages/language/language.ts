@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import {SigfoxProvider, VirtualSigfoxProvider} from "../../providers/sigfox/sigfox";
 import {ProfileProvider} from "../../providers/profile/profile";
+import { availableLanguages, sysOptions } from './language.constants';
+import { TranslateService } from 'ng2-translate';
 
 /**
  * Generated class for the LanguagePage page.
@@ -16,18 +18,20 @@ import {ProfileProvider} from "../../providers/profile/profile";
   templateUrl: 'language.html',
 })
 export class LanguagePage {
-  public locations: any
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,
-              public sigfox: SigfoxProvider, public ph: ProfileProvider, public vsp: VirtualSigfoxProvider) {
+  languages = availableLanguages;
+  selectedLanguage = sysOptions.systemLanguage;
+
+  param = { value: 'world' };
+
+  private translate: TranslateService;
+
+  constructor(translate: TranslateService) {
+    this.translate = translate;
+
   }
 
-  ionViewDidEnter() {
-
+  applyLanguage() {
+    this.translate.use(this.selectedLanguage);
   }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad LanguagePage');
-  }
-
 }

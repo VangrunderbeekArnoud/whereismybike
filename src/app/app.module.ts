@@ -24,6 +24,10 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { CallNumber } from '@ionic-native/call-number';
 import { Ionic2RatingModule } from 'ionic2-rating';
 import { PayPal, PayPalPayment, PayPalConfiguration } from '@ionic-native/paypal';
+import { TranslateModule} from 'ng2-translate/ng2-translate';
+import { TranslateLoader, TranslateStaticLoader} from 'ng2-translate/src/translate.service';
+import { Http} from '@angular/http';
+import { Globalization} from '@ionic-native/globalization';
 //other
 import { MyApp } from './app.component';
 
@@ -36,6 +40,9 @@ import { OnesignalProvider } from '../providers/onesignal/onesignal';
 import { NativeMapContainerProvider } from '../providers/native-map-container/native-map-container';
 import { SigfoxProvider, VirtualSigfoxProvider } from "../providers/sigfox/sigfox";
 
+export function createTranslateLoader( http: Http) {
+  return new TranslateStaticLoader(http, 'assets/languages', '.json');
+}
 
 //Change this to your firebase configuration file gotten from https://console.firebase.google.com
 export const firebaseConfig = {
@@ -62,6 +69,11 @@ firebase.initializeApp(firebaseConfig);
     IonicStorageModule.forRoot(),
     BrowserModule,
     HttpModule,
+    TranslateModule.forRoot({
+      provide: TranslateLoader,
+      useFactory: (createTranslateLoader),
+      deps: [Http]
+    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -94,7 +106,8 @@ firebase.initializeApp(firebaseConfig);
     GoogleMaps,
     Vibration,
     SigfoxProvider,
-    VirtualSigfoxProvider
+    VirtualSigfoxProvider,
+    Globalization
   ]
 })
 export class AppModule {}
