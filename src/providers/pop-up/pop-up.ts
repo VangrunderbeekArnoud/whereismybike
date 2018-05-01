@@ -1,10 +1,7 @@
-import { Injectable, ViewChild, Injector} from '@angular/core';
-import { AlertController, ModalController, LoadingController, Loading, NavController } from 'ionic-angular';
+import { Injectable, Injector} from '@angular/core';
+import { AlertController, LoadingController, NavController } from 'ionic-angular';
 import { NativeMapContainerProvider } from '../../providers/native-map-container/native-map-container';
 import { ProfileProvider } from '../../providers/profile/profile';
-
-import firebase from 'firebase';
-import { Storage } from '@ionic/storage';
 import { ToastController } from 'ionic-angular';
 import {TranslateService} from "ng2-translate";
 
@@ -21,7 +18,7 @@ export class PopUpProvider {
   public dismissLoader: any;
 
   constructor( protected injector: Injector, private toastCtrl: ToastController,
-               public storage: Storage, public cMap: NativeMapContainerProvider,
+               public cMap: NativeMapContainerProvider,
                public alert: AlertController, public ph: ProfileProvider,
                public load: LoadingController, private translate: TranslateService) {
 

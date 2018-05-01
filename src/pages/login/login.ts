@@ -79,39 +79,6 @@ export class LoginPage {
     }
   }
 
-
-  loginViaFacebook(){
-    this.authProvider.signInWithFacebook()
-    .then( authData => {
-      console.log(authData);
-      this.loading.dismiss().then( () => {
-            this.navCtrl.setRoot('StartupPage');
-      });
-
-    }, error => {
-      this.loading.dismiss().then( () => {
-        let alert = this.alertCtrl.create({
-          message: error.message,
-          buttons: [
-            {
-              text: "Ok",
-              role: 'cancel'
-            }
-          ]
-        });
-        alert.present();
-      });
-    });
-
-    this.translate.get('AUTH').subscribe(translation => {
-      this.loading = this.loadingCtrl.create(
-        {content: translation}
-      );
-      this.loading.present();
-    });
-
-  }
-
   goToSignup(): void {
     this.navCtrl.push('EntrancePage');
   }

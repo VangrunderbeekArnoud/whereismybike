@@ -1,4 +1,4 @@
-import {Injectable, NgZone} from '@angular/core';
+import {Injectable} from '@angular/core';
 import 'rxjs/add/operator/map';
 import {Platform} from 'ionic-angular';
 import {GeocoderProvider} from '../../providers/geocoder/geocoder';
@@ -8,7 +8,7 @@ import {
   GoogleMap,
   GoogleMapsEvent,
   GoogleMapOptions,
-  LatLng, Marker
+  Marker
 } from '@ionic-native/google-maps';
 import {SigfoxProvider} from "../sigfox/sigfox";
 
@@ -33,7 +33,7 @@ export class NativeMapContainerProvider {
   ready: boolean = false;
   private startLocation: any = {lat: 46.1634787, lng: 104.3458401}; // Mongolie
 
-  constructor(private googleMaps: GoogleMaps, public zone: NgZone, public ph: ProfileProvider,
+  constructor(private googleMaps: GoogleMaps, public ph: ProfileProvider,
               public gcode: GeocoderProvider, public platform: Platform, public sigfox: SigfoxProvider) {
   }
 

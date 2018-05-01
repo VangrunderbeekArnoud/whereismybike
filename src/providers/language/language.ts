@@ -1,6 +1,6 @@
-import {Injectable, NgModule} from '@angular/core';
+import {Injectable} from '@angular/core';
 import { Platform} from 'ionic-angular';
-import {TranslateModule, TranslateService} from 'ng2-translate';
+import {TranslateService} from 'ng2-translate';
 import { Globalization} from '@ionic-native/globalization';
 
 

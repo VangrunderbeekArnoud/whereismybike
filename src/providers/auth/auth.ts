@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import  firebase from 'firebase';
-import { Facebook } from '@ionic-native/facebook';
 import { Platform } from 'ionic-angular';
 
 
@@ -11,7 +10,7 @@ export class AuthProvider {
   private currentUser: firebase.User;
   //public provider = new firebase.auth.FacebookAuthProvider();
 
-  constructor(public platform: Platform, public facebook: Facebook) {
+  constructor(public platform: Platform) {
      this.userProfileRef = firebase.database().ref('/users');
      firebase.auth().onAuthStateChanged((user: firebase.User) => this.currentUser = user);
   }
@@ -40,40 +39,6 @@ export class AuthProvider {
 
   get authenticated(): boolean {
     return this.currentUser !== null;
-  }
-
-
-  signInWithFacebook(): firebase.Promise<any> {
-    if (this.platform.is('cordova')) {
-      return this.facebook.login(['email'])
-      .then( response => {
-        const facebookCredential = firebase.auth.FacebookAuthProvider
-          .credential(response.authResponse.accessToken);
-
-        firebase.auth().signInWithCredential(facebookCredential)
-          .then( success => {
-            console.log("Firebase success: " + JSON.stringify(success));
-          }).catch((error) => {
-            console.log("Firebase failure: " + JSON.stringify(error));
-            //alert('Something Went Wrong, Check Your Connection And Try Again')
-
-        });
-
-      }).catch((error) => { console.log(error) });
-    } else {
-
-
-      return firebase.auth().signInWithPopup(new firebase.auth.FacebookAuthProvider()).then((success) => {
-        console.log("Firebase success: " + JSON.stringify(success));
-      })
-      .catch((error) => {
-        console.log("Firebase failure: " + JSON.stringify(error));
-       // alert('Something Went Wrong, Check Your Connection And Try Again')
-
-    });
-
-    }
-
   }
 
   signOut(): void {
