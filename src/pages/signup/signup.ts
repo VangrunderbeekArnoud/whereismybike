@@ -9,6 +9,7 @@ import { AuthProvider } from '../../providers/auth/auth';
 import { EmailValidator } from '../../validators/email';
 import { IonicPage } from 'ionic-angular';
 import { ProfileProvider } from '../../providers/profile/profile';
+import {TranslateService} from "ng2-translate";
 @IonicPage()
 @Component({
   selector: 'page-signup',
@@ -18,8 +19,9 @@ export class SignupPage {
   public signupForm: FormGroup;
   loading: Loading;
   constructor(public navCtrl: NavController, public authProvider: AuthProvider,
-    public formBuilder: FormBuilder, public loadingCtrl: LoadingController,public ph: ProfileProvider,
-    public alertCtrl: AlertController) {
+              public formBuilder: FormBuilder, public loadingCtrl: LoadingController,
+              public ph: ProfileProvider, public alertCtrl: AlertController,
+              private translate: TranslateService) {
 
       this.signupForm = formBuilder.group({
         name: ['', Validators.compose([Validators.required])],
@@ -43,16 +45,18 @@ export class SignupPage {
         });
       }, (error) => {
         this.loading.dismiss().then( () => {
-          let alert = this.alertCtrl.create({
-            message: error.message,
-            buttons: [
-              {
-                text: "Ok",
-                role: 'cancel'
-              }
-            ]
+          this.translate.get('OK').subscribe(translation => {
+            let alert = this.alertCtrl.create({
+              message: error.message,
+              buttons: [
+                {
+                  text: translation,
+                  role: 'cancel'
+                }
+              ]
+            });
+            alert.present();
           });
-          alert.present();
         });
       });
       this.loading = this.loadingCtrl.create();

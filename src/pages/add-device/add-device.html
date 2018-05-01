@@ -2,15 +2,15 @@
   <ion-navbar color="nav-color" [hideBackButton]="true">
     <ion-buttons start>
       <button ion-button solid color="danger" (click)="cancel()">
-        {{'Cancel'|translate}}
+        {{'CANCEL'|translate}}
       </button>
     </ion-buttons>
     <div text-center>
-      <ion-title>{{'Add device'|translate}}</ion-title>
+      <ion-title>{{'ADD_DEV'|translate}}</ion-title>
     </div>
     <ion-buttons end>
       <button ion-button solid color="primary" [disabled]="!(sigfoxID&&name)" (click)="proceed()">
-        {{'Add'|translate}}
+        {{'ADD'|translate}}
       </button>
     </ion-buttons>
   </ion-navbar>
@@ -23,7 +23,7 @@
       <ion-grid>
         <ion-row>
           <ion-col padding col-5>
-            {{'Device ID'|translate}}:
+            {{'DEV_ID'|translate}}:
           </ion-col>
           <ion-col padding col-5 *ngIf="sigfoxID">
             <ion-icon name="ios-create"></ion-icon>
@@ -42,7 +42,7 @@
       <ion-grid>
         <ion-row>
           <ion-col padding col-5>
-            {{'Device ID'|translate}}:
+            {{'DEV_ID'|translate}}:
           </ion-col>
           <ion-col padding col-5 *ngIf="sigfoxID">
             <ion-icon name="ios-create"></ion-icon>
@@ -61,7 +61,7 @@
       <ion-grid>
         <ion-row>
           <ion-col padding col-5>
-            {{'Name'|translate}}:
+            {{'NAME'|translate}}:
           </ion-col>
           <ion-col padding col-5 *ngIf="name">
             <ion-icon name="ios-create"></ion-icon>
@@ -84,7 +84,7 @@
       <ion-grid>
         <ion-row>
           <ion-col padding col-5>
-            {{'Brand'|translate}}:
+            {{'BRAND'|translate}}:
           </ion-col>
           <ion-col padding col-5 *ngIf="brand">
             <ion-icon name="ios-create"></ion-icon>
@@ -103,7 +103,7 @@
       <ion-grid>
         <ion-row>
           <ion-col padding col-5>
-            {{'Type'|translate}}:
+            {{'TYPE'|translate}}:
           </ion-col>
           <ion-col padding col-5 *ngIf="type">
             <ion-icon name="ios-create"></ion-icon>
@@ -122,7 +122,7 @@
       <ion-grid>
         <ion-row>
           <ion-col padding col-5>
-            {{'Engravings nr'|translate}}:
+            {{'ENGNR'|translate}}:
           </ion-col>
           <ion-col padding col-5 *ngIf="number">
             <ion-icon name="ios-create"></ion-icon>
@@ -154,7 +154,7 @@
           </ion-col>
           <ion-col padding col-5>
               <div text-right>
-                <button class="editButton" ion-button color="primary" (click)="choosePic()">{{'Edit'|translate}}</button>
+                <button class="editButton" ion-button color="primary" (click)="choosePic()">{{'EDIT'|translate}}</button>
               </div>
           </ion-col>
         </ion-row>

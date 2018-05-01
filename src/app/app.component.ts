@@ -33,9 +33,9 @@ export class MyApp {
     this.translate = translate;
     this.pages = [
       //Add pages for sidemenu
-      {title: 'Devices', component: 'DevicesPage', icon: 'md-bicycle'},
-      {title: 'Support', component: 'SupportPage', icon: "ios-help-circle"},
-      {title: 'Language', component: 'LanguagePage', icon: 'md-globe'}
+      {title: 'DEVICES', component: 'DevicesPage', icon: 'md-bicycle'},
+      {title: 'SUPPORT', component: 'SupportPage', icon: "ios-help-circle"},
+      {title: 'LANGUAGE', component: 'LanguagePage', icon: 'md-globe'}
     ];
 
   }

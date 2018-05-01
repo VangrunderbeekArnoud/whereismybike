@@ -12,14 +12,14 @@
   <div id="recaptcha-container"></div>
 
   <div class='form'>
-    <ion-label class='stack' padding color='primary' stacked>Country code</ion-label>
+    <ion-label class='stack' padding color='primary' stacked>{{'COUNTRY_CODE'|translate}}</ion-label>
     <ion-select interface="popover" [(ngModel)]="myCountry" placeholder="eg Belgium (+32)">
       <ion-option *ngFor="let country of countries" [value]="country">{{country.displayName}}</ion-option>
     </ion-select>
-    <ion-label class='stack' padding color='primary' stacked>Phone</ion-label>
+    <ion-label class='stack' padding color='primary' stacked>{{'PHONE'|translate}}</ion-label>
     <ion-input class='input' no-lines type="tel" placeholder="eg 04xxxxxxxx" [(ngModel)]="phoneNumber"></ion-input>
 
-    <button padding [disabled]="!(phoneNumber && myCountry)" ion-button color="primary" id='mybutton' block (click)='signIn(phoneNumber)'>PROCEED</button>
+    <button padding [disabled]="!(phoneNumber && myCountry)" ion-button color="primary" id='mybutton' block (click)='signIn(phoneNumber)'>{{'PROCEED'|translate}}</button>
 
   </div>
 </ion-content>

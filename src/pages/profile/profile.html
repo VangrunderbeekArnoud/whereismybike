@@ -1,6 +1,6 @@
 <ion-header no-border>
   <ion-navbar color="nav-color">
-    <ion-title>{{"Profile"|translate}}</ion-title>
+    <ion-title>{{"PROFILE"|translate}}</ion-title>
     <ion-buttons end>
       <button ion-button icon-only (click)="logOut()">
         <ion-icon name="ios-log-out"></ion-icon>
@@ -28,7 +28,7 @@
         <ion-row>
           <ion-col padding col-6>
             <ion-icon name="ios-mail"></ion-icon>
-            {{'Email'|translate}}
+            {{'EMAIL'|translate}}
           </ion-col>
           <ion-col padding col-6 *ngIf="ph.user.email">
             <ion-icon></ion-icon>
@@ -43,7 +43,7 @@
         <ion-row>
           <ion-col padding col-6>
             <ion-icon name="ios-contact"></ion-icon>
-            {{'Name'|translate}}
+            {{'NAME'|translate}}
           </ion-col>
           <ion-col padding col-6 *ngIf="ph.user.name">
             <span>
@@ -60,7 +60,7 @@
         <ion-row>
           <ion-col padding col-6>
             <ion-icon name="ios-call"></ion-icon>
-            {{'Phone'|translate}}
+            {{'PHONE'|translate}}
           </ion-col>
           <ion-col padding col-6 *ngIf="ph.user.phone">
             <ion-icon name="ios-create"></ion-icon>

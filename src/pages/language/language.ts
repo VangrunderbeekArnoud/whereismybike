@@ -33,6 +33,5 @@ export class LanguagePage {
 
   applyLanguage() {
     this.translate.use(this.selectedLanguage);
-    this.language.load();
   }
 }

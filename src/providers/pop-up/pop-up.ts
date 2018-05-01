@@ -6,6 +6,7 @@ import { ProfileProvider } from '../../providers/profile/profile';
 import firebase from 'firebase';
 import { Storage } from '@ionic/storage';
 import { ToastController } from 'ionic-angular';
+import {TranslateService} from "ng2-translate";
 
 @Injectable()
 export class PopUpProvider {
@@ -19,7 +20,10 @@ export class PopUpProvider {
   public hasCleared: boolean = false;
   public dismissLoader: any;
 
-  constructor( protected injector: Injector, private toastCtrl: ToastController, public storage: Storage, public cMap: NativeMapContainerProvider,  public alert: AlertController, public ph: ProfileProvider, public load: LoadingController) {
+  constructor( protected injector: Injector, private toastCtrl: ToastController,
+               public storage: Storage, public cMap: NativeMapContainerProvider,
+               public alert: AlertController, public ph: ProfileProvider,
+               public load: LoadingController, private translate: TranslateService) {
 
   }
 
@@ -28,19 +32,21 @@ export class PopUpProvider {
   }
 
 showAlert(title, subtitle){
-  let alert = this.alert.create({
-    title: title,
-    subTitle: subtitle,
-    buttons: [ {
-      text: "Okay",
-      role: 'cancel',
-      handler: () => {
-      this.cMap.map.setClickable(true)
-      }
-    },],
-    enableBackdropDismiss: false
-  });
-  alert.present();
+    this.translate.get(['OK', 'CANCEL']).subscribe(translations => {
+      let alert = this.alert.create({
+        title: title,
+        subTitle: subtitle,
+        buttons: [ {
+          text: translations.OK,
+          role: 'cancel',
+          handler: () => {
+            this.cMap.map.setClickable(true)
+          }
+        },],
+        enableBackdropDismiss: false
+      });
+      alert.present();
+    });
 }
 
 presentToast(message) {
@@ -72,60 +78,66 @@ presentToast2(message) {
 }
 
 showPimp(title ){
-  let alert = this.alert.create({
-    title: title,
-    buttons: [ {
-      text: "Okay",
-      role: 'cancel',
-      handler: () => {
-      }
-    },],
-    enableBackdropDismiss: false
-  });
-  alert.present();
+    this.translate.get(['OK', 'CANCEL']).subscribe(translations => {
+      let alert = this.alert.create({
+        title: title,
+        buttons: [ {
+          text: translations.OK,
+          role: 'cancel',
+          handler: () => {
+          }
+        },],
+        enableBackdropDismiss: false
+      });
+      alert.present();
+    });
 }
 
 show(title ){
-  let alert = this.alert.create({
-    title: title,
-    buttons: [ {
-      text: "Okay",
-      role: 'cancel',
-      handler: () => {
-        document.getElementById("destination").innerHTML = "Set A Closer Destination";
-      }
-    },],
-    enableBackdropDismiss: false
-  });
-  alert.present();
+    this.translate.get(['OK', 'CANCEL']).subscribe(translations => {
+      let alert = this.alert.create({
+        title: title,
+        buttons: [ {
+          text: translations.OK,
+          role: 'cancel',
+          handler: () => {
+            document.getElementById("destination").innerHTML = "Set A Closer Destination";
+          }
+        },],
+        enableBackdropDismiss: false
+      });
+      alert.present();
+    });
 }
 
 Send(id) {
-  let alert = this.alert.create({
-    title: 'Write Your Short Message',
-    inputs: [
-      {
-        name: 'message',
-        placeholder: 'Message'
-      },
-    ],
-    buttons: [
-      {
-        text: 'Cancel',
-        role: 'cancel',
-        handler: data => {
+    this.translate.get(['MESSAGE', 'CANCEL', 'SEND']).subscribe(translations => {
+      let alert = this.alert.create({
+        title: translations.MESSAGE,
+        inputs: [
+          {
+            name: 'message',
+            placeholder: translations.MESSAGE
+          },
+        ],
+        buttons: [
+          {
+            text: translations.CANCEL,
+            role: 'cancel',
+            handler: data => {
 
-        }
-      },
-      {
-        text: 'Send',
-        handler: data => {
-          this.ph.SendMessage(data.message, id)
-        }
-      }
-    ]
-  });
-  alert.present();
+            }
+          },
+          {
+            text: translations.SEND,
+            handler: data => {
+              this.ph.SendMessage(data.message, id)
+            }
+          }
+        ]
+      });
+      alert.present();
+    });
 }
 
 refactor(){

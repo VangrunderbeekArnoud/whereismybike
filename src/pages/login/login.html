@@ -9,23 +9,23 @@
 
   <!-- LoginForm -->
   <form  *ngIf="initState" [formGroup]="loginForm" (submit)="loginUser()" novalidate>
-      <ion-label color='primary' stacked>Email</ion-label>
-      <ion-input  formControlName="email" type="email" placeholder="username@domain.com"
+      <ion-label color='primary' stacked>{{'EMAIL'|translate}}</ion-label>
+      <ion-input  formControlName="email" type="email" placeholder="{{'EMAIL'|translate}}"
         [class.invalid]="!loginForm.controls.email.valid && loginForm.controls.email.dirty"></ion-input>
-      <ion-label color='primary' stacked>Password</ion-label>
-      <ion-input  formControlName="password" type="password" placeholder="password"
+      <ion-label color='primary' stacked>{{'PASSWD'|translate}}</ion-label>
+      <ion-input  formControlName="password" type="password" placeholder="{{'PASSWD'|translate}}"
         [class.invalid]="!loginForm.controls.password.valid && loginForm.controls.password.dirty"></ion-input>
     <button ion-button block type="submit" [disabled]="!loginForm.valid">
-      LOGIN
+      {{'LOGIN'|translate}}
     </button>
   </form>
 
   <!-- Create new account and Forgot password buttons in loginForm -->
   <button *ngIf="initState" color='light'ion-button block clear (click)="goToSignup()">
-    CREATE NEW ACCOUNT
+    {{'CREATE_NEW_ACCOUNT'|translate}}
   </button>
   <button *ngIf="initState" color='light' ion-button block clear (click)="goToResetPassword()">
-    FORGOT PASSWORD
+    {{'FORGOT_PASSWD'|translate}}
   </button>
 
   <!-- Login and signup buttons -->
@@ -34,12 +34,12 @@
       <ion-row>
         <ion-col>
           <button *ngIf="!initState" color='primary'ion-button block (click)="initState = true">
-            LOGIN
+            {{'LOGIN'|translate}}
           </button>
         </ion-col>
         <ion-col>
           <button *ngIf="!initState" color='primary'ion-button block (click)="goToSignup()">
-            SIGNUP
+            {{'SIGNUP'|translate}}
           </button>
         </ion-col>
       </ion-row>

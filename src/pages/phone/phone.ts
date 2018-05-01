@@ -4,6 +4,7 @@ import firebase from 'firebase/app';
 import {Firebase} from '@ionic-native/firebase';
 import { PopUpProvider } from '../../providers/pop-up/pop-up';
 import { ProfileProvider } from '../../providers/profile/profile';
+import {TranslateService} from "ng2-translate";
 @IonicPage()
 @Component({
   selector: 'page-phone',
@@ -22,7 +23,10 @@ export class PhonePage {
     new Country('Luxembourg', 352),
     new Country('Germany', 49)
   ]
-  constructor(public navCtrl: NavController, public ph: ProfileProvider, private api: PopUpProvider, public navParams: NavParams, private alertCtrl: AlertController,public firebase: Firebase) {
+  constructor(public navCtrl: NavController, public ph: ProfileProvider,
+              private api: PopUpProvider, public navParams: NavParams,
+              private alertCtrl: AlertController,public firebase: Firebase,
+              private translate: TranslateService) {
   }
 
   ionViewDidLoad() {
@@ -48,7 +52,9 @@ export class PhonePage {
 
 
   signIn(phoneNumber: number) { //Step 2 - Pass the mobile number for verification
-    this.api.presentLoader('You Will Recieve An SMS Shortly');
+    this.translate.get('RECEIVE_SMS').subscribe(translation => {
+      this.api.presentLoader(translation);
+    });
     // If the phoneNumber starts with 0, delete this !
     if (this.phoneNumber.toString()[0] == '0') {
       this.phoneNumber = this.phoneNumber.substring(1, 15);
@@ -64,9 +70,11 @@ export class PhonePage {
       //this.eer = error;
       document.getElementById("mybutton").innerText = 'RESEND'
       this.api.hideLoader();
-      this.api.presentToast('Failed to send SMS. Try again');
+      this.translate.get(['FAILED_SMS', 'TRY_AGAIN']).subscribe(translation => {
+        this.api.presentToast(translation.FAILED_SMS);
+        this.api.showAlert(error, translation.TRY_AGAIN)
+      });
      // alert(error);
-      this.api.showAlert(error, 'Try Again')
     });
 
   }

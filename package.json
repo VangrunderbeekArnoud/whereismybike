@@ -144,11 +144,11 @@
         "API_KEY_FOR_ANDROID": "AIzaSyAMJZQkbwaw-vPOmMbcs0mx-2IGk35Ha-s",
         "API_KEY_FOR_IOS": "AIzaSyDoVrwVoH7iNoqPnvOywwiljO2CMCSfmoo"
       },
-      "cordova-plugin-globalization": {}
+      "cordova-plugin-globalization": {},
+      "cordova-custom-config": {}
     },
     "platforms": [
-      "ios",
-      "android"
+      "ios"
     ]
   }
 }

@@ -14,11 +14,13 @@ export class DevicesPage {
   public devices: Array<any>;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public ph: ProfileProvider,
-              public pop: PopUpProvider, private translate: TranslateService, private language: LanguageProvider) {
+              public pop: PopUpProvider, private translate: TranslateService) {
   }
 
   ionViewDidEnter() {
-    this.pop.presentLoader(this.language.Retrieving);
+    this.translate.get('RETRIEVING').subscribe(translation => {
+      this.pop.presentLoader(translation);
+    });
     this.ph.getDevices().on('value', snapshot => {
       this.devices = [];
       this.pop.hideLoader();

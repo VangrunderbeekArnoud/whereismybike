@@ -11,6 +11,7 @@ import { AuthProvider } from '../../providers/auth/auth';
 import { IonicPage } from 'ionic-angular';
 import { ProfileProvider } from '../../providers/profile/profile';
 import { NativeMapContainerProvider } from '../../providers/native-map-container/native-map-container';
+import {TranslateService} from "ng2-translate";
 // import { Diagnostic } from '@ionic-native/diagnostic';
 @IonicPage()
 @Component({
@@ -24,7 +25,7 @@ export class LoginPage {
 
   constructor(public navCtrl: NavController, public ntP: NativeMapContainerProvider,  public platform: Platform, public menu: MenuController, public loadingCtrl: LoadingController,
     public alertCtrl: AlertController, public authProvider: AuthProvider, public ph: ProfileProvider,
-    public formBuilder: FormBuilder) {
+    public formBuilder: FormBuilder, private translate: TranslateService) {
       menu.swipeEnable(false, 'menu1');
       this.loginForm = formBuilder.group({
         email: ['', Validators.compose([Validators.required, EmailValidator.isValid])],
@@ -57,16 +58,18 @@ export class LoginPage {
         });
       }, error => {
         this.loading.dismiss().then( () => {
-          let alert = this.alertCtrl.create({
-            message: error.message,
-            buttons: [
-              {
-                text: "Ok",
-                role: 'cancel'
-              }
-            ]
+          this.translate.get(['OK', 'CANCEL']).subscribe(translations => {
+            let alert = this.alertCtrl.create({
+              message: error.message,
+              buttons: [
+                {
+                  text: translations.OK,
+                  role: 'cancel'
+                }
+              ]
+            });
+            alert.present();
           });
-          alert.present();
         });
       });
 
@@ -99,10 +102,12 @@ export class LoginPage {
       });
     });
 
-    this.loading = this.loadingCtrl.create(
-      {content: 'Authenticating..'}
-    );
-    this.loading.present();
+    this.translate.get('AUTH').subscribe(translation => {
+      this.loading = this.loadingCtrl.create(
+        {content: translation}
+      );
+      this.loading.present();
+    });
 
   }
 

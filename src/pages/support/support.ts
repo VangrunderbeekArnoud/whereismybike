@@ -57,7 +57,9 @@ export class SupportPage {
 
 logForm() {
     this.prof.Complain(this.todo.description).then(suc =>{
-this.pop.showPimp('Your complain has been submitted, we will get back to you as soon as possible via e-mail.')
+      this.translate.get('FEEDBACK_SUBMITTED').subscribe(translation => {
+        this.pop.showPimp(translation);
+      });
     })
 
   }

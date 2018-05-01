@@ -21,7 +21,7 @@
       <button no-lines detail-none (click)="showSelectDevice()" [hidden]="!cMap.onLocationbarHide" ion-item class="bars-locate" icon-start>
         <ion-icon color='deep' name="locate"></ion-icon>
         <div *ngIf="!selector" id="location">{{name}}</div>
-        <div *ngIf="selector" id="mlocation">Select</div>
+        <div *ngIf="selector" id="mlocation">{{'SELECT'|translate}}</div>
       </button>
     </div>
 

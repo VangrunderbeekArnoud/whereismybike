@@ -116,7 +116,6 @@
         <param name="android-package" value="com.arttitude360.cordova.PaystackPlugin" />
     </feature>
     <engine name="ios" spec="4.5.2" />
-    <engine name="android" spec="~6.3.0" />
     <plugin name="cordova-plugin-mauron85-background-geolocation" spec="^2.3.5">
         <variable name="GOOGLE_PLAY_SERVICES_VERSION" value="+" />
         <variable name="ICON" value="@mipmap/icon" />
@@ -160,4 +159,5 @@
         <variable name="API_KEY_FOR_IOS" value="AIzaSyDoVrwVoH7iNoqPnvOywwiljO2CMCSfmoo" />
     </plugin>
     <plugin name="cordova-plugin-globalization" spec="^1.11.0" />
+    <plugin name="cordova-custom-config" spec="git+https://github.com/dpa99c/cordova-custom-config.git" />
 </widget>

@@ -34,8 +34,7 @@ export class EditDevicePage {
               public modalCtrl: ModalController, private pop: PopUpProvider, private camera: Camera,
               public alertCtrl: AlertController, public ph: ProfileProvider,
               public authProvider: AuthProvider, public sigfox: SigfoxProvider,
-              public navParams: NavParams, private translate: TranslateService,
-              private language: LanguageProvider) {
+              public navParams: NavParams, private translate: TranslateService) {
     ph.isHome = false;
     this.sigfoxID = navParams.get('sigfoxID');
   }
@@ -59,133 +58,145 @@ export class EditDevicePage {
   }
 
   deleteDevice() {
-    const alert = this.alertCtrl.create({
-      message: this.language.DeleteDevice,
-      buttons: [
-        {
-          text: this.language.Cancel,
-        },
-        {
-          text: this.language.Yes,
-          handler: data => {
-            //this.device.off();
-            this.ph.deleteDevice(this.device);
-            this.navCtrl.pop();
+    this.translate.get(['DELETE_DEV', 'CANCEL', 'YES']).subscribe(translations => {
+      const alert = this.alertCtrl.create({
+        message: translations.DELETE_DEV,
+        buttons: [
+          {
+            text: translations.CANCEL,
+          },
+          {
+            text: translations.YES,
+            handler: data => {
+              //this.device.off();
+              this.ph.deleteDevice(this.device);
+              this.navCtrl.pop();
+            }
           }
-        }
-      ]
+        ]
+      });
+      alert.present();
     });
-    alert.present();
   }
 
   updateName() {
-    const alert = this.alertCtrl.create({
-      message: this.language.Name,
-      inputs: [
-        {
-          value: this.name
-        },
-      ],
-      buttons: [
-        {
-          text: this.language.Cancel,
-        },
-        {
-          text: this.language.Save,
-          handler: data => {
-            console.log(data[0])
-            this.ph.updateDeviceName(this.device, data[0]);
+    this.translate.get(['NAME', 'CANCEL', 'SAVE']).subscribe(translations => {
+      const alert = this.alertCtrl.create({
+        message: translations.NAME,
+        inputs: [
+          {
+            value: this.name
+          },
+        ],
+        buttons: [
+          {
+            text: translations.CANCEL,
+          },
+          {
+            text: translations.SAVE,
+            handler: data => {
+              console.log(data[0])
+              this.ph.updateDeviceName(this.device, data[0]);
+            }
           }
-        }
-      ]
+        ]
+      });
+      alert.present();
     });
-    alert.present();
   }
   updateBrand() {
-    const alert = this.alertCtrl.create({
-      message: this.language.Brand,
-      inputs: [
-        { value: this.brand },
-      ],
-      buttons: [
-        { text: this.language.Cancel},
-        { text: this.language.Save,
-          handler: data => {
-            console.log(data[0]);
-            this.ph.updateDeviceBrand(this.device, data[0]);
-          }}
-      ]
+    this.translate.get(['BRAND', 'CANCEL', 'SAVE']).subscribe(translations => {
+      const alert = this.alertCtrl.create({
+        message: translations.BRAND,
+        inputs: [
+          { value: this.brand },
+        ],
+        buttons: [
+          { text: translations.CANCEL},
+          { text: translations.SAVE,
+            handler: data => {
+              console.log(data[0]);
+              this.ph.updateDeviceBrand(this.device, data[0]);
+            }}
+        ]
+      });
+      alert.present();
     });
-    alert.present();
   }
   updateType() {
-    const alert = this.alertCtrl.create({
-      message: this.language.Type,
-      inputs: [
-        { value: this.type },
-      ],
-      buttons: [
-        { text: this.language.Cancel},
-        { text: this.language.Save,
-          handler: data => {
-            console.log(data[0]);
-            this.ph.updateDeviceType(this.device, data[0]);
-          }}
-      ]
+    this.translate.get(['TYPE', 'CANCEL', 'SAVE']).subscribe(translations => {
+      const alert = this.alertCtrl.create({
+        message: translations.TYPE,
+        inputs: [
+          { value: this.type },
+        ],
+        buttons: [
+          { text: translations.CANCEL},
+          { text: translations.SAVE,
+            handler: data => {
+              console.log(data[0]);
+              this.ph.updateDeviceType(this.device, data[0]);
+            }}
+        ]
+      });
+      alert.present();
     });
-    alert.present();
   }
 
   updateNumber() {
-    const alert = this.alertCtrl.create({
-      message: this.language.EngrNr,
-      inputs: [
-        {
-          value: this.number
-        },
-      ],
-      buttons: [
-        {
-          text: this.language.Cancel,
-        },
-        {
-          text: this.language.Save,
-          handler: data => {
-            this.ph.updateDeviceNumber(this.device, data[0]);
+    this.translate.get(['ENGNR', 'CANCEL', 'SAVE']).subscribe(translations => {
+      const alert = this.alertCtrl.create({
+        message: translations.ENGNR,
+        inputs: [
+          {
+            value: this.number
+          },
+        ],
+        buttons: [
+          {
+            text: translations.CANCEL,
+          },
+          {
+            text: translations.SAVE,
+            handler: data => {
+              this.ph.updateDeviceNumber(this.device, data[0]);
+            }
           }
-        }
-      ]
+        ]
+      });
+      alert.present();
     });
-    alert.present();
   }
 
   choosePic() {
-    let actionSheet = this.actionSheetCtrl.create({
-      title: this.language.ChooseFrom,
-      buttons: [
-        {
-          text: this.language.Camera,
-          icon: 'ios-camera',
-          handler: () => {
-            this.changePic()
+    this.translate.get(['CHOOSE_FROM', 'CAMERA', 'FILE', 'CANCEL']).subscribe(translations => {
+      let actionSheet = this.actionSheetCtrl.create({
+        title: translations.CHOOSE_FROM,
+        buttons: [
+          {
+            text: translations.CAMERA,
+            icon: 'ios-camera',
+            handler: () => {
+              this.changePic()
+            }
+          }, {
+            text: translations.FILE,
+            icon: 'ios-folder',
+            handler: () => {
+              this.changePicFromFile()
+            }
+          }, {
+            text: translations.CANCEL,
+            icon: 'close',
+            role: 'cancel',
+            handler: () => {
+              console.log('Cancel clicked');
+            }
           }
-        }, {
-          text: this.language.File,
-          icon: 'ios-folder',
-          handler: () => {
-            this.changePicFromFile()
-          }
-        }, {
-          text: this.language.Cancel,
-          icon: 'close',
-          role: 'cancel',
-          handler: () => {
-            console.log('Cancel clicked');
-          }
-        }
-      ]
+        ]
+      });
+      actionSheet.present();
     });
-    actionSheet.present();
   }
 
   changePic() {
@@ -215,10 +226,12 @@ export class EditDevicePage {
   }
 
   processProfilePicture(captureData) {
+    this.translate.get('PROCESSING_IMG').subscribe(translation => {
+      this.pop.presentLoader(translation);
+    });
     let storageRef = firebase.storage().ref();
     // Create a timestamp as filename
     const filename = Math.floor(Date.now() / 1000);
-    this.pop.presentLoader(this.language.ProcessingImg);
     // Create a reference to 'images/todays-date.jpg'
     const imageRef = storageRef.child(`userPictures/${filename}.jpg`);
     imageRef.putString(captureData, firebase.storage.StringFormat.DATA_URL).then((snapshot) => {

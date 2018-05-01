@@ -141,16 +141,22 @@ export class HomePage {
     this.selector = false;
     if ( this.sigfoxID == null) { // the user is selected
       this.setLocation(this.name, this.sigfoxID, this.lat, this.lng);
-      this.pop.presentToast('Cannot lock the user!');
+      this.translate.get('USERNLOCK').subscribe(translation => {
+        this.pop.presentToast(translation);
+      });
     } else { // a device is selected
       this.ph.getDevice(this.sigfoxID).once('value', snapshot => {
         this.setLocation(snapshot.val().name, snapshot.key, snapshot.child('location').child('lat').val(), snapshot.child('location').child('lng').val());
         if ( snapshot.child('lock').child('status').val()) {
           this.ph.updateDeviceLock(snapshot.key,false);
-          this.pop.presentToast('Bike is unlocked!');
+          this.translate.get('BIKENLOCK').subscribe(translation => {
+            this.pop.presentToast(translation);
+          });
         } else {
           this.ph.updateDeviceLock(snapshot.key, true);
-          this.pop.presentToast('Bike is locked!');
+          this.translate.get('BIKELOCK').subscribe(translation => {
+            this.pop.presentToast(translation);
+          });
         }
       });
     }

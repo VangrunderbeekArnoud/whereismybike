@@ -8,14 +8,11 @@ import { Globalization} from '@ionic-native/globalization';
 export class LanguageProvider {
 
   public availableLanguages = [{
-    code: 'en',
-    name: 'English'
-  }, {
     code: 'nl',
     name: 'Nederlands'
   }];
 
-  public defaultLanguage = 'en';
+  public defaultLanguage = 'nl';
   public sysOptions = {
     systemLanguage: this.defaultLanguage
   };
@@ -40,83 +37,8 @@ export class LanguageProvider {
         }
       translate.use('nl');
       this.sysOptions.systemLanguage = 'nl';
-      this.load();
       }
     );
-  }
-  public Name: string;
-  public ChooseFrom: string;
-  public Camera: string;
-  public File: string;
-  public Cancel: string;
-  public ProcessingImg: string;
-  public Save: string;
-  public DeviceID: string;
-  public DeviceExist: string;
-  public Brand: string;
-  public Type: string;
-  public EngrNr: string;
-  public ValidID: string;
-  public Retrieving: string;
-  public Yes: string;
-  public Logout: string;
-  public Phone: string;
-  public DeleteDevice: string;
-  public load() {
-    this.translate.get('Delete device').subscribe((res: string) => {
-      this.DeleteDevice = res;
-    });
-    this.translate.get('Yes').subscribe((res: string) => {
-      this.Yes = res;
-    });
-    this.translate.get('Are you sure to logout?').subscribe((res: string) => {
-      this.Logout = res;
-    });
-    this.translate.get('Phone').subscribe((res: string) => {
-      this.Phone = res;
-    });
-    this.translate.get('Name').subscribe((res: string) => {
-      this.Name = res;
-    });
-    this.translate.get('Choose from').subscribe((res: string) => {
-      this.ChooseFrom = res;
-    });
-    this.translate.get('Camera').subscribe((res: string) => {
-      this.Camera = res;
-    });
-    this.translate.get('File').subscribe((res: string) => {
-      this.File = res;
-    });
-    this.translate.get('Cancel').subscribe((res: string) => {
-      this.Cancel = res;
-    });
-    this.translate.get('Processing image').subscribe((res: string) => {
-      this.ProcessingImg = res;
-    });
-    this.translate.get('Save').subscribe((res: string) => {
-      this.Save = res;
-    });
-    this.translate.get('Device ID').subscribe((res: string) => {
-      this.DeviceID = res;
-    });
-    this.translate.get('Device already exists!').subscribe((res: string) => {
-      this.DeviceExist = res;
-    });
-    this.translate.get('Brand').subscribe((res: string) => {
-      this.Brand = res;
-    });
-    this.translate.get('Type').subscribe((res: string) => {
-      this.Type = res;
-    });
-    this.translate.get('Engravings nr').subscribe((res: string) => {
-      this.EngrNr = res;
-    });
-    this.translate.get('Please enter a valid device ID').subscribe((res: string) => {
-      this.ValidID = res;
-    });
-    this.translate.get('Retrieving all items').subscribe((res: string) => {
-      this.Retrieving = res;
-    });
   }
 
   private getSuitableLanguage(language) {

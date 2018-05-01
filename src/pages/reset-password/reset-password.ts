@@ -4,6 +4,7 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { AuthProvider } from '../../providers/auth/auth';
 import { EmailValidator } from '../../validators/email';
 import { IonicPage } from 'ionic-angular';
+import {TranslateService} from "ng2-translate";
 @IonicPage()
 @Component({
   selector: 'page-reset-password',
@@ -11,10 +12,11 @@ import { IonicPage } from 'ionic-angular';
 })
 export class ResetPasswordPage {
   public resetPasswordForm: FormGroup;
-  
-  constructor(public navCtrl: NavController, public authProvider: AuthProvider, 
-    public formBuilder: FormBuilder, public alertCtrl: AlertController) {
-      
+
+  constructor(public navCtrl: NavController, public authProvider: AuthProvider,
+              public formBuilder: FormBuilder, public alertCtrl: AlertController,
+              private translate: TranslateService) {
+
       this.resetPasswordForm = formBuilder.group({
         email: ['', Validators.compose([Validators.required, EmailValidator.isValid])],
       });
@@ -26,25 +28,29 @@ export class ResetPasswordPage {
     } else {
       this.authProvider.resetPassword(this.resetPasswordForm.value.email)
       .then((user) => {
-        let alert = this.alertCtrl.create({
-          message: "We just sent you a reset link to your email",
-          buttons: [
-            {
-              text: "Ok",
-              role: 'cancel',
-              handler: () => { this.navCtrl.pop(); }
-            }
-          ]
+        this.translate.get(['EMAIL_RESET_LINK', 'OK']).subscribe(translations => {
+          let alert = this.alertCtrl.create({
+            message: translations.EMAIL_RESET_LINK,
+            buttons: [
+              {
+                text: translations.OK,
+                role: 'cancel',
+                handler: () => { this.navCtrl.pop(); }
+              }
+            ]
+          });
+          alert.present();
         });
-        alert.present();
 
       }, (error) => {
         var errorMessage: string = error.message;
-        let errorAlert = this.alertCtrl.create({
-          message: errorMessage,
-          buttons: [{ text: "Ok", role: 'cancel' }]
+        this.translate.get('OK').subscribe(translation => {
+          let errorAlert = this.alertCtrl.create({
+            message: errorMessage,
+            buttons: [{ text: translation, role: 'cancel' }]
+          });
+          errorAlert.present();
         });
-        errorAlert.present();
       });
     }
   }

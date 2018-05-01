@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
+import {TranslateService} from "ng2-translate";
 
 /**
  * Generated class for the EntrancePage page.
@@ -15,11 +16,14 @@ import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-an
 })
 export class EntrancePage {
 
-  constructor(public navCtrl: NavController, public load: LoadingController,  public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public load: LoadingController,
+              public navParams: NavParams, private translate: TranslateService) {
   }
 
   ionViewDidLoad() {
-    this.presentRouteLoader('Please Wait..')
+    this.translate.get('WAIT').subscribe(translation => {
+      this.presentRouteLoader(translation);
+    });
   }
 
 
@@ -34,7 +38,7 @@ presentRouteLoader(message) {
     loading.dismiss();
    this.navCtrl.setRoot('SignupPage')
     clearTimeout(myTimeout)
-    
+
   }, 1000);
 }
 

@@ -12,29 +12,29 @@
   </div> -->
   <form [formGroup]="signupForm" (submit)="signupUser()" novalidate>
 
-      <ion-label color="primary" stacked>Name</ion-label>
-    <ion-input formControlName="name" type="name" placeholder="Your name"
+      <ion-label color="primary" stacked>{{'NAME'|translate}}</ion-label>
+    <ion-input formControlName="name" type="name" placeholder="{{'NAME'|translate}}"
     [class.invalid]="!signupForm.controls.name.valid && signupForm.controls.name.dirty"></ion-input>
 
-      <ion-label color='primary' stacked>Email</ion-label>
-      <ion-input formControlName="email" type="email" placeholder="Your email address"
+      <ion-label color='primary' stacked>{{'EMAIL'|translate}}</ion-label>
+      <ion-input formControlName="email" type="email" placeholder="{{'EMAIL'|translate}}"
         [class.invalid]="!signupForm.controls.email.valid && signupForm.controls.email.dirty">
       </ion-input>
 
 
 
-      <ion-label color='primary' stacked>Password</ion-label>
-      <ion-input formControlName="password" type="password" placeholder="Your password"
+      <ion-label color='primary' stacked>{{'PASSWD'|translate}}</ion-label>
+      <ion-input formControlName="password" type="password" placeholder="{{'PASSWD'|translate}}"
         [class.invalid]="!signupForm.controls.password.valid && signupForm.controls.password.dirty">
       </ion-input>
 
 
     <button padding ion-button block type="submit" [disabled]="!signupForm.valid">
-      Create an Account
+      {{'CREATE_AN_ACCOUNT'|translate}}
     </button>
   </form>
 
   <button color='light'ion-button block (click)="goToLogin()">
-     Login
+    {{'LOGIN'|translate}}
     </button>
 </ion-content>

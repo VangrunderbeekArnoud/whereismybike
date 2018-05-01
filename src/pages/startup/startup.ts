@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, LoadingController, Loading, NavParams } from 'ionic-angular';
+import {TranslateService} from "ng2-translate";
 /**
  * Generated class for the StartupPage page.
  *
@@ -14,12 +15,15 @@ import { IonicPage, NavController, LoadingController, Loading, NavParams } from 
 })
 export class StartupPage {
 
-  constructor(public navCtrl: NavController, public load: LoadingController,  public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public load: LoadingController,
+              public navParams: NavParams, private translate: TranslateService) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad StartupPage');
-    this.presentRouteLoader('Please Wait..')
+    this.translate.get('WAIT').subscribe(translation => {
+      this.presentRouteLoader(translation);
+    });
   }
 
 
