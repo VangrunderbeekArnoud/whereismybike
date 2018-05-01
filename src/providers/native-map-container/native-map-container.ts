@@ -8,7 +8,9 @@ import {
   GoogleMap,
   GoogleMapsEvent,
   GoogleMapOptions,
-  Marker
+  Marker,
+  LocationService,
+  MyLocation
 } from '@ionic-native/google-maps';
 import {SigfoxProvider} from "../sigfox/sigfox";
 
@@ -49,7 +51,7 @@ export class NativeMapContainerProvider {
         'mapToolbar': false
       }
     };
-    this.map = this.googleMaps.create(document.getElementById("map"), mapOptions);
+    this.map = GoogleMaps.create(document.getElementById("map"), mapOptions); // this.googleMaps.create() changed to GoogleMaps.create because of deprecated.
     this.map.setClickable(false)
     // Wait the MAP_READY before using any methods.
     this.map.one(GoogleMapsEvent.MAP_READY)
@@ -58,7 +60,7 @@ export class NativeMapContainerProvider {
         this.map.setCompassEnabled(false)
         this.map.setTrafficEnabled(false)
         this.map.setIndoorEnabled(false)
-        this.map.getMyLocation().then(location => {
+        LocationService.getMyLocation().then((location: MyLocation) => {
           console.log('loadMap(): location found');
           this.addUserToMap(location.latLng);
           this.addDevicesToMap();
@@ -128,7 +130,6 @@ export class NativeMapContainerProvider {
       marker.on(GoogleMapsEvent.INFO_CLOSE).subscribe(() => {
         this.hideLocationButton();
       });
-      marker.on(GoogleMapsEvent.MARKER_)
       device.ref.child('location').on('value', snapshot => {
         if ( snapshot.exists()) {
           let location = {lat: snapshot.val().lat, lng: snapshot.val().lng};
@@ -183,16 +184,4 @@ export class NativeMapContainerProvider {
   hideLocationButton() {
 
   }
-
-  //check if gps is available by trying to get location info which automatically handles everything
-  checkGps() {
-    let mapOptions: GoogleMapOptions = {
-      camera: {}
-    };
-    this.map = this.googleMaps.create(document.getElementById("op"), mapOptions);
-    this.map.getMyLocation().then(location => {
-      console.log('location now on')
-    })
-  }
-
 }

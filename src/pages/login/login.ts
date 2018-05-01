@@ -35,14 +35,6 @@ export class LoginPage {
 
   }
 
-  ionViewDidLoad(){
-  this.checkForGPS()
- }
-
-  checkForGPS(){
-   this.ntP.checkGps();
-  }
-
   loginUser(): void {
     if (!this.loginForm.valid){
       console.log(this.loginForm.value);

@@ -156,9 +156,9 @@ export class ProfilePage {
   }
 
   logOut() {
-    this.translate.get(['SURE_LOGOUT', 'CANCEL', 'YES']).subscribe(translations => {
+    this.translate.get(['LOGOUT', 'CANCEL', 'YES']).subscribe(translations => {
       const alert = this.alertCtrl.create({
-        message: translations.SURE_LOGOUT,
+        message: translations.LOGOUT,
         buttons: [
           { text: translations.CANCEL},
           {

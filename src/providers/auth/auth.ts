@@ -15,11 +15,11 @@ export class AuthProvider {
      firebase.auth().onAuthStateChanged((user: firebase.User) => this.currentUser = user);
   }
 
-  loginUser(email: string, password: string): firebase.Promise<any> {
+  loginUser(email: string, password: string): Promise<any> {
     return  firebase.auth().signInWithEmailAndPassword(email, password);
   }
 
-  signupUser(email: string, password: string): firebase.Promise<any> {
+  signupUser(email: string, password: string): Promise<any> {
     return  firebase.auth().createUserWithEmailAndPassword(email, password).then( newUser => {
       this.userProfileRef.child(newUser.uid).set({
         email: email
@@ -27,11 +27,11 @@ export class AuthProvider {
     });
   }
 
-  resetPassword(email: string): firebase.Promise<void> {
+  resetPassword(email: string): Promise<void> {
     return  firebase.auth().sendPasswordResetEmail(email);
   }
 
-  logoutUser(): firebase.Promise<void> {
+  logoutUser(): Promise<void> {
     this.userProfileRef.child( firebase.auth().currentUser.uid).off();
     return  firebase.auth().signOut();
   }

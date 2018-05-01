@@ -38,13 +38,13 @@ export class ProfileProvider {
       this.user.photo = snapshot.val().photo;
     });
   }
-  updateName(username: string): firebase.Promise<void> {
+  updateName(username: string): Promise<void> {
     return this.userReference.update({ name: username});
   }
-  updatePhone( phone: number): firebase.Promise<any> {
+  updatePhone( phone: number): Promise<any> {
     return this.userReference.update({ phone: phone});
   }
-  updatePhoto( photo: any): firebase.Promise<any> {
+  updatePhoto( photo: any): Promise<any> {
     return this.userReference.update({ photo: photo});
   }
   getUserReference(): firebase.database.Reference {
@@ -59,15 +59,14 @@ export class ProfileProvider {
   getDashboardReference(): firebase.database.Reference {
     return this.dashboardReference;
   }
-  Complain(
-    value: any): firebase.Promise<any> {
-    return  firebase.database().ref(`dashboard/complains`).push({
+  Complain( value: any): firebase.database.ThenableReference {
+    return firebase.database().ref(`dashboard/complains`).push({
       complain: value,
       email: this.user.email,
       phone: this.user.phone
     });
   }
-  SendMessage(value: string, id: any): firebase.Promise<any> {
+  SendMessage(value: string, id: any): Promise<any> {
     return firebase.database().ref(`Customer/${id}/client`).update({
       Client_Message: value,
     });
@@ -103,27 +102,27 @@ export class ProfileProvider {
       lng: lng
     });
   }
-  updateDeviceLock(sigfoxID: any, lock: boolean): firebase.Promise<void> {
+  updateDeviceLock(sigfoxID: any, lock: boolean): Promise<void> {
     return this.getDevice(sigfoxID).child('lock').update({
       status: lock
     });
   }
-  updateDeviceName(device: any, name: string): firebase.Promise<void> {
+  updateDeviceName(device: any, name: string): Promise<void> {
     return device.update({
       name: name
     });
   }
-  updateDeviceBrand(device: any, brand: string): firebase.Promise<void> {
+  updateDeviceBrand(device: any, brand: string): Promise<void> {
     return device.update({
       brand: brand
     });
   }
-  updateDeviceType(device: any, type: string): firebase.Promise<void> {
+  updateDeviceType(device: any, type: string): Promise<void> {
     return device.update({
       type: type
     });
   }
-  updateDeviceNumber(device: any, number: string): firebase.Promise<void> {
+  updateDeviceNumber(device: any, number: string): Promise<void> {
     return device.update({
       number: number
     });
@@ -172,7 +171,7 @@ export class ProfileProvider {
     });
   }
 
-  UpdateDevicePhoto(device: any, pic: any): firebase.Promise<any> {
+  UpdateDevicePhoto(device: any, pic: any): Promise<any> {
     return device.update({
       picture: pic
     });

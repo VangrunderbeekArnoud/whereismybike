@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ProfileProvider } from '../../providers/profile/profile';
 import {TranslateService} from "ng2-translate";
+import firebase from 'firebase';
 
 @IonicPage()
 @Component({

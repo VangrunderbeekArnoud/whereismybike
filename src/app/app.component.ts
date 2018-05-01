@@ -1,5 +1,5 @@
-import {Component, ViewChild, NgZone} from '@angular/core';
-import {Platform, Nav, Loading, LoadingController} from 'ionic-angular';
+import {Component, ViewChild} from '@angular/core';
+import {Platform, Nav, LoadingController} from 'ionic-angular';
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {AuthProvider} from '../providers/auth/auth';
@@ -27,7 +27,11 @@ export class MyApp {
   pages: Array<{ title: string, component: any, icon: string }>
   private translate: TranslateService;
 
-  constructor(translate: TranslateService, private language: LanguageProvider, public zone: NgZone, private cMap: NativeMapContainerProvider, public loadingCtrl: LoadingController, private One: OneSignal, public ph: ProfileProvider, public auth: AuthProvider, public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
+  constructor(translate: TranslateService, private language: LanguageProvider,
+              private cMap: NativeMapContainerProvider, public loadingCtrl: LoadingController,
+              private One: OneSignal, public ph: ProfileProvider,
+              public auth: AuthProvider, public platform: Platform,
+              public statusBar: StatusBar, public splashScreen: SplashScreen) {
     //Initialize
     this.initializeApp();
     this.translate = translate;
