@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavController, AlertController, ModalController, ActionSheetController} from 'ionic-angular';
+import {NavController, AlertController, ActionSheetController} from 'ionic-angular';
 import {ProfileProvider} from '../../providers/profile/profile';
 import {AuthProvider} from '../../providers/auth/auth';
 import {IonicPage} from 'ionic-angular';
@@ -8,7 +8,6 @@ import {PopUpProvider} from '../../providers/pop-up/pop-up';
 import firebase from 'firebase/app';
 import { SigfoxProvider } from "../../providers/sigfox/sigfox";
 import {TranslateService} from "ng2-translate";
-import {LanguageProvider} from "../../providers/language/language";
 
 @IonicPage()
 @Component({
@@ -30,7 +29,7 @@ export class AddDevicePage {
   private reference: any;
 
   constructor(public navCtrl: NavController, public actionSheetCtrl: ActionSheetController,
-              public modalCtrl: ModalController, private pop: PopUpProvider, private camera: Camera,
+              private pop: PopUpProvider, private camera: Camera,
               public alertCtrl: AlertController, public ph: ProfileProvider,
               public authProvider: AuthProvider, public sigfox: SigfoxProvider,
               private translate: TranslateService) {

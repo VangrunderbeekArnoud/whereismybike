@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, LoadingController, Loading, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, LoadingController} from 'ionic-angular';
 import {TranslateService} from "ng2-translate";
 /**
  * Generated class for the StartupPage page.
@@ -16,7 +16,7 @@ import {TranslateService} from "ng2-translate";
 export class StartupPage {
 
   constructor(public navCtrl: NavController, public load: LoadingController,
-              public navParams: NavParams, private translate: TranslateService) {
+              private translate: TranslateService) {
   }
 
   ionViewDidLoad() {

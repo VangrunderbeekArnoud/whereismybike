@@ -2,23 +2,18 @@ import {Component} from '@angular/core';
 import {
   NavController,
   MenuController,
-  ModalController,
   Platform,
-  AlertController,
-  LoadingController
 } from 'ionic-angular';
 import {NativeMapContainerProvider} from '../../providers/native-map-container/native-map-container';
 import {ProfileProvider} from '../../providers/profile/profile';
 import {PopUpProvider} from '../../providers/pop-up/pop-up';
 import {OnesignalProvider} from '../../providers/onesignal/onesignal';
 import {GeocoderProvider} from '../../providers/geocoder/geocoder';
-import {CallNumber} from '@ionic-native/call-number';
 import * as firebase from 'firebase/app';
 import {Storage} from '@ionic/storage';
 import {Vibration} from '@ionic-native/vibration';
 import {IonicPage} from 'ionic-angular';
 import {StatusBar} from '@ionic-native/status-bar';
-import {BackgroundMode} from '@ionic-native/background-mode';
 import {TranslateService} from "ng2-translate";
 declare var google;
 
@@ -47,13 +42,12 @@ export class HomePage {
   private lat: any;
   private lng: any;
 
-  constructor(public storage: Storage, private backgroundMode: BackgroundMode,
-              public stB: StatusBar, public loadingCtrl: LoadingController,
-              private vibration: Vibration, public alert: AlertController,
-              public cMap: NativeMapContainerProvider, private call: CallNumber,
-              public myGcode: GeocoderProvider,
-              public platform: Platform, public OneSignal: OnesignalProvider,
-              public modalCtrl: ModalController, public menu: MenuController,
+  constructor(public storage: Storage,
+              public stB: StatusBar,
+              private vibration: Vibration,
+              public cMap: NativeMapContainerProvider,
+              public platform: Platform,
+              public menu: MenuController,
               public pop: PopUpProvider, public ph: ProfileProvider,
               public navCtrl: NavController, private translate: TranslateService) {
     menu.swipeEnable(false, 'menu1');

@@ -12,7 +12,6 @@ import { IonicPage } from 'ionic-angular';
 import { ProfileProvider } from '../../providers/profile/profile';
 import { NativeMapContainerProvider } from '../../providers/native-map-container/native-map-container';
 import {TranslateService} from "ng2-translate";
-// import { Diagnostic } from '@ionic-native/diagnostic';
 @IonicPage()
 @Component({
   selector: 'page-login',
@@ -23,9 +22,11 @@ export class LoginPage {
   loading: Loading;
   public initState: boolean =  false;
 
-  constructor(public navCtrl: NavController, public ntP: NativeMapContainerProvider,  public platform: Platform, public menu: MenuController, public loadingCtrl: LoadingController,
-    public alertCtrl: AlertController, public authProvider: AuthProvider, public ph: ProfileProvider,
-    public formBuilder: FormBuilder, private translate: TranslateService) {
+  constructor(public navCtrl: NavController, public ntP: NativeMapContainerProvider,
+              public platform: Platform, public menu: MenuController,
+              public loadingCtrl: LoadingController,
+              public alertCtrl: AlertController, public authProvider: AuthProvider, public ph: ProfileProvider,
+              public formBuilder: FormBuilder, private translate: TranslateService) {
       menu.swipeEnable(false, 'menu1');
       this.loginForm = formBuilder.group({
         email: ['', Validators.compose([Validators.required, EmailValidator.isValid])],

@@ -1,8 +1,6 @@
 import { PopUpProvider } from '../../providers/pop-up/pop-up';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import firebase from 'firebase';
-import { Firebase } from '@ionic-native/firebase';
 import { ProfileProvider } from '../../providers/profile/profile';
 import {TranslateService} from "ng2-translate";
 

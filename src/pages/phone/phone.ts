@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavParams, AlertController, NavController } from 'ionic-angular';
+import { IonicPage, NavController } from 'ionic-angular';
 import firebase from 'firebase/app';
 import {Firebase} from '@ionic-native/firebase';
 import { PopUpProvider } from '../../providers/pop-up/pop-up';
@@ -24,8 +24,8 @@ export class PhonePage {
     new Country('Germany', 49)
   ]
   constructor(public navCtrl: NavController, public ph: ProfileProvider,
-              private api: PopUpProvider, public navParams: NavParams,
-              private alertCtrl: AlertController,public firebase: Firebase,
+              private api: PopUpProvider,
+              public firebase: Firebase,
               private translate: TranslateService) {
   }
 

@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
 import { IonicPage } from 'ionic-angular';
 import { CallNumber } from '@ionic-native/call-number';
 import { PopUpProvider } from '../../providers/pop-up/pop-up';
@@ -27,8 +26,8 @@ export class SupportPage {
   todo: any = {
     description: ''
   }
-  constructor( public browsertab: BrowserTab, public iab: InAppBrowser, public navCtrl: NavController,
-               public pop: PopUpProvider, public prof: ProfileProvider, public navParams: NavParams,
+  constructor( public browsertab: BrowserTab, public iab: InAppBrowser,
+               public pop: PopUpProvider, public prof: ProfileProvider,
                public call: CallNumber, private translate: TranslateService) {
   }
 

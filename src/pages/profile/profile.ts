@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavController, AlertController, ModalController, ActionSheetController} from 'ionic-angular';
+import {NavController, AlertController, ActionSheetController} from 'ionic-angular';
 import {ProfileProvider} from '../../providers/profile/profile';
 import {AuthProvider} from '../../providers/auth/auth';
 import {IonicPage} from 'ionic-angular';
@@ -7,7 +7,6 @@ import {Camera, CameraOptions} from '@ionic-native/camera';
 import {PopUpProvider} from '../../providers/pop-up/pop-up';
 import firebase from 'firebase/app';
 import { TranslateService} from "ng2-translate";
-import {LanguageProvider} from "../../providers/language/language";
 
 @IonicPage()
 @Component({
@@ -16,7 +15,10 @@ import {LanguageProvider} from "../../providers/language/language";
 })
 export class ProfilePage {
 
-  constructor(private translate: TranslateService, public navCtrl: NavController, public actionSheetCtrl: ActionSheetController, public modalCtrl: ModalController, private pop: PopUpProvider, private camera: Camera, public alertCtrl: AlertController,
+  constructor(private translate: TranslateService, public navCtrl: NavController,
+              public actionSheetCtrl: ActionSheetController,
+              private pop: PopUpProvider, private camera: Camera,
+              public alertCtrl: AlertController,
               public ph: ProfileProvider, public authProvider: AuthProvider) {
     ph.isHome = false;
   }

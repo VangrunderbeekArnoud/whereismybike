@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage} from 'ionic-angular';
 import { LanguageProvider} from "../../providers/language/language";
 import { TranslateService } from 'ng2-translate';
 

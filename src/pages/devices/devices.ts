@@ -1,9 +1,8 @@
 import {Component} from '@angular/core';
-import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import {IonicPage, NavController} from 'ionic-angular';
 import {ProfileProvider} from "../../providers/profile/profile";
 import {PopUpProvider} from "../../providers/pop-up/pop-up";
 import {TranslateService} from "ng2-translate";
-import {LanguageProvider} from "../../providers/language/language";
 
 @IonicPage()
 @Component({
@@ -13,7 +12,7 @@ import {LanguageProvider} from "../../providers/language/language";
 export class DevicesPage {
   public devices: Array<any>;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public ph: ProfileProvider,
+  constructor(public navCtrl: NavController, public ph: ProfileProvider,
               public pop: PopUpProvider, private translate: TranslateService) {
   }
 

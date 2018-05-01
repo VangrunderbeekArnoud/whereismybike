@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, LoadingController, NavParams } from 'ionic-angular';
-import {TranslateService} from "ng2-translate";
+import { IonicPage, NavController, LoadingController } from 'ionic-angular';
 
 @IonicPage()
 @Component({
@@ -10,8 +9,7 @@ import {TranslateService} from "ng2-translate";
 export class LoginEntrancePage {
 
 
-  constructor(public navCtrl: NavController, public load: LoadingController,
-              public navParams: NavParams, private translate: TranslateService) {
+  constructor(public navCtrl: NavController, public load: LoadingController) {
   }
 
   ionViewDidLoad() {
