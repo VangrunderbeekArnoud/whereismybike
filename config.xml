@@ -94,4 +94,5 @@
         <variable name="API_KEY_FOR_IOS" value="AIzaSyDoVrwVoH7iNoqPnvOywwiljO2CMCSfmoo" />
     </plugin>
     <engine name="android" spec="~7.0.0" />
+    <plugin name="cordova-plugin-statusbar" spec="^2.4.2" />
 </widget>

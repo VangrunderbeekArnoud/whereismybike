@@ -7,6 +7,7 @@ import {Camera, CameraOptions} from '@ionic-native/camera';
 import {PopUpProvider} from '../../providers/pop-up/pop-up';
 import firebase from 'firebase/app';
 import { TranslateService} from "ng2-translate";
+import {StatusBar} from "@ionic-native/status-bar";
 
 @IonicPage()
 @Component({
@@ -18,16 +19,11 @@ export class ProfilePage {
   constructor(private translate: TranslateService, public navCtrl: NavController,
               public actionSheetCtrl: ActionSheetController,
               private pop: PopUpProvider, private camera: Camera,
-              public alertCtrl: AlertController,
+              public alertCtrl: AlertController, private statusBar: StatusBar,
               public ph: ProfileProvider, public authProvider: AuthProvider) {
     ph.isHome = false;
   }
 
-  remove(): void {
-    this.authProvider.logoutUser().then(() => {
-      this.navCtrl.setRoot('LoginPage');
-    });
-  }
   choosePic() {
     this.translate.get(['CHOOSE_FROM', 'CAMERA', 'FILE', 'CANCEL']).subscribe(translations => {
       let actionSheet = this.actionSheetCtrl.create({
@@ -154,7 +150,6 @@ export class ProfilePage {
       alert.present();
     });
   }
-
   logOut() {
     this.translate.get(['LOGOUT', 'CANCEL', 'YES']).subscribe(translations => {
       const alert = this.alertCtrl.create({
@@ -170,6 +165,12 @@ export class ProfilePage {
         ]
       });
       alert.present();
+    });
+  }
+  remove(): void {
+    this.authProvider.logoutUser().then(() => {
+      this.statusBar.hide();
+      this.navCtrl.setRoot('LoginPage');
     });
   }
 

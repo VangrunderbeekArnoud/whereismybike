@@ -43,7 +43,7 @@ export class HomePage {
   private lng: any;
 
   constructor(public storage: Storage,
-              public stB: StatusBar,
+              public statusBar: StatusBar,
               private vibration: Vibration,
               public cMap: NativeMapContainerProvider,
               public platform: Platform,
@@ -60,18 +60,19 @@ export class HomePage {
       // you are not a user then go to login page. But if its a user then check if the
       // user has a phone number if so then instantiate the map.
       if (!user) {
+        this.statusBar.hide();
         this.navCtrl.setRoot('LoginEntrancePage');
         unsubscribe();
-        this.stB.hide();
       } else {
+        this.statusBar.show();
         unsubscribe();
         document.getElementById("location").innerText = ' ';
         this.cMap.loadMap();
         this.ph.getUserReference().once('value', snapshot => { // it was on, now once !
           if (snapshot.val().phone == null || snapshot.val().phone == undefined) {
+            this.statusBar.hide();
             this.navCtrl.setRoot('PhonePage');
           }
-          this.stB.hide();
           //wait for the map to get your current location.
           this.WaitForGeolocation();
           if (this.platform.is('cordova')) {
