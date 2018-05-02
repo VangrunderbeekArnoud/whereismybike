@@ -58,5 +58,6 @@
   "SEND":"Verzenden",
   "AUTH":"Verifieren",
   "VERIFY":"Verifieren",
-  "EMAIL_RESET_LINK":"We hebben een email gestuurd om uw wachtwoord te resetten"
+  "EMAIL_RESET_LINK":"We hebben een email gestuurd om uw wachtwoord te resetten",
+  "LANGUAGES":"Talen"
 }

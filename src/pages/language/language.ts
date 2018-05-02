@@ -26,12 +26,8 @@ export class LanguagePage {
 
   constructor(translate: TranslateService, private language: LanguageProvider) {
     this.translate = translate;
-    this.translate.get('DEVICES').subscribe((res: string) => {
-      console.log(res);
-    });
   }
-
   applyLanguage() {
-    this.translate.use(this.selectedLanguage);
+    this.language.set(this.selectedLanguage);
   }
 }

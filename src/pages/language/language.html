@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>language</ion-title>
+    <ion-title>{{'LANGUAGE'|translate}}</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -15,7 +15,7 @@
 <ion-content>
 	<ion-list>
 		<ion-item-group radio-group (ionChange)="applyLanguage()" [(ngModel)]="selectedLanguage">
-			<ion-item-divider color="light">Languages</ion-item-divider>
+			<ion-item-divider color="light">{{'LANGUAGES'|translate}}</ion-item-divider>
 			<ion-item *ngFor="let lang of languages">
 				<ion-label>{{lang.name}}</ion-label>
 				<ion-radio [value]="lang.code"></ion-radio>
@@ -23,24 +23,7 @@
 		</ion-item-group>
 
 		<ion-item-group>
-			<ion-item-divider color="light">Translations</ion-item-divider>
-			<ion-item>
-				<h2>{{ 'DEVICES' | translate}}</h2>
-			</ion-item>
-			<ion-item>
-				<h2>{{ 'SUPPORT' | translate}}</h2>
-			</ion-item>
-      <ion-item>
-        <h2>{{ 'LANGUAGE' | translate}}</h2>
-      </ion-item>
-			<ion-item>
-				<h2>Translation string with a param</h2>
-				<p>{{ 'STRING_WITH_PARAMS' | translate : param }}</p>
-			</ion-item>
-			<ion-item>
-				<h2>Inner content as a key</h2>
-				<p translate [translateParams]="{ value: 'world 3' }">INNER_CONTENT</p>
-			</ion-item>
+			<ion-item-divider color="light"></ion-item-divider>
 		</ion-item-group>
 	</ion-list>
 </ion-content>
