@@ -143,11 +143,13 @@ export class HomePage {
         this.setLocation(snapshot.val().name, snapshot.key, snapshot.child('location').child('lat').val(), snapshot.child('location').child('lng').val());
         if ( snapshot.child('lock').child('status').val()) {
           this.ph.updateDeviceLock(snapshot.key,false);
+          this.vibration.vibrate(200);
           this.translate.get('BIKENLOCK').subscribe(translation => {
             this.pop.presentToast(translation);
           });
         } else {
           this.ph.updateDeviceLock(snapshot.key, true);
+          this.vibration.vibrate(200);
           this.translate.get('BIKELOCK').subscribe(translation => {
             this.pop.presentToast(translation);
           });
