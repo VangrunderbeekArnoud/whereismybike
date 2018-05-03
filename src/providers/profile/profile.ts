@@ -25,6 +25,7 @@ export class ProfileProvider {
         this.devicesProfile = firebase.database().ref(`users/${this.user.uid}/devices`);
         this.userListeners();
         //this.deviceListeners();
+        this.deviceLocationInit();
       }
     });
   }
@@ -88,6 +89,17 @@ export class ProfileProvider {
           this.sigfox.getDeviceLocationGps(sigfoxID).off();
           this.sigfox.getDeviceBattery(sigfoxID).off();
         }
+      });
+    });
+  }
+  deviceLocationInit() {
+    this.getDevices().on('child_added', snapshot => {
+      let sigfoxID = snapshot.key;
+      this.sigfox.getDeviceBattery(sigfoxID).once('value', snap => {
+        this.updateDeviceBattery(sigfoxID, snap.val());
+      });
+      this.sigfox.getDeviceLocationGps(sigfoxID).once('value', snap => {
+        this.updateDeviceLocation(sigfoxID, snap.val().lat, snap.val().lng);
       });
     });
   }
