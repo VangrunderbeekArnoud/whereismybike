@@ -103,4 +103,5 @@
     </plugin>
     <plugin name="cordova-plugin-statusbar" spec="^2.4.2" />
     <engine name="android" spec="~7.0.0" />
+    <plugin name="cordova-plugin-network-information" spec="^2.0.1" />
 </widget>

@@ -18,6 +18,7 @@ import { TranslateModule} from 'ng2-translate/ng2-translate';
 import { TranslateLoader, TranslateStaticLoader} from 'ng2-translate/src/translate.service';
 import { Http} from '@angular/http';
 import { Globalization} from '@ionic-native/globalization';
+import { Network} from '@ionic-native/network';
 //other
 import { MyApp } from './app.component';
 
@@ -87,7 +88,8 @@ firebase.initializeApp(firebaseConfig);
     SigfoxProvider,
     VirtualSigfoxProvider,
     Globalization,
-    LanguageProvider
+    LanguageProvider,
+    Network
   ]
 })
 export class AppModule {}
