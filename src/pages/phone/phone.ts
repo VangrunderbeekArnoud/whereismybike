@@ -65,7 +65,7 @@ export class PhonePage {
     (<any>window).FirebasePlugin.verifyPhoneNumber(au, 60, (credential) =>{
       this.api.hideLoader();
       var verificationId = credential.verificationId;
-      this.navCtrl.push('OtpPage',{verificationid: au}); //This is STEP 3 - passing verification ID to OTP Page
+      this.navCtrl.push('OtpPage',{verificationid: verificationId, phone: au}); //This is STEP 3 - passing verification ID to OTP Page
   }, (error) =>{
       //this.eer = error;
       document.getElementById("mybutton").innerText = 'RESEND'
