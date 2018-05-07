@@ -31,6 +31,7 @@ import { OnesignalProvider } from '../providers/onesignal/onesignal';
 import { NativeMapContainerProvider } from '../providers/native-map-container/native-map-container';
 import { SigfoxProvider, VirtualSigfoxProvider } from "../providers/sigfox/sigfox";
 import { LanguageProvider} from "../providers/language/language";
+import { MyErrorHandler } from '../providers/my-error-handler/my-error-handler';
 
 export function createTranslateLoader( http: Http) {
   return new TranslateStaticLoader(http, 'assets/languages', '.json');
@@ -70,7 +71,7 @@ firebase.initializeApp(firebaseConfig);
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    {provide: ErrorHandler, useClass: MyErrorHandler},
     AuthProvider,
     ProfileProvider,
     BrowserTab,
@@ -89,7 +90,8 @@ firebase.initializeApp(firebaseConfig);
     VirtualSigfoxProvider,
     Globalization,
     LanguageProvider,
-    Network
+    Network,
+    MyErrorHandler
   ]
 })
 export class AppModule {}

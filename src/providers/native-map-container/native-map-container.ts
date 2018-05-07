@@ -52,7 +52,7 @@ export class NativeMapContainerProvider {
       }
     };
     this.map = GoogleMaps.create(document.getElementById("map"), mapOptions); // this.googleMaps.create() changed to GoogleMaps.create because of deprecated.
-    this.map.setClickable(false)
+    this.map.setClickable(false);
     // Wait the MAP_READY before using any methods.
     this.map.one(GoogleMapsEvent.MAP_READY)
       .then(() => {
