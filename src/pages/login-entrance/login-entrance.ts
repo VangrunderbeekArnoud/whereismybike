@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, LoadingController } from 'ionic-angular';
+import {AnalyticsProvider} from "../../providers/analytics/analytics";
 
 @IonicPage()
 @Component({
@@ -9,19 +10,17 @@ import { IonicPage, NavController, LoadingController } from 'ionic-angular';
 export class LoginEntrancePage {
 
 
-  constructor(public navCtrl: NavController, public load: LoadingController) {
+  constructor(public navCtrl: NavController, public load: LoadingController,
+              private analytics: AnalyticsProvider) {
   }
-
+  ionViewDidEnter() {
+    this.analytics.page('LoginEntrancePage');
+  }
   ionViewDidLoad() {
-    console.log('ionViewDidLoad StartupPage');
     this.presentRouteLoader()
   }
-
-
 presentRouteLoader() {
-
   let myTimeout = setTimeout(() => {
-
    this.navCtrl.setRoot('LoginPage')
     clearTimeout(myTimeout)
 

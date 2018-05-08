@@ -10,6 +10,7 @@ import { EmailValidator } from '../../validators/email';
 import { IonicPage } from 'ionic-angular';
 import { ProfileProvider } from '../../providers/profile/profile';
 import {TranslateService} from "ng2-translate";
+import {AnalyticsProvider} from "../../providers/analytics/analytics";
 @IonicPage()
 @Component({
   selector: 'page-signup',
@@ -21,7 +22,7 @@ export class SignupPage {
   constructor(public navCtrl: NavController, public authProvider: AuthProvider,
               public formBuilder: FormBuilder, public loadingCtrl: LoadingController,
               public ph: ProfileProvider, public alertCtrl: AlertController,
-              private translate: TranslateService) {
+              private translate: TranslateService, private analytics: AnalyticsProvider) {
 
       this.signupForm = formBuilder.group({
         name: ['', Validators.compose([Validators.required])],
@@ -29,7 +30,9 @@ export class SignupPage {
         password: ['', Validators.compose([Validators.minLength(6), Validators.required])]
       });
     }
-
+  ionViewDidEnter() {
+    this.analytics.page('SignupPage');
+  }
   signupUser(){
     if (!this.signupForm.valid){
       console.log(this.signupForm.value);

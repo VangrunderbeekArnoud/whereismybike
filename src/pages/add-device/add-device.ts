@@ -8,6 +8,7 @@ import {PopUpProvider} from '../../providers/pop-up/pop-up';
 import firebase from 'firebase/app';
 import { SigfoxProvider } from "../../providers/sigfox/sigfox";
 import {TranslateService} from "ng2-translate";
+import {AnalyticsProvider} from "../../providers/analytics/analytics";
 
 @IonicPage()
 @Component({
@@ -32,18 +33,12 @@ export class AddDevicePage {
               private pop: PopUpProvider, private camera: Camera,
               public alertCtrl: AlertController, public ph: ProfileProvider,
               public authProvider: AuthProvider, public sigfox: SigfoxProvider,
-              private translate: TranslateService) {
+              private translate: TranslateService, private analytics: AnalyticsProvider) {
     ph.isHome = false;
   }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad AddDevicePage');
-  }
-
   ionViewDidEnter() {
-    console.log('AddDevicesPage: ionViewDidEnter() called');
+    this.analytics.page('AddDevicePage');
   }
-
   listeners() {
     this.reference = this.device.on('value', snapshot => {
       this.sigfoxID = snapshot.key;

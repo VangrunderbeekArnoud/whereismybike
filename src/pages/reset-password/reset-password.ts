@@ -5,6 +5,7 @@ import { AuthProvider } from '../../providers/auth/auth';
 import { EmailValidator } from '../../validators/email';
 import { IonicPage } from 'ionic-angular';
 import {TranslateService} from "ng2-translate";
+import {AnalyticsProvider} from "../../providers/analytics/analytics";
 @IonicPage()
 @Component({
   selector: 'page-reset-password',
@@ -15,13 +16,15 @@ export class ResetPasswordPage {
 
   constructor(public navCtrl: NavController, public authProvider: AuthProvider,
               public formBuilder: FormBuilder, public alertCtrl: AlertController,
-              private translate: TranslateService) {
+              private translate: TranslateService, private analytics: AnalyticsProvider) {
 
       this.resetPasswordForm = formBuilder.group({
         email: ['', Validators.compose([Validators.required, EmailValidator.isValid])],
       });
   }
-
+  ionViewDidEnter() {
+    this.analytics.page('ResetPasswordPage');
+  }
   resetPassword(){
     if (!this.resetPasswordForm.valid){
       console.log(this.resetPasswordForm.value);

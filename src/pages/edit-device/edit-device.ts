@@ -7,6 +7,7 @@ import {PopUpProvider} from '../../providers/pop-up/pop-up';
 import firebase from 'firebase/app';
 import { SigfoxProvider } from "../../providers/sigfox/sigfox";
 import {TranslateService} from "ng2-translate";
+import {AnalyticsProvider} from "../../providers/analytics/analytics";
 
 @IonicPage()
 @Component({
@@ -31,13 +32,15 @@ export class EditDevicePage {
   constructor(public navCtrl: NavController, public actionSheetCtrl: ActionSheetController,
               private pop: PopUpProvider, private camera: Camera,
               public alertCtrl: AlertController, public ph: ProfileProvider,
-              public sigfox: SigfoxProvider,
+              public sigfox: SigfoxProvider, private analytics: AnalyticsProvider,
               public navParams: NavParams, private translate: TranslateService) {
     ph.isHome = false;
     this.sigfoxID = navParams.get('sigfoxID');
   }
-
   ionViewDidEnter() {
+    this.analytics.page('EditDevicePage');
+  }
+  ngOnInit() {
     this.device = this.ph.getDevice(this.sigfoxID);
     this.device.on('value', userProfileSnapshot => {
       this.sigfoxID = userProfileSnapshot.key;
@@ -50,11 +53,6 @@ export class EditDevicePage {
       this.photoURL = userProfileSnapshot.val().photoURL;
     });
   }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad AddDevicePage');
-  }
-
   deleteDevice() {
     this.translate.get(['DELETE_DEV', 'CANCEL', 'YES']).subscribe(translations => {
       const alert = this.alertCtrl.create({

@@ -12,6 +12,7 @@ import { IonicPage } from 'ionic-angular';
 import { ProfileProvider } from '../../providers/profile/profile';
 import { NativeMapContainerProvider } from '../../providers/native-map-container/native-map-container';
 import {TranslateService} from "ng2-translate";
+import {AnalyticsProvider} from "../../providers/analytics/analytics";
 @IonicPage()
 @Component({
   selector: 'page-login',
@@ -24,7 +25,7 @@ export class LoginPage {
 
   constructor(public navCtrl: NavController, public ntP: NativeMapContainerProvider,
               public platform: Platform, public menu: MenuController,
-              public loadingCtrl: LoadingController,
+              public loadingCtrl: LoadingController, private analytics: AnalyticsProvider,
               public alertCtrl: AlertController, public authProvider: AuthProvider, public ph: ProfileProvider,
               public formBuilder: FormBuilder, private translate: TranslateService) {
       menu.swipeEnable(false, 'menu1');
@@ -34,7 +35,9 @@ export class LoginPage {
       });
 
   }
-
+  ionViewDidEnter() {
+    this.analytics.page('LoginPage');
+  }
   loginUser(): void {
     if (!this.loginForm.valid){
       console.log(this.loginForm.value);

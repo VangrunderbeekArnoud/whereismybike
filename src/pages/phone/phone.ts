@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController } from 'ionic-angular';
 import firebase from 'firebase/app';
-import {Firebase} from '@ionic-native/firebase';
 import { PopUpProvider } from '../../providers/pop-up/pop-up';
 import { ProfileProvider } from '../../providers/profile/profile';
 import {TranslateService} from "ng2-translate";
+import {AnalyticsProvider} from "../../providers/analytics/analytics";
 @IonicPage()
 @Component({
   selector: 'page-phone',
@@ -24,11 +24,12 @@ export class PhonePage {
     new Country('Germany', 49)
   ]
   constructor(public navCtrl: NavController, public ph: ProfileProvider,
-              private api: PopUpProvider,
-              public firebase: Firebase,
+              private api: PopUpProvider, private analytics: AnalyticsProvider,
               private translate: TranslateService) {
   }
-
+  ionViewDidEnter() {
+    this.analytics.page('PhonePage');
+  }
   ionViewDidLoad() {
    setTimeout(() =>{
     this.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
@@ -48,9 +49,6 @@ export class PhonePage {
   });
 }, 2000)
   }
-
-
-
   signIn(phoneNumber: number) { //Step 2 - Pass the mobile number for verification
     this.translate.get('RECEIVE_SMS').subscribe(translation => {
       this.api.presentLoader(translation);

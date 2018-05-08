@@ -4,6 +4,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ProfileProvider } from '../../providers/profile/profile';
 import {TranslateService} from "ng2-translate";
 import firebase from 'firebase';
+import {AnalyticsProvider} from "../../providers/analytics/analytics";
 
 @IonicPage()
 @Component({
@@ -16,15 +17,13 @@ export class OtpPage {
   private phone;
   constructor(public navCtrl: NavController, public ph: ProfileProvider,
               private pop: PopUpProvider, public navParams: NavParams,
-              private translate: TranslateService) {
+              private translate: TranslateService, private analytics: AnalyticsProvider) {
   this.verification_id = this.navParams.get('verificationid');
   this.phone = this.navParams.get('phone');
   }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad OtpPage');
+  ionViewDidEnter() {
+    this.analytics.page('OtpPage');
   }
-
   roleSelection() {
     this.translate.get('VERIFY').subscribe(translation => {
       this.pop.presentLoader(translation);

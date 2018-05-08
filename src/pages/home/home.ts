@@ -15,7 +15,8 @@ import {Vibration} from '@ionic-native/vibration';
 import {IonicPage} from 'ionic-angular';
 import {StatusBar} from '@ionic-native/status-bar';
 import {TranslateService} from "ng2-translate";
-import { Firebase} from '@ionic-native/firebase';
+import {AnalyticsProvider} from "../../providers/analytics/analytics";
+
 declare var google;
 
 @IonicPage()
@@ -48,11 +49,14 @@ export class HomePage {
               private vibration: Vibration,
               public cMap: NativeMapContainerProvider,
               public platform: Platform,
-              public menu: MenuController, private fb: Firebase,
+              public menu: MenuController, private analytics: AnalyticsProvider,
               public pop: PopUpProvider, public ph: ProfileProvider,
               public navCtrl: NavController, private translate: TranslateService) {
     menu.swipeEnable(false, 'menu1');
     ph.isHome = true
+  }
+  ionViewDidEnter() {
+    this.analytics.page('HomePage');
   }
   ngOnInit() {
     //detecting authentication changes in firebase.

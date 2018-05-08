@@ -9,7 +9,6 @@ import {NativeMapContainerProvider} from '../providers/native-map-container/nati
 import {LanguageProvider} from "../providers/language/language";
 import {TranslateService} from 'ng2-translate';
 
-
 @Component({
   templateUrl: 'app.html'
 })
@@ -44,7 +43,6 @@ export class MyApp {
 
   }
 
-
   initializeApp() {
     ///initialize onesignal notification here
     this.platform.ready().then(() => {
@@ -56,6 +54,7 @@ export class MyApp {
       this.One.endInit();
       //this.statusBar.styleDefault();
       //this.statusBar.backgroundColorByHexString("#131313");
+
       this.statusBar.show();
       setTimeout(() => {
         this.splashScreen.hide();
@@ -64,13 +63,10 @@ export class MyApp {
       // }
     });
   }
-
-
   openPage(page) {
     //open side menu pages on click
     this.nav.push(page.component);
   }
-
   gotoProfile() {
     //open top menu from side bar menu
     this.nav.push('ProfilePage');

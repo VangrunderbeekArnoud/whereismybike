@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, LoadingController} from 'ionic-angular';
 import {TranslateService} from "ng2-translate";
+import {AnalyticsProvider} from "../../providers/analytics/analytics";
 /**
  * Generated class for the StartupPage page.
  *
@@ -16,17 +17,16 @@ import {TranslateService} from "ng2-translate";
 export class StartupPage {
 
   constructor(public navCtrl: NavController, public load: LoadingController,
-              private translate: TranslateService) {
+              private translate: TranslateService, private analytics: AnalyticsProvider) {
   }
-
+  ionViewDidEnter() {
+    this.analytics.page('StartupPage');
+  }
   ionViewDidLoad() {
-    console.log('ionViewDidLoad StartupPage');
     this.translate.get('WAIT').subscribe(translation => {
       this.presentRouteLoader(translation);
     });
   }
-
-
 presentRouteLoader(message) {
   let loading = this.load.create({
     content: message

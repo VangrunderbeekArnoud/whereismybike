@@ -3,6 +3,7 @@ import {IonicPage, NavController} from 'ionic-angular';
 import {ProfileProvider} from "../../providers/profile/profile";
 import {PopUpProvider} from "../../providers/pop-up/pop-up";
 import {TranslateService} from "ng2-translate";
+import {AnalyticsProvider} from "../../providers/analytics/analytics";
 
 @IonicPage()
 @Component({
@@ -13,10 +14,13 @@ export class DevicesPage {
   public devices: Array<any>;
 
   constructor(public navCtrl: NavController, public ph: ProfileProvider,
-              public pop: PopUpProvider, private translate: TranslateService) {
+              public pop: PopUpProvider, private translate: TranslateService,
+              private analytics: AnalyticsProvider) {
   }
-
   ionViewDidEnter() {
+    this.analytics.page('DevicesPage');
+  }
+  ngOnInit() {
     this.translate.get('RETRIEVING').subscribe(translation => {
       this.pop.presentLoader(translation);
     });
@@ -37,11 +41,6 @@ export class DevicesPage {
       });
     });
   }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad DevicesPage');
-  }
-
   goToAddDevicePage() {
     this.navCtrl.push('AddDevicePage');
   }
@@ -50,5 +49,4 @@ export class DevicesPage {
       sigfoxID: sigfoxID
     });
   }
-
 }

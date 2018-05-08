@@ -6,6 +6,7 @@ import { ProfileProvider } from '../../providers/profile/profile';
 import { InAppBrowser } from "@ionic-native/in-app-browser";
 import { BrowserTab } from "@ionic-native/browser-tab";
 import {TranslateService} from "ng2-translate";
+import {AnalyticsProvider} from "../../providers/analytics/analytics";
 
 const newLocal = 'YourPhoneNumberHere';
 const newLocal_1 = 'YourEmailHere';
@@ -28,13 +29,12 @@ export class SupportPage {
   }
   constructor( public browsertab: BrowserTab, public iab: InAppBrowser,
                public pop: PopUpProvider, public prof: ProfileProvider,
-               public call: CallNumber, private translate: TranslateService) {
+               public call: CallNumber, private translate: TranslateService,
+               private analytics: AnalyticsProvider) {
   }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad SupportPage');
+  ionViewDidEnter() {
+    this.analytics.page('SupportPage');
   }
-
   callNow(){
    // window.open("tel:" + newLocal);
     this.call.callNumber(newLocal, true)

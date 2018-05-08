@@ -32,6 +32,7 @@ import { NativeMapContainerProvider } from '../providers/native-map-container/na
 import { SigfoxProvider, VirtualSigfoxProvider } from "../providers/sigfox/sigfox";
 import { LanguageProvider} from "../providers/language/language";
 import { MyErrorHandler } from '../providers/my-error-handler/my-error-handler';
+import { AnalyticsProvider } from '../providers/analytics/analytics';
 
 export function createTranslateLoader( http: Http) {
   return new TranslateStaticLoader(http, 'assets/languages', '.json');
@@ -91,7 +92,8 @@ firebase.initializeApp(firebaseConfig);
     Globalization,
     LanguageProvider,
     Network,
-    MyErrorHandler
+    MyErrorHandler,
+    AnalyticsProvider
   ]
 })
 export class AppModule {}

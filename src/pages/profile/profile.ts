@@ -8,6 +8,7 @@ import {PopUpProvider} from '../../providers/pop-up/pop-up';
 import firebase from 'firebase/app';
 import { TranslateService} from "ng2-translate";
 import {StatusBar} from "@ionic-native/status-bar";
+import {AnalyticsProvider} from "../../providers/analytics/analytics";
 
 @IonicPage()
 @Component({
@@ -17,13 +18,15 @@ import {StatusBar} from "@ionic-native/status-bar";
 export class ProfilePage {
 
   constructor(private translate: TranslateService, public navCtrl: NavController,
-              public actionSheetCtrl: ActionSheetController,
+              public actionSheetCtrl: ActionSheetController, private analytics: AnalyticsProvider,
               private pop: PopUpProvider, private camera: Camera,
               public alertCtrl: AlertController, private statusBar: StatusBar,
               public ph: ProfileProvider, public authProvider: AuthProvider) {
     ph.isHome = false;
   }
-
+  ionViewDidEnter() {
+    this.analytics.page('ProfilePage');
+  }
   choosePic() {
     this.translate.get(['CHOOSE_FROM', 'CAMERA', 'FILE', 'CANCEL']).subscribe(translations => {
       let actionSheet = this.actionSheetCtrl.create({
