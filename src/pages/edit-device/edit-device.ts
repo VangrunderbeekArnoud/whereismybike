@@ -5,9 +5,10 @@ import {IonicPage} from 'ionic-angular';
 import {Camera, CameraOptions} from '@ionic-native/camera';
 import {PopUpProvider} from '../../providers/pop-up/pop-up';
 import firebase from 'firebase/app';
-import { SigfoxProvider } from "../../providers/sigfox/sigfox";
+import {SigfoxProvider} from "../../providers/sigfox/sigfox";
 import {TranslateService} from "ng2-translate";
 import {AnalyticsProvider} from "../../providers/analytics/analytics";
+import {NetworkProvider} from "../../providers/network/network";
 
 @IonicPage()
 @Component({
@@ -33,13 +34,15 @@ export class EditDevicePage {
               private pop: PopUpProvider, private camera: Camera,
               public alertCtrl: AlertController, public ph: ProfileProvider,
               public sigfox: SigfoxProvider, private analytics: AnalyticsProvider,
-              public navParams: NavParams, private translate: TranslateService) {
+              public navParams: NavParams, private translate: TranslateService, private network: NetworkProvider) {
     ph.isHome = false;
     this.sigfoxID = navParams.get('sigfoxID');
   }
+
   ionViewDidEnter() {
     this.analytics.page('EditDevicePage');
   }
+
   ngOnInit() {
     this.device = this.ph.getDevice(this.sigfoxID);
     this.device.on('value', userProfileSnapshot => {
@@ -53,149 +56,180 @@ export class EditDevicePage {
       this.photoURL = userProfileSnapshot.val().photoURL;
     });
   }
+
   deleteDevice() {
-    this.analytics.event('dev_delete',{foo:'bar'});
-    this.translate.get(['DELETE_DEV', 'CANCEL', 'YES']).subscribe(translations => {
-      const alert = this.alertCtrl.create({
-        message: translations.DELETE_DEV,
-        buttons: [
-          {
-            text: translations.CANCEL,
-          },
-          {
-            text: translations.YES,
-            handler: data => {
-              //this.device.off();
-              this.ph.deleteDevice(this.device);
-              this.navCtrl.pop();
+    this.analytics.event('dev_delete', {foo: 'bar'});
+    this.translate.get(['DELETE_DEV', 'CANCEL', 'YES', 'NO_NETWORK']).subscribe(translations => {
+      if ( this.network.connected) {
+        const alert = this.alertCtrl.create({
+          message: translations.DELETE_DEV,
+          buttons: [
+            {
+              text: translations.CANCEL,
+            },
+            {
+              text: translations.YES,
+              handler: data => {
+                //this.device.off();
+                this.ph.deleteDevice(this.device);
+                this.navCtrl.pop();
+              }
             }
-          }
-        ]
-      });
-      alert.present();
+          ]
+        });
+        alert.present();
+      } else {
+        this.pop.presentToast(translations.NO_NETWORK);
+      }
     });
   }
 
   updateName() {
-    this.translate.get(['NAME', 'CANCEL', 'SAVE']).subscribe(translations => {
-      const alert = this.alertCtrl.create({
-        message: translations.NAME,
-        inputs: [
-          {
-            value: this.name
-          },
-        ],
-        buttons: [
-          {
-            text: translations.CANCEL,
-          },
-          {
-            text: translations.SAVE,
-            handler: data => {
-              console.log(data[0])
-              this.ph.updateDeviceName(this.device, data[0]);
+    this.translate.get(['NAME', 'CANCEL', 'SAVE', 'NO_NETWORK']).subscribe(translations => {
+      if ( this.network.connected) {
+        const alert = this.alertCtrl.create({
+          message: translations.NAME,
+          inputs: [
+            {
+              value: this.name
+            },
+          ],
+          buttons: [
+            {
+              text: translations.CANCEL,
+            },
+            {
+              text: translations.SAVE,
+              handler: data => {
+                console.log(data[0])
+                this.ph.updateDeviceName(this.device, data[0]);
+              }
             }
-          }
-        ]
-      });
-      alert.present();
+          ]
+        });
+        alert.present();
+      } else {
+        this.pop.presentToast(translations.NO_NETWORK);
+      }
     });
   }
+
   updateBrand() {
-    this.analytics.event('dev_update_brand',{foo:'bar'});
-    this.translate.get(['BRAND', 'CANCEL', 'SAVE']).subscribe(translations => {
-      const alert = this.alertCtrl.create({
-        message: translations.BRAND,
-        inputs: [
-          { value: this.brand },
-        ],
-        buttons: [
-          { text: translations.CANCEL},
-          { text: translations.SAVE,
-            handler: data => {
-              console.log(data[0]);
-              this.ph.updateDeviceBrand(this.device, data[0]);
-            }}
-        ]
-      });
-      alert.present();
+    this.analytics.event('dev_update_brand', {foo: 'bar'});
+    this.translate.get(['BRAND', 'CANCEL', 'SAVE', 'NO_NETWORK']).subscribe(translations => {
+      if (this.network.connected) {
+        const alert = this.alertCtrl.create({
+          message: translations.BRAND,
+          inputs: [
+            {value: this.brand},
+          ],
+          buttons: [
+            {text: translations.CANCEL},
+            {
+              text: translations.SAVE,
+              handler: data => {
+                console.log(data[0]);
+                this.ph.updateDeviceBrand(this.device, data[0]);
+              }
+            }
+          ]
+        });
+        alert.present();
+      } else {
+        this.pop.presentToast(translations.NO_NETWORK);
+      }
     });
   }
+
   updateType() {
-    this.analytics.event('dev_update_type',{foo:'bar'});
-    this.translate.get(['TYPE', 'CANCEL', 'SAVE']).subscribe(translations => {
-      const alert = this.alertCtrl.create({
-        message: translations.TYPE,
-        inputs: [
-          { value: this.type },
-        ],
-        buttons: [
-          { text: translations.CANCEL},
-          { text: translations.SAVE,
-            handler: data => {
-              console.log(data[0]);
-              this.ph.updateDeviceType(this.device, data[0]);
-            }}
-        ]
-      });
-      alert.present();
+    this.analytics.event('dev_update_type', {foo: 'bar'});
+    this.translate.get(['TYPE', 'CANCEL', 'SAVE', 'NO_NETWORK']).subscribe(translations => {
+      if ( this.network.connected) {
+        const alert = this.alertCtrl.create({
+          message: translations.TYPE,
+          inputs: [
+            {value: this.type},
+          ],
+          buttons: [
+            {text: translations.CANCEL},
+            {
+              text: translations.SAVE,
+              handler: data => {
+                console.log(data[0]);
+                this.ph.updateDeviceType(this.device, data[0]);
+              }
+            }
+          ]
+        });
+        alert.present();
+      } else {
+        this.pop.presentToast(translations.NO_NETWORK);
+      }
     });
   }
 
   updateNumber() {
-    this.analytics.event('dev_update_number',{foo:'bar'});
-    this.translate.get(['ENGNR', 'CANCEL', 'SAVE']).subscribe(translations => {
-      const alert = this.alertCtrl.create({
-        message: translations.ENGNR,
-        inputs: [
-          {
-            value: this.number
-          },
-        ],
-        buttons: [
-          {
-            text: translations.CANCEL,
-          },
-          {
-            text: translations.SAVE,
-            handler: data => {
-              this.ph.updateDeviceNumber(this.device, data[0]);
+    this.analytics.event('dev_update_number', {foo: 'bar'});
+    this.translate.get(['ENGNR', 'CANCEL', 'SAVE', 'NO_NETWORK']).subscribe(translations => {
+      if ( this.network.connected) {
+        const alert = this.alertCtrl.create({
+          message: translations.ENGNR,
+          inputs: [
+            {
+              value: this.number
+            },
+          ],
+          buttons: [
+            {
+              text: translations.CANCEL,
+            },
+            {
+              text: translations.SAVE,
+              handler: data => {
+                this.ph.updateDeviceNumber(this.device, data[0]);
+              }
             }
-          }
-        ]
-      });
-      alert.present();
+          ]
+        });
+        alert.present();
+      } else {
+        this.pop.presentToast(translations.NO_NETWORK);
+      }
     });
   }
 
   choosePic() {
-    this.translate.get(['CHOOSE_FROM', 'CAMERA', 'FILE', 'CANCEL']).subscribe(translations => {
-      let actionSheet = this.actionSheetCtrl.create({
-        title: translations.CHOOSE_FROM,
-        buttons: [
-          {
-            text: translations.CAMERA,
-            icon: 'ios-camera',
-            handler: () => {
-              this.changePic()
+    this.translate.get(['CHOOSE_FROM', 'CAMERA', 'FILE', 'CANCEL', 'NO_NETWORK']).subscribe(translations => {
+      if ( this.network.connected) {
+        let actionSheet = this.actionSheetCtrl.create({
+          title: translations.CHOOSE_FROM,
+          buttons: [
+            {
+              text: translations.CAMERA,
+              icon: 'ios-camera',
+              handler: () => {
+                this.changePic()
+              }
+            }, {
+              text: translations.FILE,
+              icon: 'ios-folder',
+              handler: () => {
+                this.changePicFromFile()
+              }
+            }, {
+              text: translations.CANCEL,
+              icon: 'close',
+              role: 'cancel',
+              handler: () => {
+                console.log('Cancel clicked');
+              }
             }
-          }, {
-            text: translations.FILE,
-            icon: 'ios-folder',
-            handler: () => {
-              this.changePicFromFile()
-            }
-          }, {
-            text: translations.CANCEL,
-            icon: 'close',
-            role: 'cancel',
-            handler: () => {
-              console.log('Cancel clicked');
-            }
-          }
-        ]
-      });
-      actionSheet.present();
+          ]
+        });
+        actionSheet.present();
+      } else {
+        this.pop.presentToast(translations.NO_NETWORK);
+      }
     });
   }
 
@@ -237,7 +271,7 @@ export class EditDevicePage {
     imageRef.putString(captureData, firebase.storage.StringFormat.DATA_URL).then((snapshot) => {
       imageRef.getDownloadURL().then(url => {
         //console.log(url)
-        this.ph.UpdateDevicePhoto( this.device, url).then(success => {
+        this.ph.UpdateDevicePhoto(this.device, url).then(success => {
           //  console.log(url)
           this.pop.hideLoader();
           //console.log("done")
@@ -252,6 +286,6 @@ export class EditDevicePage {
     }).catch(error => {
       alert(error)
     });
-    this.analytics.event('dev_update_photo',{foo:'bar'});
+    this.analytics.event('dev_update_photo', {foo: 'bar'});
   }
 }

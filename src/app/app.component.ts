@@ -8,6 +8,7 @@ import {OneSignal} from '@ionic-native/onesignal';
 import {NativeMapContainerProvider} from '../providers/native-map-container/native-map-container';
 import {LanguageProvider} from "../providers/language/language";
 import {TranslateService} from 'ng2-translate';
+import {NetworkProvider} from "../providers/network/network";
 
 @Component({
   templateUrl: 'app.html'
@@ -30,7 +31,7 @@ export class MyApp {
               private cMap: NativeMapContainerProvider, public loadingCtrl: LoadingController,
               private One: OneSignal, public ph: ProfileProvider,
               public auth: AuthProvider, public platform: Platform,
-              public statusBar: StatusBar, public splashScreen: SplashScreen) {
+              public statusBar: StatusBar, public splashScreen: SplashScreen, private network: NetworkProvider) {
     //Initialize
     this.initializeApp();
     this.translate = translate;

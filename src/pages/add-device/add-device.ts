@@ -9,6 +9,7 @@ import firebase from 'firebase/app';
 import { SigfoxProvider } from "../../providers/sigfox/sigfox";
 import {TranslateService} from "ng2-translate";
 import {AnalyticsProvider} from "../../providers/analytics/analytics";
+import {NetworkProvider} from "../../providers/network/network";
 
 @IonicPage()
 @Component({
@@ -30,7 +31,7 @@ export class AddDevicePage {
   private reference: any;
 
   constructor(public navCtrl: NavController, public actionSheetCtrl: ActionSheetController,
-              private pop: PopUpProvider, private camera: Camera,
+              private pop: PopUpProvider, private camera: Camera, private network: NetworkProvider,
               public alertCtrl: AlertController, public ph: ProfileProvider,
               public authProvider: AuthProvider, public sigfox: SigfoxProvider,
               private translate: TranslateService, private analytics: AnalyticsProvider) {
@@ -52,7 +53,13 @@ export class AddDevicePage {
 
   proceed() {
     this.analytics.event('dev_add', {foo:'bar'});
-    this.navCtrl.pop();
+    if ( this.network.connected) {
+      this.navCtrl.pop();
+    } else {
+      this.translate.get('NO_NETWORK').subscribe(translation => {
+        this.pop.presentToast(translation);
+      });
+    }
   }
 
   cancel() {
@@ -64,31 +71,35 @@ export class AddDevicePage {
   }
 
   addDevice() {
-    this.translate.get(['DEV_ID', 'CANCEL', 'SAVE', 'DEV_VALID_ID', 'DEV_EXISTS']).subscribe(translations => {
-      const alert = this.alertCtrl.create({
-        message: translations.DEV_ID,
-        inputs: [
-          { },
-        ],
-        buttons: [
-          { text: translations.CANCEL},
-          { text: translations.SAVE,
-            handler: data => {
-              this.ph.addDevice(data[0]).then((res) => {
-                if ( res == 1) {
-                  this.pop.presentToast( translations.DEV_VALID_ID);
-                } else if ( res == 2) {
-                  this.pop.presentToast( translations.DEV_EXISTS);
-                } else {
-                  this.initState = false;
-                  this.device = this.ph.getDevice(data[0]);
-                  this.listeners();
-                }
-              });
-            }}
-        ]
-      });
-      alert.present();
+    this.translate.get(['DEV_ID', 'CANCEL', 'SAVE', 'DEV_VALID_ID', 'DEV_EXISTS', 'NO_NETWORK']).subscribe(translations => {
+      if ( this.network.connected) {
+        const alert = this.alertCtrl.create({
+          message: translations.DEV_ID,
+          inputs: [
+            { },
+          ],
+          buttons: [
+            { text: translations.CANCEL},
+            { text: translations.SAVE,
+              handler: data => {
+                this.ph.addDevice(data[0]).then((res) => {
+                  if ( res == 1) {
+                    this.pop.presentToast( translations.DEV_VALID_ID);
+                  } else if ( res == 2) {
+                    this.pop.presentToast( translations.DEV_EXISTS);
+                  } else {
+                    this.initState = false;
+                    this.device = this.ph.getDevice(data[0]);
+                    this.listeners();
+                  }
+                });
+              }}
+          ]
+        });
+        alert.present();
+      } else {
+        this.pop.presentToast(translations.NO_NETWORK);
+      }
     });
   }
   updateName() {

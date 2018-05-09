@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import firebase from 'firebase';
 import {SigfoxProvider} from "../sigfox/sigfox";
+import { Storage} from "@ionic/storage";
+import {NetworkProvider} from "../network/network";
 
 @Injectable()
 export class ProfileProvider {
@@ -16,8 +18,8 @@ export class ProfileProvider {
   private dashboardReference: firebase.database.Reference;
   public devicesProfile:firebase.database.Reference;
   public isHome: boolean = true;
-  constructor(private sigfox: SigfoxProvider) {
-    console.log('constructor profile called');
+  constructor(private sigfox: SigfoxProvider, private storage: Storage) {
+    this.init();
     firebase.auth().onAuthStateChanged( user => {
       if (user) {
         this.user.uid = user.uid;
@@ -30,6 +32,18 @@ export class ProfileProvider {
       }
     });
   }
+  init() {
+    // called from storage when no available network
+    this.storage.get('user/name').then(name => {
+      this.user.name = name;
+    });
+    this.storage.get('user/email').then(email => {
+      this.user.email = email;
+    });
+    this.storage.get('user/phone').then(phone => {
+      this.user.phone = phone;
+    });
+  }
   // user
   // ====================================================================================
   userListeners() {
@@ -38,6 +52,9 @@ export class ProfileProvider {
       this.user.email = snapshot.val().email;
       this.user.phone = snapshot.val().phone;
       this.user.photo = snapshot.val().photo;
+      this.storage.set('user/name', this.user.name);
+      this.storage.set('user/email', this.user.email);
+      this.storage.set('user/phone', this.user.phone);
     });
   }
   updateName(username: string): Promise<void> {
@@ -121,9 +138,9 @@ export class ProfileProvider {
     });
   }
   updateDeviceName(device: any, name: string): Promise<void> {
-    return device.update({
-      name: name
-    });
+      return device.update({
+        name: name
+      });
   }
   updateDeviceBrand(device: any, brand: string): Promise<void> {
     return device.update({

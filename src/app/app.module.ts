@@ -33,6 +33,7 @@ import { SigfoxProvider, VirtualSigfoxProvider } from "../providers/sigfox/sigfo
 import { LanguageProvider} from "../providers/language/language";
 import { MyErrorHandler } from '../providers/my-error-handler/my-error-handler';
 import { AnalyticsProvider } from '../providers/analytics/analytics';
+import { NetworkProvider } from '../providers/network/network';
 
 export function createTranslateLoader( http: Http) {
   return new TranslateStaticLoader(http, 'assets/languages', '.json');
@@ -93,7 +94,8 @@ firebase.initializeApp(firebaseConfig);
     LanguageProvider,
     Network,
     MyErrorHandler,
-    AnalyticsProvider
+    AnalyticsProvider,
+    NetworkProvider
   ]
 })
 export class AppModule {}

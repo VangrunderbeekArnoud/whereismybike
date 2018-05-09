@@ -11,7 +11,6 @@ export class MyErrorHandler extends IonicErrorHandler implements ErrorHandler {
     super.handleError(error);
     this.platform.ready().then(() => {
       if ( this.platform.is('cordova')) {
-        //console.log('firebase.logError');
         this.firebase.logError(error.toString());
       }
     });

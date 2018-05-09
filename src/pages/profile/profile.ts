@@ -9,6 +9,7 @@ import firebase from 'firebase/app';
 import { TranslateService} from "ng2-translate";
 import {StatusBar} from "@ionic-native/status-bar";
 import {AnalyticsProvider} from "../../providers/analytics/analytics";
+import {NetworkProvider} from "../../providers/network/network";
 
 @IonicPage()
 @Component({
@@ -19,7 +20,7 @@ export class ProfilePage {
 
   constructor(private translate: TranslateService, public navCtrl: NavController,
               public actionSheetCtrl: ActionSheetController, private analytics: AnalyticsProvider,
-              private pop: PopUpProvider, private camera: Camera,
+              private pop: PopUpProvider, private camera: Camera, private network: NetworkProvider,
               public alertCtrl: AlertController, private statusBar: StatusBar,
               public ph: ProfileProvider, public authProvider: AuthProvider) {
     ph.isHome = false;
@@ -28,33 +29,37 @@ export class ProfilePage {
     this.analytics.page('ProfilePage');
   }
   choosePic() {
-    this.translate.get(['CHOOSE_FROM', 'CAMERA', 'FILE', 'CANCEL']).subscribe(translations => {
-      let actionSheet = this.actionSheetCtrl.create({
-        title: translations.CHOOSE_FROM,
-        buttons: [
-          {
-            text: translations.CAMERA,
-            icon: 'ios-camera',
-            handler: () => {
-              this.changePic()
+    this.translate.get(['CHOOSE_FROM', 'CAMERA', 'FILE', 'CANCEL', 'NO_NETWORK']).subscribe(translations => {
+      if ( this.network.connected) {
+        let actionSheet = this.actionSheetCtrl.create({
+          title: translations.CHOOSE_FROM,
+          buttons: [
+            {
+              text: translations.CAMERA,
+              icon: 'ios-camera',
+              handler: () => {
+                this.changePic()
+              }
+            }, {
+              text: translations.FILE,
+              icon: 'ios-folder',
+              handler: () => {
+                this.changePicFromFile()
+              }
+            }, {
+              text: translations.CANCEL,
+              icon: 'close',
+              role: 'cancel',
+              handler: () => {
+                console.log('Cancel clicked');
+              }
             }
-          }, {
-            text: translations.FILE,
-            icon: 'ios-folder',
-            handler: () => {
-              this.changePicFromFile()
-            }
-          }, {
-            text: translations.CANCEL,
-            icon: 'close',
-            role: 'cancel',
-            handler: () => {
-              console.log('Cancel clicked');
-            }
-          }
-        ]
-      });
-      actionSheet.present();
+          ]
+        });
+        actionSheet.present();
+      } else {
+        this.pop.presentToast(translations.NO_NETWORK);
+      }
     });
   }
   changePic() {
@@ -111,47 +116,55 @@ export class ProfilePage {
     this.analytics.event('user_update_photo',{foo:'bar'});
   }
   updateNumber() {
-    this.translate.get(['PHONE', 'CANCEL', 'SAVE']).subscribe(translations => {
-      const alert = this.alertCtrl.create({
-        message: translations.PHONE,
-        inputs: [
-          { value: this.ph.user.phone},
-        ],
-        buttons: [
-          { text: translations.CANCEL},
-          {
-            text: translations.SAVE,
-            handler: data => {
-              console.log(data[0]);
-              this.ph.updatePhone(data[0]);
+    this.translate.get(['PHONE', 'CANCEL', 'SAVE', 'NO_NETWORK']).subscribe(translations => {
+      if ( this.network.connected) {
+        const alert = this.alertCtrl.create({
+          message: translations.PHONE,
+          inputs: [
+            { value: this.ph.user.phone},
+          ],
+          buttons: [
+            { text: translations.CANCEL},
+            {
+              text: translations.SAVE,
+              handler: data => {
+                console.log(data[0]);
+                this.ph.updatePhone(data[0]);
+              }
             }
-          }
-        ]
-      });
-      alert.present();
+          ]
+        });
+        alert.present();
+      } else {
+        this.pop.presentToast(translations.NO_NETWORK);
+      }
     });
   }
 
 
   updateName() {
-    this.translate.get(['NAME', 'CANCEL', 'SAVE']).subscribe(translations => {
-      const alert = this.alertCtrl.create({
-        message: translations.NAME,
-        inputs: [
-          { value: this.ph.user.name},
-        ],
-        buttons: [
-          { text: translations.CANCEL},
-          {
-            text: translations.SAVE,
-            handler: data => {
-              console.log(data[0]);
-              this.ph.updateName(data[0]);
+    this.translate.get(['NAME', 'CANCEL', 'SAVE', 'NO_NETWORK']).subscribe(translations => {
+      if ( this.network.connected) {
+        const alert = this.alertCtrl.create({
+          message: translations.NAME,
+          inputs: [
+            { value: this.ph.user.name},
+          ],
+          buttons: [
+            { text: translations.CANCEL},
+            {
+              text: translations.SAVE,
+              handler: data => {
+                console.log(data[0]);
+                this.ph.updateName(data[0]);
+              }
             }
-          }
-        ]
-      });
-      alert.present();
+          ]
+        });
+        alert.present();
+      } else {
+        this.pop.presentToast(translations.NO_NETWORK);
+      }
     });
   }
   logOut() {

@@ -16,6 +16,7 @@ import {IonicPage} from 'ionic-angular';
 import {StatusBar} from '@ionic-native/status-bar';
 import {TranslateService} from "ng2-translate";
 import {AnalyticsProvider} from "../../providers/analytics/analytics";
+import {NetworkProvider} from "../../providers/network/network";
 
 declare var google;
 
@@ -48,7 +49,7 @@ export class HomePage {
               public statusBar: StatusBar,
               private vibration: Vibration,
               public cMap: NativeMapContainerProvider,
-              public platform: Platform,
+              public platform: Platform, private network: NetworkProvider,
               public menu: MenuController, private analytics: AnalyticsProvider,
               public pop: PopUpProvider, public ph: ProfileProvider,
               public navCtrl: NavController, private translate: TranslateService) {
@@ -71,7 +72,7 @@ export class HomePage {
       } else {
         this.statusBar.show();
         unsubscribe();
-        document.getElementById("location").innerText = ' ';
+        document.getElementById("location").innerText = this.ph.user.name;
         this.cMap.loadMap();
         this.ph.getUserReference().once('value', snapshot => { // it was on, now once !
           if (snapshot.val().phone == null || snapshot.val().phone == undefined) {
@@ -80,10 +81,6 @@ export class HomePage {
           }
           //wait for the map to get your current location.
           this.WaitForGeolocation();
-          if (this.platform.is('cordova')) {
-            //  this.SmartLoader('Please Wait..   If this is taking too long, Please check Your Connection')
-          }
-          this.name = this.ph.user.name;
           this.loadDevices();
         })
       }
@@ -118,15 +115,22 @@ export class HomePage {
     if ( this.selector) {
       this.selector = false;
     } else {
-      var length = (this.devices.length +1)*10;
-      if ( length <= 60) {
-        this.height = length;
-        this.scroll = false;
-      } else {
-        this.height = 60;
-        this.scroll = true;
+      try {
+        var length = (this.devices.length +1)*10;
+        if ( length <= 60) {
+          this.height = length;
+          this.scroll = false;
+        } else {
+          this.height = 60;
+          this.scroll = true;
+        }
+        this.selector = true;
+      } catch(err) {
+        console.log('showselectDevice error');
+        this.translate.get('NO_NETWORK').subscribe(translation => {
+          this.pop.presentToast(translation);
+        });
       }
-      this.selector = true;
     }
   }
   setLocation(name, sigfoxID, lat, lng) {
@@ -145,22 +149,28 @@ export class HomePage {
         this.pop.presentToast(translation);
       });
     } else { // a device is selected
-      this.ph.getDevice(this.sigfoxID).once('value', snapshot => {
-        this.setLocation(snapshot.val().name, snapshot.key, snapshot.child('location').child('lat').val(), snapshot.child('location').child('lng').val());
-        if ( snapshot.child('lock').child('status').val()) {
-          this.ph.updateDeviceLock(snapshot.key,false);
-          this.vibration.vibrate(200);
-          this.translate.get('BIKENLOCK').subscribe(translation => {
-            this.pop.presentToast(translation);
-          });
-        } else {
-          this.ph.updateDeviceLock(snapshot.key, true);
-          this.vibration.vibrate(200);
-          this.translate.get('BIKELOCK').subscribe(translation => {
-            this.pop.presentToast(translation);
-          });
-        }
-      });
+      if ( this.network.connected) {
+        this.ph.getDevice(this.sigfoxID).once('value', snapshot => {
+          this.setLocation(snapshot.val().name, snapshot.key, snapshot.child('location').child('lat').val(), snapshot.child('location').child('lng').val());
+          if ( snapshot.child('lock').child('status').val()) {
+            this.ph.updateDeviceLock(snapshot.key,false);
+            this.vibration.vibrate(200);
+            this.translate.get('BIKENLOCK').subscribe(translation => {
+              this.pop.presentToast(translation);
+            });
+          } else {
+            this.ph.updateDeviceLock(snapshot.key, true);
+            this.vibration.vibrate(200);
+            this.translate.get('BIKELOCK').subscribe(translation => {
+              this.pop.presentToast(translation);
+            });
+          }
+        });
+      } else {
+        this.translate.get('NO_NETWORK').subscribe(translation => {
+          this.pop.presentToast(translation);
+        });
+      }
     }
     this.analytics.event('lock', {foo: 'bar'});
   }

@@ -12,16 +12,16 @@ export class GeocoderProvider {
   public locationName: any;
   public lat: any;
   public lng: any;
-  public geocoder: any = new google.maps.Geocoder;
+  //public geocoder: any = new google.maps.Geocoder;
+  public geocoder: any;
 
   constructor(public platform: Platform, ){
-
+    // check if google.maps is ready!
+    platform.ready().then(() => {
+      this.geocoder = new google.maps.Geocoder;
+    });
   }
-
-
-
   Geocode(address) {
-
     this.geocoder.geocode( { 'address': address}, (results, status) => {
       if (status == 'OK') {
        var position = results[0].geometry.location
@@ -34,8 +34,6 @@ export class GeocoderProvider {
       }
     });
   }
-
-
   Reverse_Geocode_return(location): Promise<any> {
     return new Promise((resolve, reject) => {
       this.geocoder.geocode({'location': location}, (results, status) => {
@@ -49,8 +47,6 @@ export class GeocoderProvider {
       });
     });
   }
-
-
   Reverse_Geocode(lat, lng, map, driverMode){
 
     let latlng = {lat: parseFloat(lat), lng: parseFloat(lng)};
@@ -73,11 +69,7 @@ export class GeocoderProvider {
     });
 
   }
-
-
-
   Simple_Geocode(lat, lng){
-
     let latlng = {lat: parseFloat(lat), lng: parseFloat(lng)};
     let result;
     this.geocoder.geocode({'location': latlng}, (results, status) => {
@@ -89,8 +81,6 @@ export class GeocoderProvider {
         }
       }
     });
-
     return result
   }
-
 }

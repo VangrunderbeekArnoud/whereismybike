@@ -13,6 +13,7 @@ import { ProfileProvider } from '../../providers/profile/profile';
 import { NativeMapContainerProvider } from '../../providers/native-map-container/native-map-container';
 import {TranslateService} from "ng2-translate";
 import {AnalyticsProvider} from "../../providers/analytics/analytics";
+
 @IonicPage()
 @Component({
   selector: 'page-login',

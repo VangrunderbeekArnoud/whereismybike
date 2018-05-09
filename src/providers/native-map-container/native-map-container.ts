@@ -82,20 +82,6 @@ export class NativeMapContainerProvider {
         position: location,
       })
         .then(marker => {
-          console.log('marker added')
-          this.map.addCircle({
-            'center': location,
-            'radius': 300,
-            'strokeColor': '#A0BAE7',
-            'strokeWidth': 5,
-            'visible': false,
-            'fillColor': '#5992F5'
-          }).then(circle => {
-            setTimeout(() => {
-              circle.setRadius(0)
-              // this.startChecking()
-            }, 1500)
-          });
           this.ph.getUserNameReference().on('value', snapshot => {
             marker.setTitle(snapshot.val());
           });
@@ -112,7 +98,7 @@ export class NativeMapContainerProvider {
   }
   addMarker(device) {
     let sigfoxID = device.key;
-    let location = { lat: device.child('location').child('lat').val(), lng: device.child('location').child('lng').val()}
+    let location = { lat: device.child('location').child('lat').val(), lng: device.child('location').child('lng').val()};
     this.map.addMarker({
       title: device.val().name,
       position: location,

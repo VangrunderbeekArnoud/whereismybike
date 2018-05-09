@@ -4,7 +4,6 @@ import {NativeMapContainerProvider} from '../../providers/native-map-container/n
 import {ProfileProvider} from '../../providers/profile/profile';
 import {ToastController} from 'ionic-angular';
 import {TranslateService} from "ng2-translate";
-import {Network} from '@ionic-native/network';
 
 declare var Connection: any;
 
@@ -21,40 +20,11 @@ export class PopUpProvider {
   public dismissLoader: any;
 
   constructor(protected injector: Injector, private toastCtrl: ToastController,
-              public cMap: NativeMapContainerProvider, private network: Network,
+              public cMap: NativeMapContainerProvider,
               public alert: AlertController, public ph: ProfileProvider,
               public load: LoadingController, private translate: TranslateService,
               private platform: Platform) {
-    this.networkSetup();
   }
-
-  networkSetup() {
-    this.platform.ready().then(() => {
-      this.translate.get('NO_NETWORK').subscribe(translation => {
-        let toast;
-        if ( this.network.type == 'none') {
-          toast = this.toastCtrl.create({
-            message: translation,
-            position: 'bottom',
-          });
-          toast.present();
-        }
-        this.network.onDisconnect().subscribe(() => {
-          console.log('network disconnected');
-          toast = this.toastCtrl.create({
-            message: translation,
-            position: 'bottom',
-          });
-          toast.present();
-        });
-        this.network.onConnect().subscribe(() => {
-          console.log('network connected');
-          toast.dismiss();
-        });
-      });
-    });
-  }
-
     get
     navCtrl()
   :
