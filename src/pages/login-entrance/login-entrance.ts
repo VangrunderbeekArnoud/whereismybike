@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, LoadingController } from 'ionic-angular';
 import {AnalyticsProvider} from "../../providers/analytics/analytics";
+import {ProfileProvider} from "../../providers/profile/profile";
 
 @IonicPage()
 @Component({
@@ -11,7 +12,7 @@ export class LoginEntrancePage {
 
 
   constructor(public navCtrl: NavController, public load: LoadingController,
-              private analytics: AnalyticsProvider) {
+              private analytics: AnalyticsProvider, private ph: ProfileProvider) {
   }
   ionViewDidEnter() {
     this.analytics.page('LoginEntrancePage');

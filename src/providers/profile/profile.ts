@@ -4,6 +4,7 @@ import {SigfoxProvider} from "../sigfox/sigfox";
 
 @Injectable()
 export class ProfileProvider {
+  public title: string = 'CYCLESKY';
   public user: any = {
     uid: null,
     name: null,
