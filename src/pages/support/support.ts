@@ -1,12 +1,13 @@
-import { Component } from '@angular/core';
-import { IonicPage } from 'ionic-angular';
-import { CallNumber } from '@ionic-native/call-number';
-import { PopUpProvider } from '../../providers/pop-up/pop-up';
-import { ProfileProvider } from '../../providers/profile/profile';
-import { InAppBrowser } from "@ionic-native/in-app-browser";
-import { BrowserTab } from "@ionic-native/browser-tab";
+import {Component} from '@angular/core';
+import {IonicPage} from 'ionic-angular';
+import {CallNumber} from '@ionic-native/call-number';
+import {PopUpProvider} from '../../providers/pop-up/pop-up';
+import {ProfileProvider} from '../../providers/profile/profile';
+import {InAppBrowser} from "@ionic-native/in-app-browser";
+import {BrowserTab} from "@ionic-native/browser-tab";
 import {TranslateService} from "ng2-translate";
 import {AnalyticsProvider} from "../../providers/analytics/analytics";
+import {NetworkProvider} from "../../providers/network/network";
 
 const newLocal = 'YourPhoneNumberHere';
 const newLocal_1 = 'YourEmailHere';
@@ -27,42 +28,64 @@ export class SupportPage {
   todo: any = {
     description: ''
   }
-  constructor( public browsertab: BrowserTab, public iab: InAppBrowser,
-               public pop: PopUpProvider, public prof: ProfileProvider,
-               public call: CallNumber, private translate: TranslateService,
-               private analytics: AnalyticsProvider) {
+
+  constructor(public browsertab: BrowserTab, public iab: InAppBrowser,
+              public pop: PopUpProvider, public prof: ProfileProvider,
+              public call: CallNumber, private translate: TranslateService,
+              private analytics: AnalyticsProvider, private network: NetworkProvider) {
   }
+
   ionViewDidEnter() {
     this.analytics.page('SupportPage');
   }
-  callNow(){
-   // window.open("tel:" + newLocal);
+
+  callNow() {
+    // window.open("tel:" + newLocal);
     this.call.callNumber(newLocal, true)
   }
 
-  goToSite(){
+  goToSite() {
     //const browser = this.iab.create('http://startware.tech/');
-    this.browsertab.openUrl('http://startware.tech/').then(suc=>{
-      console.log('hurray!! it works')
-    });
-    this.analytics.event('website_visit',{foo:'bar'});
-  }
-
-  goToSiteFAQ(){
-    //const browser = this.iab.create('http://startware.tech/');
-    this.browsertab.openUrl('http://startware.tech/').then(suc=>{
-      console.log('hurray!! it works')
-    });
-    this.analytics.event('faq_visit', {foo:'bar'});
-  }
-
-logForm() {
-    this.prof.Complain(this.todo.description).then(suc =>{
-      this.translate.get('FEEDBACK_SUBMITTED').subscribe(translation => {
-        this.pop.showPimp(translation);
+    this.analytics.event('website_visit', {foo: 'bar'});
+    if (this.network.connected) {
+      this.browsertab.openUrl('http://startware.tech/').then(suc => {
+        console.log('hurray!! it works')
       });
-    });
-    this.analytics.event('user_feedback', {foo:'bar'});
+    } else {
+      this.translate.get('NO_NETWORK').subscribe(translation => {
+        this.pop.presentToast(translation);
+      });
+    }
+  }
+
+  goToSiteFAQ() {
+    //const browser = this.iab.create('http://startware.tech/');
+    this.analytics.event('faq_visit', {foo: 'bar'});
+    if (this.network.connected) {
+      this.browsertab.openUrl('http://startware.tech/').then(suc => {
+        console.log('hurray!! it works')
+      });
+    } else {
+      this.translate.get('NO_NETWORK').subscribe(translation => {
+        this.pop.presentToast(translation);
+      });
+    }
+  }
+
+  logForm() {
+    this.analytics.event('user_feedback', {foo: 'bar'});
+    if (this.network.connected) {
+      this.prof.Complain(this.todo.description).then(suc => {
+        this.translate.get('FEEDBACK_SUBMITTED').subscribe(translation => {
+          this.pop.showPimp(translation);
+        });
+      });
+      document.getElementById("myInput").innerText = '';
+    } else {
+      this.translate.get('NO_NETWORK').subscribe(translation => {
+        this.pop.presentToast(translation);
+      });
+    }
   }
 
 }
