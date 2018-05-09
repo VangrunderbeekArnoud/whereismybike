@@ -108,6 +108,7 @@ export class ProfilePage {
     }).catch(error => {
       alert(error)
     });
+    this.analytics.event('user_update_photo',{foo:'bar'});
   }
   updateNumber() {
     this.translate.get(['PHONE', 'CANCEL', 'SAVE']).subscribe(translations => {
@@ -169,6 +170,7 @@ export class ProfilePage {
       });
       alert.present();
     });
+    this.analytics.event('logout',{foo:'bar'});
   }
   remove(): void {
     this.authProvider.logoutUser().then(() => {

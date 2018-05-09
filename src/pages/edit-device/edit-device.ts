@@ -54,6 +54,7 @@ export class EditDevicePage {
     });
   }
   deleteDevice() {
+    this.analytics.event('dev_delete',{foo:'bar'});
     this.translate.get(['DELETE_DEV', 'CANCEL', 'YES']).subscribe(translations => {
       const alert = this.alertCtrl.create({
         message: translations.DELETE_DEV,
@@ -101,6 +102,7 @@ export class EditDevicePage {
     });
   }
   updateBrand() {
+    this.analytics.event('dev_update_brand',{foo:'bar'});
     this.translate.get(['BRAND', 'CANCEL', 'SAVE']).subscribe(translations => {
       const alert = this.alertCtrl.create({
         message: translations.BRAND,
@@ -120,6 +122,7 @@ export class EditDevicePage {
     });
   }
   updateType() {
+    this.analytics.event('dev_update_type',{foo:'bar'});
     this.translate.get(['TYPE', 'CANCEL', 'SAVE']).subscribe(translations => {
       const alert = this.alertCtrl.create({
         message: translations.TYPE,
@@ -140,6 +143,7 @@ export class EditDevicePage {
   }
 
   updateNumber() {
+    this.analytics.event('dev_update_number',{foo:'bar'});
     this.translate.get(['ENGNR', 'CANCEL', 'SAVE']).subscribe(translations => {
       const alert = this.alertCtrl.create({
         message: translations.ENGNR,
@@ -248,6 +252,6 @@ export class EditDevicePage {
     }).catch(error => {
       alert(error)
     });
+    this.analytics.event('dev_update_photo',{foo:'bar'});
   }
-
 }

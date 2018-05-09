@@ -11,7 +11,7 @@ export class AnalyticsProvider {
     console.log('AnalyticsProvider');
     platform.ready().then(() => {
       if ( platform.is('cordova')) {
-        firebase.setUserId(this.ph.user.uid.toString());
+        firebase.setUserId(this.ph.user.uid);
         firebase.setAnalyticsCollectionEnabled(true);
       }
     });

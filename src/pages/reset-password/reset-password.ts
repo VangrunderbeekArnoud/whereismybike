@@ -55,6 +55,7 @@ export class ResetPasswordPage {
           errorAlert.present();
         });
       });
+      this.analytics.event('reset_password', {foo: 'bar'});
     }
   }
 }

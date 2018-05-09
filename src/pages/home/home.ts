@@ -162,6 +162,7 @@ export class HomePage {
         }
       });
     }
+    this.analytics.event('lock', {foo: 'bar'});
   }
   WaitForGeolocation() {
     //A timer to detect if the location has been found.

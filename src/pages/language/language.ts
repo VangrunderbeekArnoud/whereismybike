@@ -34,5 +34,6 @@ export class LanguagePage {
   }
   applyLanguage() {
     this.language.set(this.selectedLanguage);
+    this.analytics.event('set_language', {foo: 'bar'});
   }
 }

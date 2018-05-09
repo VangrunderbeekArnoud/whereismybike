@@ -51,6 +51,7 @@ export class AddDevicePage {
   }
 
   proceed() {
+    this.analytics.event('dev_add', {foo:'bar'});
     this.navCtrl.pop();
   }
 
@@ -116,6 +117,7 @@ export class AddDevicePage {
     });
   }
   updateBrand() {
+    this.analytics.event('dev_update_brand', {foo:'bar'});
     this.translate.get(['BRAND', 'CANCEL', 'SAVE']).subscribe(translations => {
       const alert = this.alertCtrl.create({
         message: translations.BRAND,
@@ -135,6 +137,7 @@ export class AddDevicePage {
     });
   }
   updateType() {
+    this.analytics.event('dev_update_type', {foo:'bar'});
     this.translate.get(['TYPE', 'CANCEL', 'SAVE']).subscribe(translations => {
       const alert = this.alertCtrl.create({
         message: translations.TYPE,
@@ -155,6 +158,7 @@ export class AddDevicePage {
   }
 
   updateNumber() {
+    this.analytics.event('dev_update_number', {foo:'bar'});
     this.translate.get(['ENGNR', 'CANCEL', 'SAVE']).subscribe(translations => {
       const alert = this.alertCtrl.create({
         message: translations.ENGNR,
@@ -270,5 +274,6 @@ export class AddDevicePage {
     }).catch(error => {
       alert(error)
     });
+    this.analytics.event('dev_update_photo', {foo:'bar'});
   }
 }

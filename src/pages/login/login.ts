@@ -71,6 +71,7 @@ export class LoginPage {
 
       this.loading = this.loadingCtrl.create();
       this.loading.present();
+      this.analytics.event('login',{foo:'bar'});
     }
   }
 

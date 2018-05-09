@@ -44,14 +44,16 @@ export class SupportPage {
     //const browser = this.iab.create('http://startware.tech/');
     this.browsertab.openUrl('http://startware.tech/').then(suc=>{
       console.log('hurray!! it works')
-    })
+    });
+    this.analytics.event('website_visit',{foo:'bar'});
   }
 
   goToSiteFAQ(){
     //const browser = this.iab.create('http://startware.tech/');
     this.browsertab.openUrl('http://startware.tech/').then(suc=>{
       console.log('hurray!! it works')
-    })
+    });
+    this.analytics.event('faq_visit', {foo:'bar'});
   }
 
 logForm() {
@@ -59,8 +61,8 @@ logForm() {
       this.translate.get('FEEDBACK_SUBMITTED').subscribe(translation => {
         this.pop.showPimp(translation);
       });
-    })
-
+    });
+    this.analytics.event('user_feedback', {foo:'bar'});
   }
 
 }

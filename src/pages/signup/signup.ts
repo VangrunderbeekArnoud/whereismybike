@@ -64,6 +64,7 @@ export class SignupPage {
       });
       this.loading = this.loadingCtrl.create();
       this.loading.present();
+      this.analytics.event('signup',{foo:'bar'});
     }
   }
 
