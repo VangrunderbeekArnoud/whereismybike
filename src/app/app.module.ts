@@ -13,12 +13,12 @@ import { GoogleMaps} from '@ionic-native/google-maps';
 import * as firebase from 'firebase/app'
 import { OneSignal} from '@ionic-native/onesignal';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
-import { CallNumber } from '@ionic-native/call-number';
 import { TranslateModule} from 'ng2-translate/ng2-translate';
 import { TranslateLoader, TranslateStaticLoader} from 'ng2-translate/src/translate.service';
 import { Http} from '@angular/http';
 import { Globalization} from '@ionic-native/globalization';
 import { Network} from '@ionic-native/network';
+import { Diagnostic} from '@ionic-native/diagnostic';
 //other
 import { MyApp } from './app.component';
 
@@ -83,7 +83,6 @@ firebase.initializeApp(firebaseConfig);
     OnesignalProvider,
     OneSignal,
     InAppBrowser,
-    CallNumber,
     Firebase,
     NativeMapContainerProvider,
     GoogleMaps,
@@ -95,7 +94,8 @@ firebase.initializeApp(firebaseConfig);
     Network,
     MyErrorHandler,
     AnalyticsProvider,
-    NetworkProvider
+    NetworkProvider,
+    Diagnostic
   ]
 })
 export class AppModule {}

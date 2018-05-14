@@ -76,4 +76,24 @@
       </ion-grid>
     </ion-item>
   </ion-list>
+  <ion-list>
+    <ion-item class="legalprivacy" (click)="goToPrivacy()">
+      <ion-grid>
+        <ion-row>
+          <ion-col padding col-6>
+            {{'PRIVACY'|translate}}
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+    <ion-item class="legalprivacy" (click)="goToLegal()">
+      <ion-grid>
+        <ion-row>
+          <ion-col padding col-6>
+            {{'LEGAL'|translate}}
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+  </ion-list>
 </ion-content>

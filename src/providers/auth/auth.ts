@@ -35,16 +35,17 @@ export class AuthProvider {
     this.userProfileRef.child( firebase.auth().currentUser.uid).off();
     return  firebase.auth().signOut();
   }
-
-
+  deleteUser(password: string): Promise<void> {
+    return firebase.auth().currentUser.reauthenticateWithCredential(firebase.auth.EmailAuthProvider.credential(firebase.auth().currentUser.email, password)).then(() => {
+      firebase.auth().currentUser.delete();
+    });
+  }
   get authenticated(): boolean {
     return this.currentUser !== null;
   }
-
   signOut(): void {
     firebase.auth().signOut();
   }
-
   displayName(): string {
     if (this.currentUser !== null) {
       return this.currentUser.displayName;

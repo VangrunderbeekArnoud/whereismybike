@@ -57,6 +57,10 @@ export class ProfileProvider {
       this.storage.set('user/phone', this.user.phone);
     });
   }
+  deleteUser() {
+    this.userReference.off();
+    this.userReference.remove();
+  }
   updateName(username: string): Promise<void> {
     return this.userReference.update({ name: username});
   }

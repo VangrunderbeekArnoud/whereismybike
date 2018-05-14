@@ -59,5 +59,17 @@
   "AUTH":"Authenticate",
   "VERIFY":"Verification",
   "EMAIL_RESET_LINK":"We have sent an email to reset your password",
-  "LANGUAGES":"Languages"
+  "LANGUAGES":"Languages",
+
+  "PRIVACY":"Privacy settings",
+  "LEGAL":"Legal info",
+  "LOCATION":"Location",
+  "LOCATION_PREFERENCES":"Edit your preferences for sharing your location",
+  "NOTIFICATIONS":"Notifications",
+  "NOTIFICATIONS_PREFERENCES":"Manage the messages you receive.",
+  "DELETE_ACCOUNT":"Delete your account",
+  "ON":"on",
+  "OFF":"off",
+  "DELETE_ACCOUNT_INFO":"When deleting your account, all user data will be lost. Enter your password to delete your account.",
+  "WRONG_PASSWD":"wrong password"
 }

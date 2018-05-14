@@ -1,0 +1,50 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{'PRIVACY'|translate}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <div class="spacer"></div>
+  <ion-grid (click)="settings()">
+    <ion-row>
+      <ion-col class="title" col-10>
+        {{'LOCATION'|translate}}
+      </ion-col>
+      <ion-col col-2>
+        <ion-badge item-end>{{locationState}}</ion-badge>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="content">
+        {{'LOCATION_PREFERENCES'|translate}}
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <div class="spacer"></div>
+  <ion-grid (click)="settings()">
+    <ion-row>
+      <ion-col class="title" col-10>
+        {{'NOTIFICATIONS'|translate}}
+      </ion-col>
+      <ion-col col-2>
+        <ion-badge item-end>{{notificationState}}</ion-badge>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="content">
+        {{'NOTIFICATIONS_PREFERENCES'|translate}}
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid class="delete" (click)="deleteAccount()">
+    <ion-row>
+      <ion-col>
+        {{'DELETE_ACCOUNT'|translate}}
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

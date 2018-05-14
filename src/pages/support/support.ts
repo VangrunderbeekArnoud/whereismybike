@@ -1,6 +1,5 @@
 import {Component} from '@angular/core';
 import {IonicPage} from 'ionic-angular';
-import {CallNumber} from '@ionic-native/call-number';
 import {PopUpProvider} from '../../providers/pop-up/pop-up';
 import {ProfileProvider} from '../../providers/profile/profile';
 import {InAppBrowser} from "@ionic-native/in-app-browser";
@@ -31,19 +30,13 @@ export class SupportPage {
 
   constructor(public browsertab: BrowserTab, public iab: InAppBrowser,
               public pop: PopUpProvider, public prof: ProfileProvider,
-              public call: CallNumber, private translate: TranslateService,
+              private translate: TranslateService,
               private analytics: AnalyticsProvider, private network: NetworkProvider) {
   }
 
   ionViewDidEnter() {
     this.analytics.page('SupportPage');
   }
-
-  callNow() {
-    // window.open("tel:" + newLocal);
-    this.call.callNumber(newLocal, true)
-  }
-
   goToSite() {
     //const browser = this.iab.create('http://startware.tech/');
     this.analytics.event('website_visit', {foo: 'bar'});

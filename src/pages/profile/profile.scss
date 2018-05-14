@@ -16,13 +16,14 @@ page-profile {
     padding: 0;
    // border: 1px solid color($colors, nav-border-bottom, base);
   }
-
+  .legalprivacy {
+    height: 3em;
+  }
   .profile-pic{
     width: 6em !important;
     height: 6em !important;
     object-fit: cover;
   }
-
   ion-item {
     padding: 0 !important;
     border: 1px solid color($colors, nav-border-bottom, base);
@@ -33,7 +34,7 @@ page-profile {
   }
 
   .item-inner {
-    border: none !important;
+    //border: none !important;
     padding: 0;
   }
 

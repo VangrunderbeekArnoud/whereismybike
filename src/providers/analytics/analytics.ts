@@ -27,6 +27,8 @@ export class AnalyticsProvider {
     if ( this.platform.is('cordova')) {
       this.firebase.setScreenName(name)
         .catch(err => console.log(err));
+      this.firebase.logEvent('screen_view', {firebase_screen: name, firebase_screen_class: name})
+        .catch(err => {throw err;});
     }
   }
 

@@ -10,6 +10,7 @@ import { TranslateService} from "ng2-translate";
 import {StatusBar} from "@ionic-native/status-bar";
 import {AnalyticsProvider} from "../../providers/analytics/analytics";
 import {NetworkProvider} from "../../providers/network/network";
+import {InAppBrowser, InAppBrowserOptions} from "@ionic-native/in-app-browser";
 
 @IonicPage()
 @Component({
@@ -22,7 +23,8 @@ export class ProfilePage {
               public actionSheetCtrl: ActionSheetController, private analytics: AnalyticsProvider,
               private pop: PopUpProvider, private camera: Camera, private network: NetworkProvider,
               public alertCtrl: AlertController, private statusBar: StatusBar,
-              public ph: ProfileProvider, public authProvider: AuthProvider) {
+              public ph: ProfileProvider, public authProvider: AuthProvider,
+              private iab: InAppBrowser) {
     ph.isHome = false;
   }
   ionViewDidEnter() {
@@ -190,6 +192,15 @@ export class ProfilePage {
       this.statusBar.hide();
       this.navCtrl.setRoot('LoginPage');
     });
+  }
+  goToPrivacy() {
+    this.navCtrl.push('PrivacyPage');
+  }
+  goToLegal() {
+    const options: InAppBrowserOptions = {
+      location: "no",
+    }
+    const browser = this.iab.create('https://google.com', '_self', options );
   }
 
 }
