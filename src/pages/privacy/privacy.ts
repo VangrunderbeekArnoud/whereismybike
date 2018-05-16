@@ -7,6 +7,7 @@ import {ProfileProvider} from "../../providers/profile/profile";
 import {Diagnostic} from '@ionic-native/diagnostic';
 import {TranslateService} from "ng2-translate";
 import {NetworkProvider} from "../../providers/network/network";
+import {AnalyticsProvider} from "../../providers/analytics/analytics";
 
 /**
  * Generated class for the PrivacyPage page.
@@ -27,7 +28,8 @@ export class PrivacyPage {
               private pop: PopUpProvider, private statusBar: StatusBar,
               private navCtrl: NavController, private ph: ProfileProvider,
               private diagnostic: Diagnostic, private platform: Platform,
-              private translate: TranslateService, private network: NetworkProvider) {
+              private translate: TranslateService, private network: NetworkProvider,
+              private analytics: AnalyticsProvider) {
     this.setLocationState();
     this.setNotificationState();
     this.platform.ready().then(() => {
@@ -36,6 +38,9 @@ export class PrivacyPage {
         this.setNotificationState();
       });
     });
+  }
+  ionViewDidEnter() {
+    this.analytics.page('PrivacyPage');
   }
   setLocationState() {
     this.platform.ready().then(() => {
@@ -75,6 +80,7 @@ export class PrivacyPage {
     if ( this.platform.is('cordova')) {
       this.diagnostic.switchToSettings();
     }
+    this.analytics.event('privacy_settings', {foo:'bar'});
   }
   deleteAccount() {
     this.translate.get(['DELETE_ACCOUNT', 'DELETE_ACCOUNT_INFO', 'PASSWD', 'CANCEL', 'DELETE', 'WRONG_PASSWD', 'NO_NETWORK']).subscribe(translations => {
@@ -94,6 +100,7 @@ export class PrivacyPage {
                 this.auth.deleteUser(data[0]).then(() => {
                   this.ph.deleteUser();
                   this.statusBar.hide();
+                  this.analytics.event('user_delete', {foo:'bar'});
                   this.navCtrl.setRoot('LoginPage');
                 }, () => {
                   this.pop.presentToast(translations.WRONG_PASSWD);

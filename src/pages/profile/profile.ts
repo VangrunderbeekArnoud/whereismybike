@@ -197,6 +197,7 @@ export class ProfilePage {
     this.navCtrl.push('PrivacyPage');
   }
   goToLegal() {
+    this.analytics.event('Legal', {foo:'bar'});
     const options: InAppBrowserOptions = {
       location: "no",
     }
