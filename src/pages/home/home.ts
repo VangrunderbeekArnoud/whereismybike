@@ -80,7 +80,7 @@ export class HomePage {
             this.navCtrl.setRoot('PhonePage');
           }
           //wait for the map to get your current location.
-          this.WaitForGeolocation();
+          //this.WaitForGeolocation();
           this.loadDevices();
         })
       }

@@ -19,6 +19,7 @@ import { Http} from '@angular/http';
 import { Globalization} from '@ionic-native/globalization';
 import { Network} from '@ionic-native/network';
 import { Diagnostic} from '@ionic-native/diagnostic';
+import { Geolocation} from '@ionic-native/geolocation';
 //other
 import { MyApp } from './app.component';
 
@@ -95,7 +96,8 @@ firebase.initializeApp(firebaseConfig);
     MyErrorHandler,
     AnalyticsProvider,
     NetworkProvider,
-    Diagnostic
+    Diagnostic,
+    Geolocation
   ]
 })
 export class AppModule {}

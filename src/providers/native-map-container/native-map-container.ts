@@ -13,6 +13,7 @@ import {
   MyLocation
 } from '@ionic-native/google-maps';
 import {SigfoxProvider} from "../sigfox/sigfox";
+import {Geolocation} from '@ionic-native/geolocation';
 
 declare var google: any;
 
@@ -36,12 +37,12 @@ export class NativeMapContainerProvider {
   private startLocation: any = {lat: 46.1634787, lng: 104.3458401}; // Mongolie
 
   constructor(private googleMaps: GoogleMaps, public ph: ProfileProvider,
-              public gcode: GeocoderProvider, public platform: Platform, public sigfox: SigfoxProvider) {
+              public gcode: GeocoderProvider, public platform: Platform,
+              private geolocation: Geolocation, public sigfox: SigfoxProvider) {
   }
 
   ///Start the cordova map
   loadMap() {
-    console.log('loadMap(): map called')
     let mapOptions: GoogleMapOptions = { camera: {
         target: this.startLocation,
         zoom: 5,
@@ -52,40 +53,43 @@ export class NativeMapContainerProvider {
       }
     };
     this.map = GoogleMaps.create(document.getElementById("map"), mapOptions); // this.googleMaps.create() changed to GoogleMaps.create because of deprecated.
-    this.map.setClickable(false);
-    // Wait the MAP_READY before using any methods.
-    this.map.one(GoogleMapsEvent.MAP_READY)
+    this.map.one(GoogleMapsEvent.MAP_READY) // run MAP_READY before using any methods
       .then(() => {
-        console.log('loadMap(): map ready!');
-        this.map.setCompassEnabled(false)
-        this.map.setTrafficEnabled(false)
-        this.map.setIndoorEnabled(false)
-        LocationService.getMyLocation().then((location: MyLocation) => {
-          console.log('loadMap(): location found');
-          this.addUserToMap(location.latLng);
-          this.addDevicesToMap();
-          this.setLocation(location.latLng);
-          this.hasShown = true;
-          this.location = location;
-          this.userLocation = location.latLng;
-          this.map.setClickable(true)
-          this.gcode.Reverse_Geocode(location.latLng.lat, location.latLng.lng, this.map, false)
-        }).catch(er => {
-          console.log(er)
-        })
+        this.map.setClickable(false);
+        this.map.setCompassEnabled(false);
+        this.map.setTrafficEnabled(false);
+        this.map.setIndoorEnabled(false);
+        this.addUserToMap();
+        this.addDevicesToMap();
+        this.map.setClickable(true);
+        //this.hasShown = true;
+        this.map.setClickable(true)
       });
   }
-  addUserToMap(location) {
+  addUserToMap() {
     this.platform.ready().then( () => {
-      this.map.addMarker({
-        icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAEcUlEQVRIS7WVfUxVZRzHf7/nuQx8QZJLEC81MXpZsjSuZOrEc869CDhoZTW16GXiRXvbrCxa/lFuQdqLmE5mMuacq1Z3gxISHPc8B1dopGEMxlTYNZp6s4WUFl2unOdp5+DFc4GL9EdnO9vdOc/9fH+/7+/lIPzPF96Ej7mS5OCIRQIxi3OeZJynAL8iIe0c4BBj7BQAiEiciAK5suy8JsR7lJBsrutXgJB2iug3QBwgRej6A4TSWQjQhkKUNWva0YlExgk4HI6o2bGxOwQhLwEAQyHeHxZCbWlpGbYCJEmyEUJyAaAMAZYj5zuHAV4fey5MwIDfEhf3Jdf1FcRmK1VV9bPJ0r8uiE6n8xkQYi8ANMTb7Ws8Ho8eCiZMwCVJu3Uh1tkIWdGsaa1Tqf/iwicfjNYDF6MCA3dyxCYuRJWmaa+NEzA854heQCxWVfXTqcCz1m5Wfk5fVT3zSt+lub7aVbZ/fl8pEGsAMUdV1W8NRigDlCSpjRJyVWXMNQVbwID3pRXV9KflzDF6aM7pgydmnDuanxj0fU0QicrY0lGBXElayAk5gULkezXtiPEiLy8veZjSWPXw4bNjszHh6UU1/ckj8NB9T8dHx5PPNeyghHi4EAs0TeswM3DK8lbO+SaBaDe6YNHDa5Mu3P1o7bXouBm3d9cVn6zb2xUSMeFzi2r6U8LhMX/7A2m+r7bcdb5+T2Bw8DJSWsEYKzcFFEWpF0LM1DRNdjxRGjeQuqTZN//ZbCOytDP13Um+hjU/evZ1Zj29Wem744YtocgNeEZXdWXXwbffMniSJB0jhPgZY4+ZApIk/WAjpHeY83W/ZK4+4svemGNNPaX3m+64/tObfkvM3hfyfBT+lz+Q0XkDbjqiKB4ASDHqECbgZeypee6KD3uyN7wcjI6PsorEn2/TL6csouYzPuJ7TAh+YCTy0DVOwClJhwQhsxhjknEo012+qydr/fND0xNtVhHr75ir/kBGR3Vl1xh4yCJK6UVVVR83M3Apyju6rr8SKrLxbF5J+Z6ehe7S4PRbx4mY8FMTwwsKCqKDQ0MDgPiuqqoVpoAsyw6CeFIArGSMNYZSvW99eVWvw+22isT8GRlu+u90PgJC1CEh93u93s7RQXMpynEOEGCMydZByyzZWnU2+wV3cFqCLeYPfyDjp+rKrv3hnlvsNwa2FRF1TdOWWScZcmV5OUdsAcTnVFU9YC3avRu27bqULpeknmn6eBI4uGS5VCB+IgCWMsaOhQmYtZCkSkHIRiJE/tj9vrRg9UOtjV98H2lHKYqiCF1vpJRWehl7c8Jtaux4SsjnAFCIQrzo1bT9U9hL6JJlt875bkJpbbzdXhxxXV9vMRsibieIr3IhvgOADxISEpo8Hk/QGr3ZLcFgga7rb1BCFiPA9tl2+xYrfJxFYcPidC4DIbYBwBKu64MCsYMScsE4o3OeSglZAADTjCAQsSzk+VgLb/bRN1p4PiIWAkAWAtxmAka+ze2IWG+0YqS6TJrBZH/6L+/+BedwGDdvfYzpAAAAAElFTkSuQmCC",
-        position: location,
-      })
-        .then(marker => {
-          this.ph.getUserNameReference().on('value', snapshot => {
-            marker.setTitle(snapshot.val());
-          });
-        });
+      this.geolocation.getCurrentPosition({timeout:500})
+        .then(location => {
+          this.map.addMarker({
+            icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAEcUlEQVRIS7WVfUxVZRzHf7/nuQx8QZJLEC81MXpZsjSuZOrEc869CDhoZTW16GXiRXvbrCxa/lFuQdqLmE5mMuacq1Z3gxISHPc8B1dopGEMxlTYNZp6s4WUFl2unOdp5+DFc4GL9EdnO9vdOc/9fH+/7+/lIPzPF96Ej7mS5OCIRQIxi3OeZJynAL8iIe0c4BBj7BQAiEiciAK5suy8JsR7lJBsrutXgJB2iug3QBwgRej6A4TSWQjQhkKUNWva0YlExgk4HI6o2bGxOwQhLwEAQyHeHxZCbWlpGbYCJEmyEUJyAaAMAZYj5zuHAV4fey5MwIDfEhf3Jdf1FcRmK1VV9bPJ0r8uiE6n8xkQYi8ANMTb7Ws8Ho8eCiZMwCVJu3Uh1tkIWdGsaa1Tqf/iwicfjNYDF6MCA3dyxCYuRJWmaa+NEzA854heQCxWVfXTqcCz1m5Wfk5fVT3zSt+lub7aVbZ/fl8pEGsAMUdV1W8NRigDlCSpjRJyVWXMNQVbwID3pRXV9KflzDF6aM7pgydmnDuanxj0fU0QicrY0lGBXElayAk5gULkezXtiPEiLy8veZjSWPXw4bNjszHh6UU1/ckj8NB9T8dHx5PPNeyghHi4EAs0TeswM3DK8lbO+SaBaDe6YNHDa5Mu3P1o7bXouBm3d9cVn6zb2xUSMeFzi2r6U8LhMX/7A2m+r7bcdb5+T2Bw8DJSWsEYKzcFFEWpF0LM1DRNdjxRGjeQuqTZN//ZbCOytDP13Um+hjU/evZ1Zj29Wem744YtocgNeEZXdWXXwbffMniSJB0jhPgZY4+ZApIk/WAjpHeY83W/ZK4+4svemGNNPaX3m+64/tObfkvM3hfyfBT+lz+Q0XkDbjqiKB4ASDHqECbgZeypee6KD3uyN7wcjI6PsorEn2/TL6csouYzPuJ7TAh+YCTy0DVOwClJhwQhsxhjknEo012+qydr/fND0xNtVhHr75ir/kBGR3Vl1xh4yCJK6UVVVR83M3Apyju6rr8SKrLxbF5J+Z6ehe7S4PRbx4mY8FMTwwsKCqKDQ0MDgPiuqqoVpoAsyw6CeFIArGSMNYZSvW99eVWvw+22isT8GRlu+u90PgJC1CEh93u93s7RQXMpynEOEGCMydZByyzZWnU2+wV3cFqCLeYPfyDjp+rKrv3hnlvsNwa2FRF1TdOWWScZcmV5OUdsAcTnVFU9YC3avRu27bqULpeknmn6eBI4uGS5VCB+IgCWMsaOhQmYtZCkSkHIRiJE/tj9vrRg9UOtjV98H2lHKYqiCF1vpJRWehl7c8Jtaux4SsjnAFCIQrzo1bT9U9hL6JJlt875bkJpbbzdXhxxXV9vMRsibieIr3IhvgOADxISEpo8Hk/QGr3ZLcFgga7rb1BCFiPA9tl2+xYrfJxFYcPidC4DIbYBwBKu64MCsYMScsE4o3OeSglZAADTjCAQsSzk+VgLb/bRN1p4PiIWAkAWAtxmAka+ze2IWG+0YqS6TJrBZH/6L+/+BedwGDdvfYzpAAAAAElFTkSuQmCC",
+            position: {lat: location.coords.latitude, lng: location.coords.longitude},
+          })
+            .then(marker => {
+              this.ph.getUserNameReference().on('value', snapshot => {
+                marker.setTitle(snapshot.val());
+              });
+              this.geolocation.watchPosition().subscribe(location => {
+                marker.setPosition({lat:location.coords.latitude,lng:location.coords.longitude});
+                this.location = {lat:location.coords.latitude,lng:location.coords.longitude};
+                this.userLocation = {lat:location.coords.latitude,lng:location.coords.longitude};
+              });
+              this.setLocation({lat:location.coords.latitude,lng:location.coords.longitude});
+              this.location = {lat:location.coords.latitude,lng:location.coords.longitude};
+              this.userLocation = {lat:location.coords.latitude,lng:location.coords.longitude};
+            });
+        }).catch(error => {
+          console.log(error);
+      });
     });
   }
   addDevicesToMap() {

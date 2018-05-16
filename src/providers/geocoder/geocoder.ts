@@ -47,40 +47,4 @@ export class GeocoderProvider {
       });
     });
   }
-  Reverse_Geocode(lat, lng, map, driverMode){
-
-    let latlng = {lat: parseFloat(lat), lng: parseFloat(lng)};
-    this.geocoder.geocode({'location': latlng}, (results, status) => {
-      if (status === 'OK') {
-        if (results[0]) {
-          if (!driverMode){
-          //document.getElementById("location").innerText = results[0].formatted_address;
-          this.locationName = results[0].formatted_address;
-          }else{
-          var driver_location = results[0].formatted_address;
-          }
-
-        } else {
-         // window.alert('No results found');
-        }
-      } else {
-       // window.alert('Geocoder failed due to: ' + status);
-      }
-    });
-
-  }
-  Simple_Geocode(lat, lng){
-    let latlng = {lat: parseFloat(lat), lng: parseFloat(lng)};
-    let result;
-    this.geocoder.geocode({'location': latlng}, (results, status) => {
-      if (status === 'OK') {
-        if (results[0]) {
-
-         result = results[0].formatted_address
-
-        }
-      }
-    });
-    return result
-  }
 }
