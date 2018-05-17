@@ -5,6 +5,7 @@
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
     <content src="index.html" />
     <access origin="*" />
+    <allow-navigation href="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
@@ -95,7 +96,6 @@
     <plugin name="cordova-plugin-firebase" spec="^1.0.3" />
     <plugin name="onesignal-cordova-plugin" spec="^2.3.3" />
     <plugin name="cordova-plugin-inappbrowser" spec="^3.0.0" />
-    <plugin name="mx.ferreyra.callnumber" spec="~0.0.2" />
     <plugin name="cordova-plugin-globalization" spec="^1.11.0" />
     <plugin name="cordova-plugin-googlemaps" spec="^2.1.0">
         <variable name="API_KEY_FOR_ANDROID" value="AIzaSyAMJZQkbwaw-vPOmMbcs0mx-2IGk35Ha-s" />
@@ -103,9 +103,9 @@
     </plugin>
     <plugin name="cordova-plugin-statusbar" spec="^2.4.2" />
     <plugin name="cordova-plugin-network-information" spec="^2.0.1" />
-    <engine name="android" spec="~7.0.0" />
     <plugin name="cordova.plugins.diagnostic" spec="^4.0.6" />
     <plugin name="cordova-plugin-geolocation" spec="^4.0.1">
         <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="To locate you" />
     </plugin>
+    <engine name="android" spec="~7.0.0" />
 </widget>
