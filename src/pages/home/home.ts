@@ -66,11 +66,15 @@ export class HomePage {
       // you are not a user then go to login page. But if its a user then check if the
       // user has a phone number if so then instantiate the map.
       if (!user) {
-        this.statusBar.hide();
+        if ( this.platform.is('cordova')) {
+          this.statusBar.hide();
+        }
         this.navCtrl.setRoot('LoginEntrancePage');
         unsubscribe();
       } else {
-        this.statusBar.show();
+        if ( this.platform.is('cordova')) {
+          this.statusBar.show();
+        }
         unsubscribe();
         document.getElementById("location").innerText = this.ph.user.name;
         this.cMap.loadMap();

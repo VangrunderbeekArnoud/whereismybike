@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import firebase from 'firebase';
 import {SigfoxProvider} from "../sigfox/sigfox";
 import { Storage} from "@ionic/storage";
-import {NetworkProvider} from "../network/network";
 
 @Injectable()
 export class ProfileProvider {

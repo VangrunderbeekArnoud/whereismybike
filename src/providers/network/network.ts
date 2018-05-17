@@ -13,33 +13,35 @@ export class NetworkProvider extends Network {
   }
   init() {
     this.platform.ready().then(() => {
-      this.translate.get('NO_NETWORK').subscribe(translation => {
-        let toast;
-        if ( this.type == 'none') {
-          toast = this.toastCtrl.create({
-            message: translation,
-            position: 'bottom',
+      if ( this.platform.is('cordova')) {
+        this.translate.get('NO_NETWORK').subscribe(translation => {
+          let toast;
+          if ( this.type == 'none') {
+            toast = this.toastCtrl.create({
+              message: translation,
+              position: 'bottom',
+            });
+            toast.present();
+            this.connected = false;
+          } else {
+            this.connected = true;
+          }
+          this.onDisconnect().subscribe(() => {
+            console.log('network disconnected');
+            toast = this.toastCtrl.create({
+              message: translation,
+              position: 'bottom',
+            });
+            toast.present();
+            this.connected = false;
           });
-          toast.present();
-          this.connected = false;
-        } else {
-          this.connected = true;
-        }
-        this.onDisconnect().subscribe(() => {
-          console.log('network disconnected');
-          toast = this.toastCtrl.create({
-            message: translation,
-            position: 'bottom',
+          this.onConnect().subscribe(() => {
+            console.log('network connected');
+            toast.dismiss();
+            this.connected = true;
           });
-          toast.present();
-          this.connected = false;
         });
-        this.onConnect().subscribe(() => {
-          console.log('network connected');
-          toast.dismiss();
-          this.connected = true;
-        });
-      });
+      }
     });
   }
 

@@ -48,20 +48,22 @@ export class MyApp {
     ///initialize onesignal notification here
     this.platform.ready().then(() => {
       console.log('initializeApp');
-      //Replace with your app id and google cloud messaging id from https://onesignal.com
-      this.One.startInit("cafd3aeb-1e83-4c1b-9d98-04768038324f", "1026466723913");
-      this.One.inFocusDisplaying(this.One.OSInFocusDisplayOption.Notification);
-      this.One.setSubscription(true);
-      this.One.endInit();
-      //this.statusBar.styleDefault();
-      //this.statusBar.backgroundColorByHexString("#131313");
+      if ( this.platform.is('cordova')) {
+        //Replace with your app id and google cloud messaging id from https://onesignal.com
+        this.One.startInit("cafd3aeb-1e83-4c1b-9d98-04768038324f", "1026466723913");
+        this.One.inFocusDisplaying(this.One.OSInFocusDisplayOption.Notification);
+        this.One.setSubscription(true);
+        this.One.endInit();
+        //this.statusBar.styleDefault();
+        //this.statusBar.backgroundColorByHexString("#131313");
 
-      this.statusBar.show();
-      setTimeout(() => {
-        this.splashScreen.hide();
-      }, 500);
+        this.statusBar.show();
+        setTimeout(() => {
+          this.splashScreen.hide();
+        }, 500);
 
-      // }
+        // }
+      }
     });
   }
   openPage(page) {
