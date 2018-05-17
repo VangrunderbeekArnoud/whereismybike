@@ -30,6 +30,7 @@
     <preference name="orientation" value="portrait" />
     <platform name="android">
         <allow-intent href="market:*" />
+        <preference name="android-minSdkVersion" value="16" />
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
         <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
         <icon density="hdpi" src="resources/android/icon/drawable-hdpi-icon.png" />
@@ -97,15 +98,15 @@
     <plugin name="onesignal-cordova-plugin" spec="^2.3.3" />
     <plugin name="cordova-plugin-inappbrowser" spec="^3.0.0" />
     <plugin name="cordova-plugin-globalization" spec="^1.11.0" />
-    <plugin name="cordova-plugin-googlemaps" spec="^2.1.0">
-        <variable name="API_KEY_FOR_ANDROID" value="AIzaSyAMJZQkbwaw-vPOmMbcs0mx-2IGk35Ha-s" />
-        <variable name="API_KEY_FOR_IOS" value="AIzaSyDoVrwVoH7iNoqPnvOywwiljO2CMCSfmoo" />
-    </plugin>
     <plugin name="cordova-plugin-statusbar" spec="^2.4.2" />
     <plugin name="cordova-plugin-network-information" spec="^2.0.1" />
     <plugin name="cordova.plugins.diagnostic" spec="^4.0.6" />
     <plugin name="cordova-plugin-geolocation" spec="^4.0.1">
         <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="To locate you" />
+    </plugin>
+    <plugin name="cordova-plugin-googlemaps" spec="^2.1.0">
+        <variable name="API_KEY_FOR_ANDROID" value="AIzaSyAMJZQkbwaw-vPOmMbcs0mx-2IGk35Ha-s" />
+        <variable name="API_KEY_FOR_IOS" value="AIzaSyDoVrwVoH7iNoqPnvOywwiljO2CMCSfmoo" />
     </plugin>
     <engine name="android" spec="~7.0.0" />
 </widget>

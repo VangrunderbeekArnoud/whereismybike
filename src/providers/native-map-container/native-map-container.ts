@@ -54,8 +54,10 @@ export class NativeMapContainerProvider {
         }
       };
       this.map = GoogleMaps.create(document.getElementById("map"), mapOptions); // this.googleMaps.create() changed to GoogleMaps.create because of deprecated.
+      console.log('Google maps created!');
       this.map.one(GoogleMapsEvent.MAP_READY) // run MAP_READY before using any methods
         .then(() => {
+          console.log('Google maps ready!');
           this.map.setClickable(false);
           this.map.setCompassEnabled(false);
           this.map.setTrafficEnabled(false);
@@ -65,7 +67,7 @@ export class NativeMapContainerProvider {
           this.map.setClickable(true);
           //this.hasShown = true;
           this.map.setClickable(true)
-        });
+        }).catch(error => console.log(error));
     }
   }
   addUserToMap() {
