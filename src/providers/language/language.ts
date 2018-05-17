@@ -51,7 +51,7 @@ export class LanguageProvider {
     language = this.getSuitableLanguage(language);
     this.translate.use(language);
     this.sysOptions.systemLanguage = language;
-    this.storage.set('language', language).catch(err => console.log(err));
+    this.storage.set('language', language).catch(err => console.log('Language error: '+err));
   }
   private getSuitableLanguage(language) {
     language = language.substring(0, 2).toLowerCase();

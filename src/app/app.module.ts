@@ -59,7 +59,10 @@ firebase.initializeApp(firebaseConfig);
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
-    IonicStorageModule.forRoot(),
+    IonicStorageModule.forRoot({
+      name:'__mydb',
+      driverOrder:['sqlite', 'websql', 'indexeddb']
+    }),
     BrowserModule,
     TranslateModule.forRoot({
       provide: TranslateLoader,
