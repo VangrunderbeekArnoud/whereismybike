@@ -4,7 +4,6 @@ import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {AuthProvider} from '../providers/auth/auth';
 import {ProfileProvider} from '../providers/profile/profile';
-import {OneSignal} from '@ionic-native/onesignal';
 import {NativeMapContainerProvider} from '../providers/native-map-container/native-map-container';
 import {LanguageProvider} from "../providers/language/language";
 import {TranslateService} from 'ng2-translate';
@@ -29,7 +28,7 @@ export class MyApp {
 
   constructor(translate: TranslateService, private language: LanguageProvider,
               private cMap: NativeMapContainerProvider, public loadingCtrl: LoadingController,
-              private One: OneSignal, public ph: ProfileProvider,
+              public ph: ProfileProvider,
               public auth: AuthProvider, public platform: Platform,
               public statusBar: StatusBar, public splashScreen: SplashScreen, private network: NetworkProvider) {
     //Initialize
@@ -50,10 +49,6 @@ export class MyApp {
       console.log('initializeApp');
       if ( this.platform.is('cordova')) {
         //Replace with your app id and google cloud messaging id from https://onesignal.com
-        this.One.startInit("cafd3aeb-1e83-4c1b-9d98-04768038324f", "1026466723913");
-        this.One.inFocusDisplaying(this.One.OSInFocusDisplayOption.Notification);
-        this.One.setSubscription(true);
-        this.One.endInit();
         //this.statusBar.styleDefault();
         //this.statusBar.backgroundColorByHexString("#131313");
 

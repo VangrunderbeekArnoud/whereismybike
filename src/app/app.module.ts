@@ -11,7 +11,6 @@ import { BrowserTab} from '@ionic-native/browser-tab';
 import { Firebase} from '@ionic-native/firebase';
 import { GoogleMaps} from '@ionic-native/google-maps';
 import * as firebase from 'firebase/app'
-import { OneSignal} from '@ionic-native/onesignal';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { TranslateModule} from 'ng2-translate/ng2-translate';
 import { TranslateLoader, TranslateStaticLoader} from 'ng2-translate/src/translate.service';
@@ -28,7 +27,6 @@ import { AuthProvider } from '../providers/auth/auth';
 import { ProfileProvider } from '../providers/profile/profile';
 import { GeocoderProvider } from '../providers/geocoder/geocoder';
 import { PopUpProvider } from '../providers/pop-up/pop-up';
-import { OnesignalProvider } from '../providers/onesignal/onesignal';
 import { NativeMapContainerProvider } from '../providers/native-map-container/native-map-container';
 import { SigfoxProvider, VirtualSigfoxProvider } from "../providers/sigfox/sigfox";
 import { LanguageProvider} from "../providers/language/language";
@@ -84,8 +82,6 @@ firebase.initializeApp(firebaseConfig);
     Camera,
     GeocoderProvider,
     PopUpProvider,
-    OnesignalProvider,
-    OneSignal,
     InAppBrowser,
     Firebase,
     NativeMapContainerProvider,

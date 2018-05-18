@@ -7,7 +7,6 @@ import {
 import {NativeMapContainerProvider} from '../../providers/native-map-container/native-map-container';
 import {ProfileProvider} from '../../providers/profile/profile';
 import {PopUpProvider} from '../../providers/pop-up/pop-up';
-import {OnesignalProvider} from '../../providers/onesignal/onesignal';
 import {GeocoderProvider} from '../../providers/geocoder/geocoder';
 import * as firebase from 'firebase/app';
 import {Storage} from '@ionic/storage';
@@ -24,8 +23,7 @@ declare var google;
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html',
-  providers: [NativeMapContainerProvider, ProfileProvider, PopUpProvider,
-    OnesignalProvider, GeocoderProvider],
+  providers: [NativeMapContainerProvider, ProfileProvider, PopUpProvider, GeocoderProvider],
 })
 
 export class HomePage {
