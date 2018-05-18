@@ -28,7 +28,7 @@
     "@ionic-native/firebase": "^4.7.0",
     "@ionic-native/geolocation": "^4.7.0",
     "@ionic-native/globalization": "^4.7.0",
-    "@ionic-native/google-maps": "^4.8.2",
+    "@ionic-native/google-maps": "4.7.0",
     "@ionic-native/in-app-browser": "^4.7.0",
     "@ionic-native/network": "^4.7.0",
     "@ionic-native/onesignal": "^4.7.0",
@@ -44,7 +44,7 @@
     "cordova-plugin-firebase": "^1.0.5",
     "cordova-plugin-geolocation": "^4.0.1",
     "cordova-plugin-globalization": "^1.11.0",
-    "cordova-plugin-googlemaps": "^2.1.0",
+    "cordova-plugin-googlemaps": "2.2.9",
     "cordova-plugin-inappbrowser": "^3.0.0",
     "cordova-plugin-ionic-keyboard": "^2.0.5",
     "cordova-plugin-ionic-webview": "^1.2.1",
@@ -90,7 +90,9 @@
       },
       "cordova-plugin-googlemaps": {
         "API_KEY_FOR_ANDROID": "AIzaSyAMJZQkbwaw-vPOmMbcs0mx-2IGk35Ha-s",
-        "API_KEY_FOR_IOS": "AIzaSyDoVrwVoH7iNoqPnvOywwiljO2CMCSfmoo"
+        "API_KEY_FOR_IOS": "AIzaSyDoVrwVoH7iNoqPnvOywwiljO2CMCSfmoo",
+        "PLAY_SERVICES_VERSION": "15.0.1",
+        "ANDROID_SUPPORT_V4_VERSION": "26.1.0"
       }
     },
     "platforms": [

@@ -104,9 +104,11 @@
     <plugin name="cordova-plugin-geolocation" spec="^4.0.1">
         <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="To locate you" />
     </plugin>
-    <plugin name="cordova-plugin-googlemaps" spec="^2.1.0">
+    <plugin name="cordova-plugin-googlemaps" spec="2.2.9">
         <variable name="API_KEY_FOR_ANDROID" value="AIzaSyAMJZQkbwaw-vPOmMbcs0mx-2IGk35Ha-s" />
         <variable name="API_KEY_FOR_IOS" value="AIzaSyDoVrwVoH7iNoqPnvOywwiljO2CMCSfmoo" />
+        <variable name="PLAY_SERVICES_VERSION" value="15.0.1" />
+        <variable name="ANDROID_SUPPORT_V4_VERSION" value="26.1.0" />
     </plugin>
     <engine name="android" spec="~7.0.0" />
 </widget>
