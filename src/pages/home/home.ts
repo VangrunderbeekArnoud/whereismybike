@@ -16,6 +16,9 @@ import {StatusBar} from '@ionic-native/status-bar';
 import {TranslateService} from "ng2-translate";
 import {AnalyticsProvider} from "../../providers/analytics/analytics";
 import {NetworkProvider} from "../../providers/network/network";
+import { FcmProvider} from "../../providers/fcm/fcm";
+import { ToastController} from "ionic-angular";
+import { tap} from "rxjs/operators";
 
 declare var google;
 
@@ -44,8 +47,8 @@ export class HomePage {
   private lng: any;
 
   constructor(public storage: Storage,
-              public statusBar: StatusBar,
-              private vibration: Vibration,
+              public statusBar: StatusBar, private toastCtrl: ToastController,
+              private vibration: Vibration, private fcm: FcmProvider,
               public cMap: NativeMapContainerProvider,
               public platform: Platform, private network: NetworkProvider,
               public menu: MenuController, private analytics: AnalyticsProvider,
@@ -56,6 +59,18 @@ export class HomePage {
   }
   ionViewDidEnter() {
     this.analytics.page('HomePage');
+  }
+  ionViewDidLoad() {
+    this.fcm.getToken();
+    this.fcm.listenToNotifications().pipe(
+      tap(msg => {
+        const toast = this.toastCtrl.create({
+          message:msg.body,
+          duration: 3000
+        });
+        toast.present();
+      })
+    ).subscribe();
   }
   ngOnInit() {
     //detecting authentication changes in firebase.

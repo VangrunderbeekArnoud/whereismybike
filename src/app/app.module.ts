@@ -33,6 +33,7 @@ import { LanguageProvider} from "../providers/language/language";
 import { MyErrorHandler } from '../providers/my-error-handler/my-error-handler';
 import { AnalyticsProvider } from '../providers/analytics/analytics';
 import { NetworkProvider } from '../providers/network/network';
+import { FcmProvider } from '../providers/fcm/fcm';
 
 export function createTranslateLoader( http: Http) {
   return new TranslateStaticLoader(http, 'assets/languages', '.json');
@@ -96,7 +97,8 @@ firebase.initializeApp(firebaseConfig);
     AnalyticsProvider,
     NetworkProvider,
     Diagnostic,
-    Geolocation
+    Geolocation,
+    FcmProvider
   ]
 })
 export class AppModule {}
